@@ -1,14 +1,32 @@
 {
   "name": "bbs-parser",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.1.0",
+  "description": "Unofficial library to parse data from bbs-betriebe.de",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
-    "test": "export $(grep -v '^#' .env | xargs) && jest"
+    "test": "export $(grep -v '^#' .env | xargs) && jest",
+    "build": "rm -rf lb && tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "scraper",
+    "webscraper",
+    "bbs",
+    "school",
+    "timetable"
+  ],
+  "author": "Alwin Lohrie",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niwla23/bbs-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/niwla23/bbs-parser/issues"
+  },
   "dependencies": {
     "axios": "^0.27.2",
     "cheerio": "1.0.0-rc.12",

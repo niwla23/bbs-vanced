@@ -30,7 +30,11 @@ export async function getSessionToken(user: string, password: string): Promise<s
   })
   fs.writeFileSync("/tmp/test2.html", x.data)
 
-  return x.headers['set-cookie'][0].split("=")[1].split(";")[0] // this mess extracts the token from the cookie
+  if (x.headers['set-cookie']) {
+    return x.headers['set-cookie'][0].split("=")[1].split(";")[0] // this mess extracts the token from the cookie
+  } else {
+    throw new Error("no token was returned")
+  }
 }
 
 export function getDatestamp(date: Date): string {
@@ -76,7 +80,7 @@ export function parseTimetable(html: string, date: Date) {
     $(table).find("tbody > tr").each((rowIndex, row) => {
 
       let hour = Number($($(row).find("td").get(0)).text())
-      let cellText = $($(row).find("td").get(columnIndex)).text().split("(")[0].trim()
+      let cellText: string | null = $($(row).find("td").get(columnIndex)).text().split("(")[0].trim()
 
       if (cellText === '-') {
         cellText = null

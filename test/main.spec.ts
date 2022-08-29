@@ -1,8 +1,12 @@
-import { getDatestamp, getSessionToken, getTimetable, parseTimetable } from "../src/main";
+import { getDatestamp, getSessionToken, getTimetable, parseTimetable } from "../src";
 import * as fs from 'fs';
 
 
 test('getSessionToken returns valid token', async () => {
+  if (!process.env.USERNAME || !process.env.PASSWORD) {
+    expect("USERNAME and PASSWORD must be set").toBe("but arent")
+    return
+  }
   let token = await getSessionToken(process.env.USERNAME, process.env.PASSWORD)
   console.log(token)
   expect(token).toHaveLength(26);
@@ -40,6 +44,10 @@ test('parseTimetable returns valid data', async () => {
 });
 
 test('getTimetable returns valid data', async () => {
+  if (!process.env.USERNAME || !process.env.PASSWORD || !process.env.COURSE) {
+    expect("USERNAME, COURSE and PASSWORD must be set").toBe("but arent")
+    return
+  }
   let token = await getSessionToken(process.env.USERNAME, process.env.PASSWORD)
   let x = new Date()
   x.setDate(x.getDate() + 2)

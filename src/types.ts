@@ -1,7 +1,7 @@
 export interface TimetableLesson {
-  teacher: string
-  subject: string
-  room: string
+  teacher: string | null
+  subject: string | null
+  room: string | null
 }
 
 export interface TimetableDay {
