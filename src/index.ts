@@ -2,7 +2,7 @@ import { load } from 'cheerio';
 import axios from 'axios'
 import * as FormData from 'form-data'
 import * as fs from 'fs';
-import { TimetableDay, TimetableLesson } from './types';
+import { TimetableLesson } from './types';
 
 const default_headers = {
   "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
@@ -75,7 +75,7 @@ export function parseTimetable(html: string, date: Date) {
     }
   })
 
-  let timetable: TimetableDay = {}
+  let timetable: TimetableLesson[] = []
   tables.each((tableIndex, table) => {
     $(table).find("tbody > tr").each((rowIndex, row) => {
 
@@ -85,9 +85,8 @@ export function parseTimetable(html: string, date: Date) {
       if (cellText === '-') {
         cellText = null
       }
-
       if (!timetable[hour]) {
-        timetable[hour] = { teacher: null, subject: null, room: null }
+        timetable.push({ teacher: null, subject: null, room: null, hour: hour })
       }
 
       switch (tableIndex) {
@@ -103,6 +102,17 @@ export function parseTimetable(html: string, date: Date) {
       }
     })
   })
+
+  let hour = timetable.length;
+  while (hour--) {
+    const lesson = timetable[hour]
+    if (!lesson.room && !lesson.subject && !lesson.teacher) {
+      timetable.pop()
+    } else {
+      break
+    }
+  }
+
   return timetable
 }
 
@@ -114,14 +124,11 @@ export function parseTimetable(html: string, date: Date) {
  * @param {Date} date - Date to get timetable for
  */
 export async function getTimetable(token: string, course: string, date: Date) {
-  // date.setHours(0, 0, 0, 0)
-  // console.log(date, "huhu")
-
-  let res = await axios.get(`${base_url}/page-3/index.php?KlaBuDatum=${getDatestamp(date)}&Klasse=${course}&Schule=0&HideChangesOff=1&HideChanges=1&StdNachmOff=1&StdNachm=1`, {
+  let res = await axios.get(`${base_url}/page-3/index.php?KlaBuDatum=${getDatestamp(date)}&Klasse=${course}&Schule=0&HideChangesOff=1&HideChanges=1&StdNachmOff=1&StdNachm=1&StdNullOff=1&StdNull=1`, {
     headers: { ...default_headers, "Cookie": `PHPSESSID=${token}` }
   })
 
-  // fs.writeFileSync("testdata/timetable.html", res.data)
+  fs.writeFileSync("testdata/timetable.html", res.data)
 
   return parseTimetable(res.data, date)
 }
