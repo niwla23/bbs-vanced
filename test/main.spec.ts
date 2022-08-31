@@ -17,8 +17,7 @@ test('getDatestamp work', () => {
 })
 
 test('parseTimetable returns valid data', async () => {
-  let x = new Date()
-  x.setDate(x.getDate() + 2)
+  let x = new Date("2022-09-01")
 
   let timetable = parseTimetable(fs.readFileSync("testdata/timetable.html").toString(), x)
   expect(timetable).toHaveLength(9)
