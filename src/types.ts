@@ -4,3 +4,5 @@ export interface TimetableLesson {
   subject: string | null
   room: string | null
 }
+
+export type TimetableWeek = Map<Date, TimetableLesson[]>

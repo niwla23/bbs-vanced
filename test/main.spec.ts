@@ -1,4 +1,6 @@
 import { getDatestamp, getSessionToken, getTimetable, parseTimetable } from "../src";
+import { TimetableLesson, TimetableWeek } from "../src/types";
+
 import * as fs from 'fs';
 
 
@@ -16,7 +18,7 @@ test('getDatestamp work', () => {
   expect(stamp).toBe("2022-08-29")
 })
 
-test('parseTimetable returns valid data', async () => {
+test('parseTimetable returns valid data with given date', async () => {
   let x = new Date("2022-09-01")
 
   let timetable = parseTimetable(fs.readFileSync("testdata/timetable.html").toString(), x)
@@ -34,7 +36,30 @@ test('parseTimetable returns valid data', async () => {
   ], null, 2))
 });
 
-test('getTimetable returns valid data', async () => {
+function mapCompatibleReplacer(key: string, value: any) {
+  if (value instanceof Map) {
+    return {
+      dataType: 'Map',
+      value: Array.from(value.entries()), // or with spread: value: [...value]
+    };
+  } else {
+    return value;
+  }
+}
+
+// just overengineering tests here
+const jsonNeutralizer = (input: string): string => {
+  return JSON.stringify(JSON.parse(input), null, 2)
+}
+
+test('parseTimetable returns valid data with no given date', async () => {
+  let timetable = parseTimetable(fs.readFileSync("testdata/timetable.html").toString())
+  const expectedData = jsonNeutralizer(fs.readFileSync("testdata/parsedweek.json").toString()) // not included in repo
+  expect([...timetable.keys()]).toHaveLength(7)
+  expect(jsonNeutralizer(JSON.stringify(timetable, mapCompatibleReplacer))).toBe(expectedData)
+});
+
+test('getTimetable returns valid data with given date', async () => {
   if (!process.env.USERNAME || !process.env.PASSWORD || !process.env.COURSE) {
     expect("USERNAME, COURSE and PASSWORD must be set").toBe("but arent")
     return
@@ -44,5 +69,23 @@ test('getTimetable returns valid data', async () => {
   x.setDate(x.getDate() + 2)
 
   let timetable = await getTimetable(token, process.env.COURSE, x)
-  expect(timetable.length).toBeGreaterThan(2)
+  expect(Array.isArray(timetable)).toBeTruthy()
+  if (Array.isArray(timetable)) {
+    expect(timetable.length).toBeGreaterThan(2)
+  }
+});
+
+test('getTimetable returns valid data with fullWeek', async () => {
+  if (!process.env.USERNAME || !process.env.PASSWORD || !process.env.COURSE) {
+    expect("USERNAME, COURSE and PASSWORD must be set").toBe("but arent")
+    return
+  }
+  let token = await getSessionToken(process.env.USERNAME, process.env.PASSWORD)
+  let x = new Date()
+  x.setDate(x.getDate() + 2)
+
+  let timetable = await getTimetable(token, process.env.COURSE, x, true)
+  console.log(timetable)
+  expect(Array.isArray(timetable)).toBeFalsy()
+  expect([...timetable.keys()]).toHaveLength(7)
 });
