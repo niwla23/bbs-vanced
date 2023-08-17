@@ -1,9 +1,6 @@
 import { getDatestamp, getSessionToken, getTimetable, parseTimetable } from "../src";
-import { TimetableLesson, TimetableWeek } from "../src/types";
 
 import * as fs from 'fs';
-
-
 test('getSessionToken returns valid token', async () => {
   if (!process.env.USERNAME || !process.env.PASSWORD) {
     expect("USERNAME and PASSWORD must be set").toBe("but arent")
@@ -14,12 +11,12 @@ test('getSessionToken returns valid token', async () => {
 });
 
 test('getDatestamp work', () => {
-  let stamp = getDatestamp(new Date(2022, 7, 29)) // 29.08.2022, month is 0-indexed
-  expect(stamp).toBe("2022-08-29")
+  let stamp = getDatestamp(new Date(2023, 7, 29)) // 29.08.2023, month is 0-indexed
+  expect(stamp).toBe("2023-08-29")
 })
 
 test('parseTimetable returns valid data with given date', async () => {
-  let x = new Date("2022-09-01")
+  let x = new Date("2023-09-01")
 
   let timetable = parseTimetable(fs.readFileSync("testdata/timetable.html").toString(), x)
   expect(timetable).toHaveLength(9)

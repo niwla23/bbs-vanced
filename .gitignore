@@ -1,4 +1,4 @@
 .env
 testdata
 node_modules
-lib
+# lib

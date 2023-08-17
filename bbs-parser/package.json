@@ -2,15 +2,14 @@
   "name": "bbs-parser",
   "version": "2.1.0",
   "description": "Unofficial library to parse data from bbs-betriebe.de",
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "test": "export $(grep -v '^#' .env | xargs) && jest",
     "build": "rm -rf lb && tsc",
     "mkdocs": "jsdoc src/index.ts"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "keywords": [
     "scraper",

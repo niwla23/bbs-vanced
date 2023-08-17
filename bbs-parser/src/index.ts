@@ -1,8 +1,9 @@
 import { load } from 'cheerio';
 import axios from 'axios'
-import * as FormData from 'form-data'
+// import * as FormData from 'form-data'
+import { default as FormData } from "form-data";
 import * as fs from 'fs';
-import { TimetableLesson, TimetableWeek } from './types';
+import { TimetableLesson, TimetableTimeSlot, TimetableWeek } from './types';
 
 // so we are definetely a normal browser
 const default_headers = {
@@ -32,6 +33,7 @@ export async function getSessionToken(user: string, password: string): Promise<s
   bodyFormData.append("formAction", "login")
   bodyFormData.append("formName", "stacks_in_368_page4")
 
+
   const x = await axios.post(`${base_url}/index.php`, bodyFormData, {
     headers: {
       ...default_headers,
@@ -40,6 +42,7 @@ export async function getSessionToken(user: string, password: string): Promise<s
     "maxRedirects": 0,
     "validateStatus": (code) => [200, 204, 301, 302].includes(code)
   })
+
 
   if (x.headers['set-cookie']) {
     return x.headers['set-cookie'][0].split("=")[1].split(";")[0] // this mess extracts the token from the cookie
@@ -75,7 +78,7 @@ const ROOMS_INDEX = 2
  * @returns {TimetableWeek | TimetableLesson[]} The timetable or map of dates and timetables if not date is provided
  */
 
-export function parseTimetable(html: string, date?: Date): TimetableWeek | TimetableLesson[] {
+export function parseTimetable(html: string, date?: Date): TimetableWeek | TimetableTimeSlot[] {
   const $ = load(html);
   const tables = $(".table")
 
@@ -94,47 +97,65 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
       return
     }
 
-    let timetable: TimetableLesson[] = []
+    let timetableDay: TimetableTimeSlot[] = []
     tables.each((tableIndex, table) => {
-      $(table).find("tbody > tr").each((rowIndex, row) => {
+      $(table).find("tbody > tr").each((_rowIndex, row) => {
 
         const hour = Number($($(row).find("td").get(0)).text())
-        let cellText: string | null = $($(row).find("td").get(index)).text().split("(")[0].trim()
+        let cellText: string[] | null = String($($(row).find("td").get(index)).html()).split("<br>")
+        // .split("(")[0].trim().split("\n")
 
-        if (cellText === '-') {
-          cellText = null
-        }
-        if (!timetable[hour]) {
-          timetable.push({ teacher: null, subject: null, room: null, hour: hour })
+        if (!timetableDay[hour]) {
+          let scaffoldData = { teacher: null, subject: null, room: null, hour: hour }
+          let scaffoldArray = []
+          for (let i = 0; i < cellText.length; i++) {
+            scaffoldArray.push(scaffoldData)
+          }
+          timetableDay[hour] = scaffoldArray
         }
 
-        switch (tableIndex) {
-          case TEACHERS_INDEX:
-            timetable[hour].teacher = cellText
-            break;
-          case SUBEJCTS_INDEX:
-            timetable[hour].subject = cellText
-            break;
-          case ROOMS_INDEX:
-            timetable[hour].room = cellText
-            break;
+        for (let [i, unprocessedProperty] of cellText.entries()) {
+          let currentPropertyData: string | null = unprocessedProperty.trim() === "-" ? null : unprocessedProperty
+          switch (tableIndex) {
+            case TEACHERS_INDEX:
+              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { teacher: currentPropertyData?.split(" ")[0] });
+              break;
+            case SUBEJCTS_INDEX:
+              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { subject: currentPropertyData });
+              break;
+            case ROOMS_INDEX:
+              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { room: currentPropertyData });
+              break;
+          }
         }
       })
     })
 
 
     // cleanup
-    let hour = timetable.length;
+    // delete all slots from the end of a day up to the last contenful slot
+    /* let hour = timetableDay.length;
     while (hour--) {
-      const lesson = timetable[hour]
+      const slot = timetableDay[hour]
+
+      if (slot.length === 0) {
+        timetableDay.pop()
+        continue
+      }
+
+      if (slot.length > 1) {
+        continue
+      }
+
+      let lesson = slot[0]
       if (!lesson.room && !lesson.subject && !lesson.teacher) {
-        timetable.pop()
+        timetableDay.pop()
       } else {
         break
       }
-    }
+    } */
 
-    timetable_week.set(currentDate, timetable)
+    timetable_week.set(currentDate, timetableDay)
   })
 
   if (date) {
@@ -162,7 +183,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
  * @param {boolean} fullWeek - Returns the plan for the whole week date is in, not just for date
  * @returns {Promise<TimetableLesson[] | TimetableWeek>} Returns a TimetableWeek if `fullWeek` is set otherwise a TimetableLesson array
  */
-export async function getTimetable(token: string, course: string, date: Date, fullWeek?: boolean): Promise<TimetableLesson[] | TimetableWeek> {
+export async function getTimetable(token: string, course: string, date: Date, fullWeek?: boolean): Promise<TimetableTimeSlot[] | TimetableWeek> {
   const res = await axios.get(`${base_url}/page-3/index.php?KlaBuDatum=${getDatestamp(date)}&Klasse=${course}&Schule=0&HideChangesOff=1&HideChanges=1&StdNachmOff=1&StdNachm=1&StdNullOff=1&StdNull=1`, {
     headers: { ...default_headers, "Cookie": `PHPSESSID=${token}` }
   })
@@ -175,3 +196,5 @@ export async function getTimetable(token: string, course: string, date: Date, fu
     return parseTimetable(res.data, date)
   }
 }
+
+
