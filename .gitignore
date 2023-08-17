@@ -1,4 +1,5 @@
 .env
 testdata
 node_modules
+.netlify
 # lib
