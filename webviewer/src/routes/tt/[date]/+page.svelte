@@ -34,7 +34,6 @@
 		let lastHour = timetable.length;
 		while (lastHour--) {
 			let currentTimeslot = timetable[lastHour];
-			console.log(lastHour, currentTimeslot);
 			if (currentTimeslot && currentTimeslot.length != 0) {
 				return lastHour;
 			}

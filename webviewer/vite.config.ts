@@ -1,9 +1,16 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { SvelteKitPWA } from '@vite-pwa/sveltekit'
 import { defineConfig } from 'vitest/config';
 import path from "path"
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [
+    sveltekit(),
+    SvelteKitPWA({
+      registerType: "autoUpdate",
+      injectRegister: 'auto'
+    })
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

@@ -15,7 +15,6 @@ export const load: PageServerLoad = async (input) => {
   }
 
   const token = await getSessionToken(settings?.username, settings?.password)
-  console.log(token)
   const timetable = await getTimetable(token, settings?.className, new Date(input.params.date)) as TimetableTimeSlot[]
 
   return {
