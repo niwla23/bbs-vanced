@@ -2,7 +2,6 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
 	import Icon from '@iconify/svelte';
-	import { goto } from '$app/navigation';
 	import type { TimetableTimeSlot } from 'bbs-parser/src/types';
 	import { getSettings } from '@/lib/settings';
 
@@ -28,7 +27,7 @@
 		'BUV-12-1A'
 	]; */
 
-	const settings = getSettings();
+	$: settings = data.settings;
 
 	function getLastHour(timetable: TimetableTimeSlot[]) {
 		let lastHour = timetable.length;
@@ -41,8 +40,11 @@
 	}
 
 	function filterTimetable(timetable: TimetableTimeSlot[]) {
+		let showAllCourses = !settings?.courses || settings.courses.length == 0;
 		let filtered = timetable.map((slot) => {
-			return slot.filter((lesson) => lesson.subject && settings?.courses.includes(lesson.subject));
+			return slot.filter(
+				(lesson) => lesson.subject && (settings?.courses.includes(lesson.subject) || showAllCourses)
+			);
 		});
 		return filtered;
 	}

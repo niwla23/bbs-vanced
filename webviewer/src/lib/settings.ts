@@ -15,6 +15,7 @@ export function getSettings(cookies?: Cookies) {
     encoded = cookies.get("settings")
   } else {
     encoded = JsCookie.get('settings');
+    console.log(encoded)
   }
   if (!encoded) {
     return;
