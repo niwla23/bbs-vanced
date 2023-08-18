@@ -90,7 +90,9 @@
 		<div class="flex flex-col gap-2 text-white">
 			{#each Array.from(Array((lastHour || 10) + 1).keys()).slice(1) as hour}
 				<div
-					class="bg-dark rounded-md border border-colborder shadow-sm shadow-black flex items-center py-2"
+					class="{filteredTimetable[hour] && filteredTimetable[hour].length > 0
+						? 'bg-dark'
+						: 'bg-darkest'} rounded-md border border-colborder shadow-sm shadow-black flex items-center py-2"
 				>
 					<div class="text-4xl w-20 font-bold flex justify-center items-center">
 						<p class="w-min text-primary">{hour}</p>
