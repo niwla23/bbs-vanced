@@ -10,6 +10,7 @@ export interface Settings {
 
 export function getSettings(cookies?: Cookies) {
   let encoded = undefined
+  // server function will inject cookies
   if (cookies) {
     encoded = cookies.get("settings")
   } else {

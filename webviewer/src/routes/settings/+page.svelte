@@ -36,7 +36,13 @@
 	function saveSettings() {
 		let settings: Settings = { courses: [...courses], className, username, password };
 		console.log('saving:', settings);
-		Cookies.set('settings', JSON.stringify(settings));
+		let expiryDate = new Date();
+		expiryDate.setFullYear(expiryDate.getFullYear() + 10);
+		Cookies.set('settings', JSON.stringify(settings), {
+			expires: expiryDate,
+			secure: true,
+			sameSite: 'strict'
+		});
 		goto('/');
 	}
 
