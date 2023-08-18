@@ -8,7 +8,26 @@ export default defineConfig({
     sveltekit(),
     SvelteKitPWA({
       registerType: "autoUpdate",
-      injectRegister: 'auto'
+      injectRegister: 'auto',
+      manifest: {
+        name: "BBS Viewer",
+        short_name: "BBS Viewer",
+        description: "zeigt dir den stundenplan",
+        theme_color: "#14b8a5",
+        icons: [
+          {
+            src: "android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+
     })
   ],
   resolve: {
