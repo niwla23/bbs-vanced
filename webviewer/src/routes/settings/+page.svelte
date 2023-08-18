@@ -34,7 +34,13 @@
 	}
 
 	function saveSettings() {
-		let settings: Settings = { courses: [...courses], className, username, password };
+		let trimmedCourses = [...courses].map((course) => course.trim());
+		let settings: Settings = {
+			courses: trimmedCourses,
+			className: className.trim(),
+			username: username.trim(),
+			password
+		};
 		let expiryDate = new Date();
 		expiryDate.setFullYear(expiryDate.getFullYear() + 10);
 		Cookies.set('settings', JSON.stringify(settings), {
