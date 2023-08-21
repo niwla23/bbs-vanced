@@ -45,8 +45,8 @@
 		expiryDate.setFullYear(expiryDate.getFullYear() + 10);
 		Cookies.set('settings', JSON.stringify(settings), {
 			expires: expiryDate,
-			secure: true,
-			sameSite: 'strict'
+			secure: false,
+			sameSite: 'lax'
 		});
 		goto('/');
 	}

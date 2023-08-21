@@ -1,13 +1,16 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit'
+import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config';
 import path from "path"
 
 export default defineConfig({
   plugins: [
     sveltekit(),
-    SvelteKitPWA({
+    VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        globIgnores: ["**/*", "*", "**"]
+      },
       injectRegister: 'script',
       manifest: {
         name: "BBS Viewer",
