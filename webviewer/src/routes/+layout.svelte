@@ -25,7 +25,7 @@
 </svelte:head>
 <div class="bg-darkest text-brightest min-h-screen h-full w-screen flex">
 	<div class="flex-grow">
-		{#if $navigating}
+		{#if $navigating || true}
 			<LoadingScreen />
 		{:else}
 			<slot />
