@@ -16,6 +16,7 @@
 	}
 
 	function addCourse(event: Event) {
+		event.preventDefault();
 		// @ts-expect-error i dont wanna fix it
 		let course = event.currentTarget[0].value;
 		// @ts-expect-error i dont wanna fix it
