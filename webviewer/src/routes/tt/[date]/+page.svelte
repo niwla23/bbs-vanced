@@ -2,8 +2,7 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
 	import Icon from '@iconify/svelte';
-	import type { TimetableTimeSlot } from 'bbs-parser/src/types';
-	import { getSettings } from '@/lib/settings';
+	import type { TimetableTimeSlot, TimetableDay } from 'bbs-parser/src/types';
 
 	const weekdayMap = [
 		'Sonntag',
@@ -29,28 +28,31 @@
 
 	$: settings = data.settings;
 
-	function getLastHour(timetable: TimetableTimeSlot[]) {
-		let lastHour = timetable.length;
-		while (lastHour--) {
-			let currentTimeslot = timetable[lastHour];
+	function getLastIndex(timetable: TimetableDay) {
+		let lastIndex = timetable.length;
+		while (lastIndex--) {
+			let [hours, currentTimeslot] = timetable[lastIndex];
 			if (currentTimeslot && currentTimeslot.length != 0) {
-				return lastHour;
+				return lastIndex;
 			}
 		}
 	}
 
-	function filterTimetable(timetable: TimetableTimeSlot[]) {
+	function filterTimetable(timetable: TimetableDay): TimetableDay {
 		let showAllCourses = !settings?.courses || settings.courses.length == 0;
-		let filtered = timetable.map((slot) => {
-			return slot.filter(
+		let filtered: TimetableDay = [];
+		for (const [hours, slot] of timetable) {
+			const filteredSlot = slot.filter(
 				(lesson) => lesson.subject && (settings?.courses.includes(lesson.subject) || showAllCourses)
 			);
-		});
-		return filtered;
+			filtered.push([hours, filteredSlot]);
+		}
+
+		let lastIndex = getLastIndex(filtered);
+		return filtered.splice(1).splice(0, lastIndex); // we don't want hour 0
 	}
 
-	$: filteredTimetable = filterTimetable(data.timetable);
-	$: lastHour = filteredTimetable ? getLastHour(filteredTimetable) : 10;
+	$: filteredTimetable = filterTimetable(data.timetableMerged);
 
 	function formatDateForApi(date: Date) {
 		return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -89,18 +91,18 @@
 			</div>
 		</header>
 		<div class="flex flex-col gap-2 text-white">
-			{#each Array.from(Array((lastHour || 10) + 1).keys()).slice(1) as hour}
+			{#each filteredTimetable as [hours, timeSlot]}
 				<div
-					class="{filteredTimetable[hour] && filteredTimetable[hour].length > 0
+					class="{timeSlot.length > 0
 						? 'bg-dark'
-						: 'bg-darkest'} rounded-md border border-colborder shadow-sm shadow-black flex items-center py-2"
+						: 'bg-darkest'} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2"
 				>
-					<div class="text-4xl w-20 font-bold flex justify-center items-center">
-						<p class="w-min text-primary">{hour}</p>
+					<div class="text-3xl tracking-tight w-20 font-bold flex justify-center items-center pr-2">
+						<p class="w-min text-primary">{hours.join('/')}</p>
 					</div>
 					<div>
-						{#if filteredTimetable[hour] && filteredTimetable[hour].length > 0}
-							{#each filteredTimetable[hour] as lesson}
+						{#if timeSlot.length > 0}
+							{#each timeSlot as lesson}
 								<p class="">{lesson.subject}</p>
 								<p class="text-muted">{lesson.teacher}</p>
 								<p class="text-muted">{lesson.room}</p>

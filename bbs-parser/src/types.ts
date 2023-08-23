@@ -6,5 +6,5 @@ export interface TimetableLesson {
 }
 
 export type TimetableTimeSlot = TimetableLesson[]
-
+export type TimetableDay = [number[], TimetableTimeSlot][]
 export type TimetableWeek = Map<Date, TimetableTimeSlot[]>

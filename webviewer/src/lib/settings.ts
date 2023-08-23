@@ -15,13 +15,33 @@ export function getSettings(cookies?: Cookies) {
     encoded = cookies.get("settings")
   } else {
     encoded = JsCookie.get('settings');
-    console.log(encoded)
   }
   if (!encoded) {
     return;
   }
   const data: Settings = JSON.parse(encoded);
   return data
+}
+
+export function saveSettings(settings: Settings) {
+  const expiryDate = new Date();
+  expiryDate.setFullYear(expiryDate.getFullYear() + 10);
+  JsCookie.set('settings', JSON.stringify(settings), {
+    expires: expiryDate,
+    secure: false,
+    sameSite: 'lax'
+  });
+
+}
+
+export function settingsToJson(cookies?: Cookies) {
+  const settings = getSettings(cookies)
+  return JSON.stringify(settings)
+}
+
+export function importSettingsFromJSON(json: string) {
+  const newSettings = JSON.parse(json)
+  saveSettings(newSettings)
 }
 
 export function areSettingsComplete(settings: Settings) {

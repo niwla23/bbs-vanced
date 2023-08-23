@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { getSettings, type Settings } from '@/lib/settings';
+	import {
+		getSettings,
+		saveSettings,
+		settingsToJson,
+		importSettingsFromJSON
+	} from '@/lib/settings';
 	import Icon from '@iconify/svelte';
-	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
 
 	let courses = new Set<string>([]);
@@ -34,26 +38,36 @@
 		courses = new Set(data.courses);
 	}
 
-	function saveSettings() {
+	function save() {
 		let trimmedCourses = [...courses].map((course) => course.trim());
-		let settings: Settings = {
+		saveSettings({
 			courses: trimmedCourses,
 			className: className.trim(),
 			username: username.trim(),
 			password
-		};
-		let expiryDate = new Date();
-		expiryDate.setFullYear(expiryDate.getFullYear() + 10);
-		Cookies.set('settings', JSON.stringify(settings), {
-			expires: expiryDate,
-			secure: false,
-			sameSite: 'lax'
 		});
 		goto('/');
 	}
 
+	function importSettings() {
+		const data = prompt(
+			'Füge deine Einstellungen von einem anderem Export hier ein, um sie zu importieren.'
+		);
+		if (!data) {
+			alert('keine daten importiert');
+			return;
+		}
+		importSettingsFromJSON(data);
+		loadSettings();
+	}
+	function exportSettings() {
+		prompt(
+			'Füge den folgenden text auf einem anderen Gerät ein, um die Einstellungen dort zu importieren',
+			settingsToJson()
+		);
+	}
+
 	onMount(() => {
-		console.log('loading settings from cookie');
 		loadSettings();
 	});
 </script>
@@ -112,11 +126,18 @@
 				</li>
 			{/each}
 		</ul>
-		<button
-			class="bg-primary mt-4 p-4 w-full rounded-md border border-colborder"
-			on:click={saveSettings}
-		>
+		<button class="bg-primary mt-4 p-4 w-full rounded-md border border-colborder" on:click={save}>
 			Speichern
 		</button>
+		<div class="flex gap-2 pt-2">
+			<button
+				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
+				on:click={importSettings}>Import</button
+			>
+			<button
+				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
+				on:click={exportSettings}>Export</button
+			>
+		</div>
 	</main>
 </div>
