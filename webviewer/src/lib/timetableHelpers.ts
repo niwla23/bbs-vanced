@@ -67,3 +67,4 @@ export function getLastIndex(timetable: TimetableDay) {
     }
   }
 }
+

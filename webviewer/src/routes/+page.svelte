@@ -28,23 +28,33 @@
 			.sort((a, b) => a[0].getTime() - b[0].getTime());
 	}
 
-	function loadPast() {
+	async function loadPast() {
 		const firstDate = data[0][0];
 		const target = getPreviousMonday(firstDate);
-		loadData(target);
+		await loadData(target);
 	}
 
-	function loadFuture() {
+	async function loadFuture() {
 		const firstDate = data[data.length - 1][0];
 		const target = getNextMonday(firstDate);
-		loadData(target);
+		await loadData(target);
+	}
+
+	async function initialLoad() {
+		const today = new Date();
+		await loadData(today);
+		if (today.getDay() > 4 || today.getDay() === 0) {
+			await loadFuture();
+		}
+		location.hash = '#' + formatDateForApi(getNextMonday(new Date()));
 	}
 
 	onMount(() => {
-		loadData(new Date());
-
+		initialLoad();
 		const handleScroll = () => {
-			if (window.scrollY === window.scrollMaxY) {
+			console.log('scroll');
+			if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+				console.log('loading');
 				loadFuture();
 			}
 		};
@@ -59,13 +69,12 @@
 	let settings = getSettings() as Settings;
 
 	function filterWeekTimetable(timetable: [Date, TimetableDay][]) {
-		const all = timetable
-			.map(([day, v]) => {
-				const filtered = filterTimetable(settings, v);
-				return [day, filtered];
-			})
-			// @ts-expect-error fuck ts
-			.filter(([day, v]) => v.length > 0);
+		const all = timetable.map(([day, v]) => {
+			const filtered = filterTimetable(settings, v);
+			return [day, filtered];
+		});
+		// @ts-expect-error fuck ts
+		// .filter(([day, v]) => v.length > 0);
 
 		return all;
 	}
@@ -73,7 +82,7 @@
 </script>
 
 <div class="w-full flex justify-center p-4">
-	<main class="max-w-6xl w-full">
+	<main class="max-w-4xl w-full">
 		<div class="w-full flex gap-2 justify-center">
 			<button on:click={loadPast} class="border border-primary rounded-md p-2 text-xs">
 				Frühere Tage laden
@@ -84,9 +93,12 @@
 			{#each filteredTimetable as [day, slots] (day)}
 				<div class="py-2 flex-grow">
 					<a id={formatDateForApi(day)} aria-hidden="true" />
-					<b class:bg-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
-						>{weekdayMap[day.getDay()]} - {day.toLocaleDateString()}</b
+					<b
+						class="p-1 rounded-md"
+						class:bg-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
 					>
+						{weekdayMap[day.getDay()]} - {day.toLocaleDateString()}
+					</b>
 					<div class="pt-2 flex flex-col gap-2">
 						{#each slots as [hours, slot]}
 							<Timeslot {hours} timeSlot={slot} />
@@ -94,7 +106,7 @@
 					</div>
 				</div>
 			{/each}
-			<p>Loading more...</p>
+			<p>Wird geladen...</p>
 		</div>
 	</main>
 </div>

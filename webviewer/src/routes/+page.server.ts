@@ -1,4 +1,6 @@
 import { redirect } from '@sveltejs/kit';
+import { checkSettings } from '@/lib/settings';
+import type { PageServerLoad } from './$types';
 
 // black magic, stole it from stackoverflow
 function getNextMonday() {
@@ -25,8 +27,6 @@ function getLogicalDate() {
   return now
 }
 
-// export function load() {
-//   const x = getLogicalDate()
-//
-//   throw redirect(307, `/tt/${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`);
-// }
+export const load: PageServerLoad = (input) => {
+  checkSettings(input.cookies)
+}

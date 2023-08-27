@@ -1,4 +1,4 @@
-import type { Cookies } from "@sveltejs/kit";
+import { redirect, type Cookies } from "@sveltejs/kit";
 import JsCookie from "js-cookie";
 
 export interface Settings {
@@ -49,4 +49,16 @@ export function areSettingsComplete(settings: Settings) {
   if (!settings.username) return false
   if (!settings.password) return false
   return true
+}
+
+
+export function checkSettings(cookies: Cookies) {
+  const settings = getSettings(cookies)
+  if (!settings) {
+    throw redirect(307, `/settings`);
+  }
+
+  if (!areSettingsComplete(settings)) {
+    throw redirect(307, `/settings`);
+  }
 }

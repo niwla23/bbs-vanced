@@ -23,7 +23,7 @@
 		}
 	</script>
 </svelte:head>
-<div class="bg-darkest text-brightest min-h-screen h-full w-screen flex">
+<div class="scroll-smooth bg-darkest text-brightest min-h-screen h-full w-screen flex">
 	<div class="flex-grow">
 		{#if $navigating}
 			<LoadingScreen />
