@@ -26,3 +26,14 @@ export function autoMergeTimeslots(slots: TimetableTimeSlot[]): TimetableDay {
   }
   return Array.from(dayMap.entries())
 }
+
+export function dateTimeReviver(key, value) {
+  var a;
+  if (typeof value === 'string') {
+    a = /\/Date\((\d*)\)\//.exec(value);
+    if (a) {
+      return new Date(+a[1]);
+    }
+  }
+  return value;
+}

@@ -188,7 +188,8 @@ export async function getTimetable(token: string, course: string, date: Date, fu
     headers: { ...default_headers, "Cookie": `PHPSESSID=${token}` }
   })
 
-  // fs.writeFileSync("testdata/timetable.html", res.data)
+  // fs.writeFileSync("testdata/timetable2.html", res.data)
+  //
 
   if (fullWeek) {
     return parseTimetable(res.data)

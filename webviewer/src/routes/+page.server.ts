@@ -25,8 +25,8 @@ function getLogicalDate() {
   return now
 }
 
-export function load() {
-  const x = getLogicalDate()
-
-  throw redirect(307, `/tt/${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`);
-}
+// export function load() {
+//   const x = getLogicalDate()
+//
+//   throw redirect(307, `/tt/${x.getFullYear()}-${x.getMonth() + 1}-${x.getDate()}`);
+// }
