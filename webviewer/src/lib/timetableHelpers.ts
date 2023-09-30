@@ -49,7 +49,7 @@ export function filterTimetable(settings: Settings, timetable: TimetableDay): Ti
       slot = []
     }
     const filteredSlot = slot.filter(
-      (lesson) => lesson.subject && (settings?.courses.includes(lesson.subject) || showAllCourses)
+      (lesson) => lesson.originalSubject && (settings?.courses.includes(lesson.originalSubject) || showAllCourses)
     );
     filtered.push([hours, filteredSlot]);
   }

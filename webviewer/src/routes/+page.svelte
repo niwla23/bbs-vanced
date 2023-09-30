@@ -10,8 +10,11 @@
 	import Timeslot from '@/lib/Timeslot.svelte';
 	import { getSettings, type Settings } from '@/lib/settings';
 	import { onMount } from 'svelte';
+	import Icon from '@iconify/svelte';
+	import LoadingScreen from '@/lib/LoadingScreen.svelte';
 
 	let data: [Date, TimetableDay][] = [];
+	let lastLoadTime = new Date().getTime();
 
 	async function loadData(date: Date) {
 		const resp = await fetch(`/api/timetable?date=${formatDateForApi(date)}`);
@@ -46,15 +49,21 @@
 		if (today.getDay() > 4 || today.getDay() === 0) {
 			await loadFuture();
 		}
-		location.hash = '#' + formatDateForApi(getNextMonday(new Date()));
+		setTimeout(() => {
+			const elId = formatDateForApi(getNextMonday(new Date()));
+			document.getElementById(elId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+		}, 200);
 	}
 
 	onMount(() => {
 		initialLoad();
 		const handleScroll = () => {
-			console.log('scroll');
-			if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+			if (
+				window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
+				new Date().getTime() - lastLoadTime > 300
+			) {
 				console.log('loading');
+				lastLoadTime = new Date().getTime();
 				loadFuture();
 			}
 		};
@@ -85,9 +94,11 @@
 	<main class="max-w-4xl w-full">
 		<div class="w-full flex gap-2 justify-center">
 			<button on:click={loadPast} class="border border-primary rounded-md p-2 text-xs">
-				Frühere Tage laden
+				<Icon icon="material-symbols:arrow-upward" class="h-8 w-8" />
 			</button>
-			<a href="/settings" class="border border-primary rounded-md p-2 text-xs"> Einstellungen </a>
+			<a href="/settings" class="border border-primary rounded-md p-2 text-xs">
+				<Icon icon="material-symbols:settings" class="h-8 w-8" />
+			</a>
 		</div>
 		<div class="flex flex-col gap-2">
 			{#each filteredTimetable as [day, slots] (day)}
@@ -107,6 +118,7 @@
 				</div>
 			{/each}
 			<p>Wird geladen...</p>
+			<LoadingScreen />
 		</div>
 	</main>
 </div>

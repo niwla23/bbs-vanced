@@ -37,3 +37,12 @@ export function dateTimeReviver(key, value) {
   }
   return value;
 }
+
+
+export function extractOriginalSubject(input: string) {
+  if (!input) return null
+  const regex = /<([^>]+)>(.*?)<\/\1>/g;
+  const match = regex.exec(input);
+  const isolatedSubject = match ? match[2] || input : input;
+  return isolatedSubject.trim()
+}

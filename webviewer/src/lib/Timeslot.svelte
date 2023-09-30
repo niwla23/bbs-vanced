@@ -1,12 +1,27 @@
 <script lang="ts">
-	import type { TimetableTimeSlot } from 'bbs-parser/src/types';
+	import type { TimetableLesson, TimetableTimeSlot } from 'bbs-parser/src/types';
 
 	export let timeSlot: TimetableTimeSlot;
 	export let hours: number[];
+
+	function isLessonFree(lesson: TimetableLesson) {
+		if (!lesson.subject) return true;
+		const regex = /^<del>.*<\/del>$/g;
+		const isFree = regex.test(lesson.subject);
+		return isFree;
+	}
+
+	$: isFree = (function () {
+		if (timeSlot.length === 0) return true;
+		for (const lesson of timeSlot) {
+			const x = isLessonFree(lesson);
+			return x;
+		}
+	})();
 </script>
 
 <div
-	class="{timeSlot.length > 0
+	class="{!isFree
 		? 'bg-dark'
 		: 'bg-darkest'} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2"
 >
@@ -16,9 +31,9 @@
 	<div>
 		{#if timeSlot.length > 0}
 			{#each timeSlot as lesson}
-				<p class="">{lesson.subject}</p>
-				<p class="text-muted">{lesson.teacher}</p>
-				<p class="text-muted">{lesson.room}</p>
+				<p class="">{@html lesson.subject}</p>
+				<p class="text-muted">{@html lesson.teacher}</p>
+				<p class="text-muted">{@html lesson.room}</p>
 			{/each}
 		{:else}
 			<p class="text-muted">Frei :)</p>

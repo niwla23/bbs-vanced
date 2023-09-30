@@ -2,6 +2,7 @@ export interface TimetableLesson {
   hour: number | null
   teacher: string | null
   subject: string | null
+  originalSubject: string | null
   room: string | null
 }
 

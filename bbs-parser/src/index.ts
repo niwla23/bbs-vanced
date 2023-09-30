@@ -4,6 +4,7 @@ import axios from 'axios'
 import { default as FormData } from "form-data";
 import * as fs from 'fs';
 import { TimetableLesson, TimetableTimeSlot, TimetableWeek } from './types';
+import { extractOriginalSubject } from './helpers';
 
 // so we are definetely a normal browser
 const default_headers = {
@@ -106,7 +107,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
         // .split("(")[0].trim().split("\n")
 
         if (!timetableDay[hour]) {
-          let scaffoldData = { teacher: null, subject: null, room: null, hour: hour }
+          let scaffoldData: TimetableLesson = { teacher: null, subject: null, originalSubject: null, room: null, hour: hour }
           let scaffoldArray = []
           for (let i = 0; i < cellText.length; i++) {
             scaffoldArray.push(scaffoldData)
@@ -122,6 +123,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
               break;
             case SUBEJCTS_INDEX:
               timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { subject: currentPropertyData });
+              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { originalSubject: extractOriginalSubject(currentPropertyData) });
               break;
             case ROOMS_INDEX:
               timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { room: currentPropertyData });
@@ -184,7 +186,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
  * @returns {Promise<TimetableLesson[] | TimetableWeek>} Returns a TimetableWeek if `fullWeek` is set otherwise a TimetableLesson array
  */
 export async function getTimetable(token: string, course: string, date: Date, fullWeek?: boolean): Promise<TimetableTimeSlot[] | TimetableWeek> {
-  const res = await axios.get(`${base_url}/page-3/index.php?KlaBuDatum=${getDatestamp(date)}&Klasse=${course}&Schule=0&HideChangesOff=1&HideChanges=1&StdNachmOff=1&StdNachm=1&StdNullOff=1&StdNull=1`, {
+  const res = await axios.get(`${base_url}/page-3/index.php?KlaBuDatum=${getDatestamp(date)}&Klasse=${course}&Schule=0&StdNachmOff=1&StdNachm=1&StdNullOff=1&StdNull=1`, {
     headers: { ...default_headers, "Cookie": `PHPSESSID=${token}` }
   })
 
