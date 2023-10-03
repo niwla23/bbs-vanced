@@ -49,26 +49,44 @@
 		goto('/');
 	}
 
-	function importSettings() {
-		const data = prompt(
-			'Füge deine Einstellungen von einem anderem Export hier ein, um sie zu importieren.'
-		);
-		if (!data) {
-			alert('keine daten importiert');
-			return;
-		}
-		importSettingsFromJSON(data);
-		loadSettings();
-	}
 	function exportSettings() {
-		prompt(
-			'Füge den folgenden text auf einem anderen Gerät ein, um die Einstellungen dort zu importieren',
-			settingsToJson()
-		);
+		const jsonSettings = settingsToJson();
+		const urlSafeSettings = encodeURIComponent(jsonSettings);
+		const exportUrl = `${window.location.origin}/settings?import=${urlSafeSettings}`;
+
+		if (navigator.share) {
+			navigator.share({
+				title: 'BBS Stundenplan App',
+				text: 'Mit diesem Link kannst du die BBS Viewer app mit meinen Einstellungen nutzen',
+				url: exportUrl
+			});
+		} else if (navigator.clipboard) {
+			navigator.clipboard.writeText(exportUrl);
+			alert(
+				'Der Link mit deinen Einstellungen wurde kopiert! Schick ihn jemandem oder dir selbst als Backup.'
+			);
+		} else {
+			prompt(
+				'Mit diesem Link aknnst du die aktuellen Einstellungen auf einem anderen Gerät verwenden',
+				exportUrl
+			);
+		}
+
+		// prompt(
+		// 	'Füge den folgenden text auf einem anderen Gerät ein, um die Einstellungen dort zu importieren',
+		// 	exportUrl
+		// );
 	}
 
 	onMount(() => {
 		loadSettings();
+		const urlParams = new URLSearchParams(window.location.search);
+		const importString = urlParams.get('import');
+		if (importString) {
+			importSettingsFromJSON(importString);
+			loadSettings();
+			window.location.href = window.location.origin + window.location.pathname;
+		}
 	});
 </script>
 
@@ -126,17 +144,13 @@
 				</li>
 			{/each}
 		</ul>
-		<button class="bg-primary mt-4 p-4 w-full rounded-md border border-colborder" on:click={save}>
-			Speichern
-		</button>
-		<div class="flex gap-2 pt-2">
+		<div class="flex gap-2 pt-4">
+			<button class="bg-primary p-4 w-full rounded-md border border-colborder" on:click={save}>
+				Speichern
+			</button>
 			<button
 				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
-				on:click={importSettings}>Import</button
-			>
-			<button
-				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
-				on:click={exportSettings}>Export</button
+				on:click={exportSettings}>Einstellungen teilen</button
 			>
 		</div>
 	</main>
