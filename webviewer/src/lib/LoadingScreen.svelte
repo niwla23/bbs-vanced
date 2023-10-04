@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	const availableEmojis = ['🤮', '😭', '😳', '🥲', '🥱', '🥺', '🫤'];
+	const availableEmojis = ['🤮', '😭', '😳', '🥲', '🥱', '🥺', '🫤', '😥', '😑'];
 	const availableMotd = [
 		'Heute wird wieder ein Kacktag.',
 		'Tipp: Bis zum dritten Tag gibt es keine Attestpflicht',
@@ -12,7 +12,9 @@
 		'Setze deine Energiepunkte sinnvoll ein.',
 		'Hinweis: Taktisches Überspringen von Stunden wirkt sich positiv auf dein HP aus',
 		'Achtung! Hausaufgaben sind Side Quests. Verschwende nicht zu viel Zeit mit ihnen.',
-		'Tipp: Die NPCs können dir behilflich sein. Frage sie zum Beispiel nach Hausaufgaben.'
+		'Tipp: Die NPCs können dir behilflich sein. Frage sie zum Beispiel nach Hausaufgaben.',
+		'Tipp: Du kannst den Raum währrend des Unterrichts jederzeit verlassen',
+		'Hinweis: Der Schülerladen öffnet nur selten. Verpasse es nicht!'
 	];
 	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
 	const choosenMotd = availableMotd[Math.floor(Math.random() * availableMotd.length)];
