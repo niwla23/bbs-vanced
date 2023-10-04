@@ -9,6 +9,7 @@
 		weekdayMap
 	} from '@/lib/timetableHelpers';
 	import Timeslot from '@/lib/Timeslot.svelte';
+	import LoadingScreen from '@/lib/LoadingScreen.svelte';
 
 	// export let data: PageServerData;
 	//
@@ -22,4 +23,5 @@
 
 <div class="w-full">
 	<a href="/settings">Settings</a>
+	<LoadingScreen />
 </div>

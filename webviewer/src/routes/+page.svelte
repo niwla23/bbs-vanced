@@ -92,13 +92,19 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<div class="w-full flex gap-2 justify-center">
-			<button on:click={loadPast} class="border border-primary rounded-md p-2 text-xs">
-				<Icon icon="material-symbols:arrow-upward" class="h-8 w-8" />
-			</button>
-			<a href="/settings" class="border border-primary rounded-md p-2 text-xs">
-				<Icon icon="material-symbols:settings" class="h-8 w-8" />
-			</a>
+		<div class="w-full flex gap-2 justify-between pb-4">
+			<div>
+				<h1 class="font-bold text-2xl">Stundenplan</h1>
+				<h2 class="text-gray-300 text-xs">By Alwin Lohrie</h2>
+			</div>
+			<div class="flex gap-2">
+				<button on:click={loadPast} class="border border-primary rounded-md p-2 text-xs">
+					<Icon icon="material-symbols:arrow-upward" class="h-8 w-8" />
+				</button>
+				<a href="/settings" class="border border-primary rounded-md p-2 text-xs">
+					<Icon icon="material-symbols:settings" class="h-8 w-8" />
+				</a>
+			</div>
 		</div>
 		<div class="flex flex-col gap-2">
 			{#each filteredTimetable as [day, slots] (day)}
