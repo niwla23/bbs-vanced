@@ -78,6 +78,24 @@
 		// );
 	}
 
+	function importSettings() {
+		const inputString = prompt('Füge den Link mit den Einstellungen hier ein');
+		if (!inputString) {
+			alert('no link');
+			return;
+		}
+		const urlParams = new URLSearchParams(new URL(inputString).search);
+		console.log(urlParams);
+		const importString = urlParams.get('import');
+		console.log(importString);
+		if (!importString) {
+			alert('kein link');
+			return;
+		}
+		importSettingsFromJSON(importString);
+		loadSettings();
+	}
+
 	onMount(() => {
 		loadSettings();
 		const urlParams = new URLSearchParams(window.location.search);
@@ -144,13 +162,17 @@
 				</li>
 			{/each}
 		</ul>
-		<div class="flex gap-2 pt-4">
-			<button class="bg-primary p-4 w-full rounded-md border border-colborder" on:click={save}>
-				Speichern
-			</button>
+		<button class="bg-primary p-4 w-full rounded-md border border-colborder mt-2" on:click={save}>
+			Speichern
+		</button>
+		<div class="flex gap-2 pt-2">
 			<button
 				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
 				on:click={exportSettings}>Einstellungen teilen</button
+			>
+			<button
+				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
+				on:click={importSettings}>Aus Link laden</button
 			>
 		</div>
 	</main>
