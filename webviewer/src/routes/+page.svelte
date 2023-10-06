@@ -12,6 +12,7 @@
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
+	import { runPWAChecks } from '@/lib/pwaLogic';
 
 	let data: [Date, TimetableDay][] = [];
 	let lastLoadTime = new Date().getTime();
@@ -57,6 +58,7 @@
 
 	onMount(() => {
 		initialLoad();
+		runPWAChecks();
 		const handleScroll = () => {
 			if (
 				window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
