@@ -39,7 +39,18 @@
 		'Du willst nach Hause? Geh. Morgen ist auch noch ein Tag.',
 		'Schlaf > Schule.',
 		'Der Unterricht ist zum Essen und auf Klo gehen. Flasche auffüllen auch. Verschwende nicht die Pause damit.',
-		'Antworten ausdenken > Lernen'
+		'Antworten ausdenken > Lernen',
+		'Ach mein, dein... Das sind doch bürgerliche Kategorien',
+		'Wer anderen eine Grube gräbt, braucht eine Baugenehmigung',
+		'We don’t make Mistakes, we have Happy Accident’s. - Bob Ross',
+		'Es gibt eben sone und solche, aber dann gibts noch ganz andere und dit sind die schlimmsten - Herta',
+		'Warum liegt hier überhaupt Stroh?',
+		'"Was ist dass? - Das ist blaues Licht - und was macht es? - Es leuchtet blau" - Deutsche Hochschule der Polizei.',
+		'I dont wanna live in a world were Kindness is a sign of weakness',
+		'europäische Blauhaarkatze',
+		'Niemand will an dein Schnitzel, Alice',
+		'gLaUben kAnnst dU IN DEr kiRCHE',
+		'Dit is ‘ne freundliche Diktatur hier.'
 	];
 	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
 	const choosenMotd = availableMotd[Math.floor(Math.random() * availableMotd.length)];
