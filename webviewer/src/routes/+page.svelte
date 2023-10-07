@@ -13,9 +13,12 @@
 	import Icon from '@iconify/svelte';
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
 	import { runPWAChecks } from '@/lib/pwaLogic';
+	import { availableEmojis } from '@/lib/textRessources';
 
 	let data: [Date, TimetableDay][] = [];
 	let lastLoadTime = new Date().getTime();
+
+	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
 
 	async function loadData(date: Date) {
 		const resp = await fetch(`/api/timetable?date=${formatDateForApi(date)}`);
@@ -94,11 +97,14 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<div class="w-full flex justify-center py-2 px-4 fixed top-0 left-0 backdrop-blur bg-black">
+		<div class="w-full flex justify-center py-2 px-4 fixed top-0 left-0 backdrop-blur bg-darkest">
 			<div class="w-full max-w-4xl flex gap-2 justify-between">
-				<div>
-					<h1 class="font-bold text-2xl">Stundenplan</h1>
-					<h2 class="text-gray-300 text-xs">By Alwin Lohrie</h2>
+				<div class="flex items-center">
+					<p class="text-2xl pr-4">{choosenEmoji}</p>
+					<div>
+						<h1 class="font-bold text-2xl">Stundenplan</h1>
+						<h2 class="text-gray-300 text-xs">By Alwin Lohrie</h2>
+					</div>
 				</div>
 				<div class="flex gap-2">
 					<button on:click={loadPast} class="rounded-md p-2 text-xs">
