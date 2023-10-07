@@ -119,7 +119,7 @@
 		<div class="flex flex-col gap-2 pt-12">
 			{#each filteredTimetable as [day, slots] (day)}
 				<div class="py-2 flex-grow">
-					<a id={formatDateForApi(day)} aria-hidden="true" />
+					<a id={formatDateForApi(day)} aria-hidden="true" class="block relative -top-16" />
 					<b
 						class="p-1 rounded-md"
 						class:bg-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
