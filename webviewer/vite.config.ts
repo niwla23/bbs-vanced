@@ -16,7 +16,7 @@ export default defineConfig({
         name: "BBS Viewer",
         short_name: "BBS Viewer",
         description: "zeigt dir den stundenplan",
-        theme_color: "#22C55E",
+        theme_color: "#0C0A09",
         icons: [
           {
             src: "android-chrome-192x192.png",
