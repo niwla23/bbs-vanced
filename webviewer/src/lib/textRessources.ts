@@ -23,7 +23,7 @@ export const availableMotd = [
   'Achtung: Ab Level 25 endet die Low-Level-Protection und du musst du deine Krankenversicherungsbeiträge selbst bezahlen.',
   'Wenn du die ganze Woche grinden willst, caste mit einem Heiler den Zauber "gelber Schein".',
   'Die Enten im Park sind kostenlos.',
-  'Kranstellplätze müssen verdichtet werden.',
+  'Kranplätze müssen verdichtet sein.',
   'Trete aus der Kirche aus, um Kirchensteuer zu sparen',
   'Durch Handtücher können jegliche Sitzflächen reserviert werden.',
   'Die Gelbe Tonne ist nur für Verpackungsmaterial',
