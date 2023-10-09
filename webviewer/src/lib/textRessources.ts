@@ -40,7 +40,7 @@ export const availableMotd = [
   'Ach mein, dein... Das sind doch bürgerliche Kategorien',
   'Wer anderen eine Grube gräbt, braucht eine Baugenehmigung',
   'We don’t make Mistakes, we have Happy Accident’s. - Bob Ross',
-  'Es gibt eben sone und solche, aber dann gibts noch ganz andere und dit sind die schlimmsten - Herta',
+  'Es jibt sone und solche, und dann jibt es noch janz andre, aba dit sind die Schlimmstn - Herta',
   'Warum liegt hier überhaupt Stroh?',
   '"Was ist dass? - Das ist blaues Licht - und was macht es? - Es leuchtet blau" - Deutsche Hochschule der Polizei.',
   'I dont wanna live in a world were Kindness is a sign of weakness',
