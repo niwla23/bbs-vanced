@@ -49,12 +49,14 @@
 
 	async function initialLoad() {
 		const today = new Date();
+		let targetDate = today;
 		await loadData(today);
-		if (today.getDay() > 4 || today.getDay() === 0) {
+		if (today.getDay() > 5 || today.getDay() === 0) {
 			await loadFuture();
+			targetDate = getNextMonday(today);
 		}
 		setTimeout(() => {
-			const elId = formatDateForApi(getNextMonday(new Date()));
+			const elId = formatDateForApi(targetDate);
 			document.getElementById(elId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
 		}, 200);
 	}

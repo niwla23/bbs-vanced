@@ -42,7 +42,7 @@ export const availableMotd = [
   'We don’t make Mistakes, we have Happy Accident’s. - Bob Ross',
   'Es jibt sone und solche, und dann jibt es noch janz andre, aba dit sind die Schlimmstn - Herta',
   'Warum liegt hier überhaupt Stroh?',
-  '"Was ist dass? - Das ist blaues Licht - und was macht es? - Es leuchtet blau" - Deutsche Hochschule der Polizei.',
+  '"Was ist das? - Das ist blaues Licht - und was macht es? - Es leuchtet blau" - Deutsche Hochschule der Polizei.',
   'I dont wanna live in a world were Kindness is a sign of weakness',
   'europäische Blauhaarkatze',
   'Niemand will an dein Schnitzel, Alice',
