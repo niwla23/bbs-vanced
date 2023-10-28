@@ -3,8 +3,6 @@ import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
 import { getSessionToken, getTimetable } from "bbs-parser"
 import { autoMergeTimeslots } from "bbs-parser/src/helpers"
 import { areSettingsComplete, getSettings } from '@/lib/settings';
-import { redirect } from '@sveltejs/kit';
-import { formatDateForApi } from "@/lib/timetableHelpers";
 
 function sendJson(data: any) {
   return new Response(JSON.stringify(data))

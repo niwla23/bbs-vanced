@@ -1,9 +1,20 @@
 <script lang="ts">
 	import type { TimetableLesson, TimetableTimeSlot } from 'bbs-parser/src/types';
+	import { isExamInTimeslot, type Exam } from './exams';
+	import Icon from '@iconify/svelte';
 
 	export let timeSlot: TimetableTimeSlot;
+	export let date: Date;
 	export let hours: number[];
+	export let exams: Exam[];
 
+	let externalExam: Exam | null;
+
+	for (const exam of exams) {
+		if (isExamInTimeslot(timeSlot, date, hours, exam)) {
+			externalExam = exam;
+		}
+	}
 	function isLessonFree(lesson: TimetableLesson) {
 		if (!lesson.subject) return true;
 		const regex = /^<del>.*<\/del>$/g;
@@ -22,6 +33,8 @@
 	};
 	const isExam = function () {
 		if (timeSlot.find((l) => l.exam)) return true;
+		if (externalExam) return true;
+		return false;
 	};
 
 	$: backgroundColor = (function () {
@@ -43,7 +56,14 @@
 				<p class="">{@html lesson.subject}</p>
 				<p class="text-muted">{@html lesson.teacher}</p>
 				<p class="text-muted">{@html lesson.room}</p>
-				{#if lesson.exam}<p class="text-red-500">{@html lesson.exam}</p>{/if}
+				{#if lesson.exam}<p class="text-red-500">
+						{@html lesson.exam}
+						<Icon icon="material-symbols:verified" class="h-6 w-6 inline" />
+					</p>{/if}
+				{#if externalExam}<p class="text-red-500">
+						{externalExam.topic}
+						<Icon icon="material-symbols:supervised-user-circle" class="h-6 w-6 inline" />
+					</p>{/if}
 			{/each}
 		{:else}
 			<p class="text-muted">Frei :)</p>

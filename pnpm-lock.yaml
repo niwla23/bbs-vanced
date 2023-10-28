@@ -45,6 +45,9 @@ importers:
       '@types/js-cookie':
         specifier: ^3.0.3
         version: 3.0.3
+      bbs-parser:
+        specifier: workspace:*
+        version: link:../bbs-parser
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -60,6 +63,9 @@ importers:
       lucide-react:
         specifier: ^0.268.0
         version: 0.268.0(react@18.2.0)
+      pocketbase:
+        specifier: ^0.19.0
+        version: 0.19.0
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0
@@ -97,9 +103,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.15
         version: 10.4.15(postcss@8.4.28)
-      bbs-parser:
-        specifier: workspace:*
-        version: link:../bbs-parser
       eslint:
         specifier: ^8.28.0
         version: 8.47.0
@@ -5254,6 +5257,10 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
     dev: true
+
+  /pocketbase@0.19.0:
+    resolution: {integrity: sha512-bUVZfVdD17K8GnwbeDMZPEdREVg2YE0F8uHPDC0zer4VtwXUqoPCCeudTy3fhUE7pfuKnfpuPxeBSYsBY3AGIQ==}
+    dev: false
 
   /postcss-import@15.1.0(postcss@8.4.28):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}

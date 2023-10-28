@@ -14,8 +14,10 @@
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
 	import { runPWAChecks } from '@/lib/pwaLogic';
 	import { availableEmojis } from '@/lib/textRessources';
+	import { getExamsClient, type Exam } from '@/lib/exams';
 
 	let data: [Date, TimetableDay][] = [];
+	let exams: Exam[] = [];
 	let lastLoadTime = new Date().getTime();
 
 	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
@@ -33,6 +35,8 @@
 				([date, _v], i, self) => self.findIndex(([d, _v]) => d.getTime() === date.getTime()) === i
 			)
 			.sort((a, b) => a[0].getTime() - b[0].getTime());
+
+		exams = await getExamsClient();
 	}
 
 	async function loadPast() {
@@ -89,8 +93,6 @@
 			const filtered = filterTimetable(settings, v);
 			return [day, filtered];
 		});
-		// @ts-expect-error fuck ts
-		// .filter(([day, v]) => v.length > 0);
 
 		return all;
 	}
@@ -108,33 +110,38 @@
 						<h2 class="text-gray-300 text-xs">By Alwin Lohrie</h2>
 					</div>
 				</div>
-				<div class="flex gap-2">
-					<button on:click={loadPast} class="rounded-md p-2 text-xs">
-						<Icon icon="material-symbols:arrow-upward" class="h-8 w-8" />
+				<div class="flex gap-1">
+					<button on:click={loadPast} class="rounded-md px-2 text-xs">
+						<Icon icon="material-symbols:calendar-add-on-rounded" class="h-6 w-6" />
 					</button>
-					<a href="/settings" class="rounded-md p-2 text-xs">
-						<Icon icon="material-symbols:settings" class="h-8 w-8" />
+					<button on:click={loadPast} class="rounded-md px-2 text-xs">
+						<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
+					</button>
+					<a href="/settings" class="flex flex-col justify-center rounded-md px-2 text-xs">
+						<Icon icon="material-symbols:settings" class="h-6 w-6" />
 					</a>
 				</div>
 			</div>
 		</div>
 		<div class="flex flex-col gap-2 pt-12">
-			{#each filteredTimetable as [day, slots] (day)}
-				<div class="py-2 flex-grow">
-					<a id={formatDateForApi(day)} aria-hidden="true" class="block relative -top-16" />
-					<b
-						class="p-1 rounded-md"
-						class:bg-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
-					>
-						{weekdayMap[day.getDay()]} - {day.toLocaleDateString()}
-					</b>
-					<div class="pt-2 flex flex-col gap-2">
-						{#each slots as [hours, slot]}
-							<Timeslot {hours} timeSlot={slot} />
-						{/each}
+			{#if exams}
+				{#each filteredTimetable as [day, slots] (day)}
+					<div class="py-2 flex-grow">
+						<a id={formatDateForApi(day)} aria-hidden="true" class="block relative -top-16" />
+						<b
+							class="p-1 rounded-md"
+							class:bg-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
+						>
+							{weekdayMap[day.getDay()]} - {day.toLocaleDateString()}
+						</b>
+						<div class="pt-2 flex flex-col gap-2">
+							{#each slots as [hours, slot]}
+								<Timeslot {hours} {exams} date={day} timeSlot={slot} />
+							{/each}
+						</div>
 					</div>
-				</div>
-			{/each}
+				{/each}
+			{/if}
 			<p>Wird geladen...</p>
 			<LoadingScreen />
 		</div>
