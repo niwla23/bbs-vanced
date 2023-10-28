@@ -4,6 +4,7 @@ export interface TimetableLesson {
   subject: string | null
   originalSubject: string | null
   room: string | null
+  exam: string | null
 }
 
 export type TimetableTimeSlot = TimetableLesson[]

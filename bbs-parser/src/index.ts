@@ -70,6 +70,7 @@ export function getDatestamp(date: Date): string {
 const TEACHERS_INDEX = 0
 const SUBEJCTS_INDEX = 1
 const ROOMS_INDEX = 2
+const EXAM_INDEX = 3
 
 
 /**
@@ -107,7 +108,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
         // .split("(")[0].trim().split("\n")
 
         if (!timetableDay[hour]) {
-          let scaffoldData: TimetableLesson = { teacher: null, subject: null, originalSubject: null, room: null, hour: hour }
+          let scaffoldData: TimetableLesson = { teacher: null, subject: null, originalSubject: null, room: null, exam: null, hour: hour }
           let scaffoldArray = []
           for (let i = 0; i < cellText.length; i++) {
             scaffoldArray.push(scaffoldData)
@@ -127,6 +128,9 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
               break;
             case ROOMS_INDEX:
               timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { room: currentPropertyData });
+              break;
+            case EXAM_INDEX:
+              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { exam: currentPropertyData });
               break;
           }
         }
