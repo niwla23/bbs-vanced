@@ -14,7 +14,7 @@ export interface Exam {
 
 const pb = new PocketBase('https://bbs-backend.noteqr.de');
 
-function formatDate(n: Date) {
+export function formatDate(n: Date) {
   return n.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
 }
 

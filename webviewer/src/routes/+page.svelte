@@ -111,9 +111,9 @@
 					</div>
 				</div>
 				<div class="flex gap-1">
-					<button on:click={loadPast} class="rounded-md px-2 text-xs">
+					<a href="/addExam" class="flex flex-col justify-center rounded-md px-2 text-xs">
 						<Icon icon="material-symbols:calendar-add-on-rounded" class="h-6 w-6" />
-					</button>
+					</a>
 					<button on:click={loadPast} class="rounded-md px-2 text-xs">
 						<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
 					</button>
