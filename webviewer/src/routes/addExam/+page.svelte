@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { formatDate } from '@/lib/exams';
 	import { getSettings } from '@/lib/settings';
 	import Icon from '@iconify/svelte';
 	import PocketBase from 'pocketbase';
@@ -48,7 +49,7 @@
 			startHour,
 			endHour,
 			topic,
-			date: '2022-01-01 10:00:00.123Z',
+			date: formatDate(date),
 			schoolUsername: appSettings?.username,
 			course: appSettings?.className,
 			createdBy: pb.authStore.model.id
