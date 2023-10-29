@@ -6,6 +6,7 @@
 		getPreviousMonday,
 		weekdayMap
 	} from '@/lib/timetableHelpers';
+	import PocketBase from 'pocketbase';
 	import type { TimetableDay } from 'bbs-parser/src/types';
 	import Timeslot from '@/lib/Timeslot.svelte';
 	import { getSettings, type Settings } from '@/lib/settings';
@@ -14,7 +15,9 @@
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
 	import { runPWAChecks } from '@/lib/pwaLogic';
 	import { availableEmojis } from '@/lib/textRessources';
-	import { getExamsClient, type Exam } from '@/lib/exams';
+	import { getExamsClient, type Exam, formatDate } from '@/lib/exams';
+	import { goto } from '$app/navigation';
+	import { areNewNewsAvailable } from '@/lib/news';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
@@ -63,6 +66,11 @@
 			const elId = formatDateForApi(targetDate);
 			document.getElementById(elId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
 		}, 200);
+
+		// check for news
+		if (await areNewNewsAvailable()) {
+			goto('/news');
+		}
 	}
 
 	onMount(() => {

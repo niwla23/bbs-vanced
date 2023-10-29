@@ -18,15 +18,15 @@ export function formatDate(n: Date) {
   return n.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
 }
 
-export async function getExamsServer(pbUser: string, pbPassword: string, course: string, schoolUsername: string, startDate: Date, endDate: Date) {
+export async function getExamsServer(pbUser: string, pbPassword: string, course: string, schoolUsername: string) {
   pb.autoCancellation(false)
   pb.collection('users').authWithPassword(pbUser, pbPassword)
 
-  const filterTemplate = "course = {:course} && schoolUsername = {:schoolUsername} && date >= {:startDate} && date <= {:endDate}"
+  const filterTemplate = "course = {:course} && schoolUsername = {:schoolUsername}"
 
   return await pb.collection('exams').getFullList({
     sort: '-date',
-    filter: pb.filter(filterTemplate, { course, schoolUsername, startDate: formatDate(startDate), endDate: formatDate(endDate) }),
+    filter: pb.filter(filterTemplate, { course, schoolUsername }),
     requestKey: null
   });
 }

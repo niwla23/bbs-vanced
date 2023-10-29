@@ -21,7 +21,7 @@ export const GET: RequestHandler = async (event) => {
 
   const date = new Date(event.url.searchParams.get("date") || new Date())
 
-  const exams = await getExamsServer(env.PB_USER as string, env.PB_PASSWORD as string, settings.className, settings.username, new Date(2021, 1, 1), new Date(2024, 1, 1))
+  const exams = await getExamsServer(env.PB_USER as string, env.PB_PASSWORD as string, settings.className, settings.username)
 
   return new Response(JSON.stringify(exams), { headers: { "content-type": "application/json" } });
 }
