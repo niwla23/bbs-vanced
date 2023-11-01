@@ -8,9 +8,9 @@ export default defineConfig({
     sveltekit(),
     VitePWA({
       registerType: "autoUpdate",
-      // workbox: {
-      //   globIgnores: ["**/*", "*", "**"]
-      // },
+      workbox: {
+        globIgnores: ["api/**", "api/*", "/api/**", "api"]
+      },
       injectRegister: 'script',
       manifest: {
         name: "BBS Viewer",

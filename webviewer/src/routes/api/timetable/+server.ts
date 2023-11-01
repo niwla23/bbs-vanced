@@ -30,6 +30,7 @@ export const GET: RequestHandler = async (event) => {
     timetableMerged.set(day, merged)
   }
 
+  event.setHeaders({ "cache-control": "max-age=60" })
 
   return new Response(JSON.stringify({
     timetableMerged: Array.from(timetableMerged.entries()),
