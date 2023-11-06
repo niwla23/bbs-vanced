@@ -23,6 +23,6 @@ export const GET: RequestHandler = async (event) => {
 
   const exams = await getExamsServer(env.PB_USER as string, env.PB_PASSWORD as string, settings.className, settings.username)
 
-  event.setHeaders({ "cache-control": "max-age=60" })
+  event.setHeaders({ "cache-control": "max-age=0" })
   return new Response(JSON.stringify(exams), { headers: { "content-type": "application/json" } });
 }

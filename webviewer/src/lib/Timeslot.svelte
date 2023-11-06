@@ -8,13 +8,25 @@
 	export let hours: number[];
 	export let exams: Exam[];
 
-	let externalExam: Exam | null;
+	// let externalExam: Exam | null;
 
-	for (const exam of exams) {
-		if (isExamInTimeslot(timeSlot, date, hours, exam)) {
-			externalExam = exam;
+	// function getExternalExam() {
+	// 	for (const exam of exams) {
+	// 		if (isExamInTimeslot(timeSlot, date, hours, exam)) {
+	// 			// externalExam = exam;
+	// 			return exam;
+	// 		}
+	// 	}
+	// }
+	$: externalExam = (function () {
+		for (const exam of exams) {
+			if (isExamInTimeslot(timeSlot, date, hours, exam)) {
+				return exam;
+			}
 		}
-	}
+		return null;
+	})();
+
 	function isLessonFree(lesson: TimetableLesson) {
 		if (!lesson.subject) return true;
 		const regex = /^<del>.*<\/del>$/g;
@@ -38,6 +50,7 @@
 	};
 
 	$: backgroundColor = (function () {
+		exams; // this exists so svelte knows that there is a dependency on exams
 		if (isFree()) return 'bg-darkest';
 		if (isExam()) return 'bg-red-800/40';
 		return 'bg-dark';
