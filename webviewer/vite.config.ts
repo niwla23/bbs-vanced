@@ -13,8 +13,8 @@ export default defineConfig({
       },
       injectRegister: 'script',
       manifest: {
-        name: "BBS Viewer",
-        short_name: "BBS Viewer",
+        name: "BBS Vanced",
+        short_name: "BBS Vanced",
         description: "zeigt dir den stundenplan",
         theme_color: "#0C0A09",
         icons: [

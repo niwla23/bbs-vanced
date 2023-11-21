@@ -11,7 +11,7 @@
 		{
 			icon: 'material-symbols:eyeglasses',
 			label: 'Klausuren',
-			onclick: (e) => alert('lool')
+			onclick: (e) => goto('/exams')
 		},
 		{
 			icon: 'material-symbols:calendar-add-on',

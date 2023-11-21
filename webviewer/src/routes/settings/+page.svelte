@@ -58,7 +58,7 @@
 		if (navigator.share) {
 			navigator.share({
 				title: 'BBS Stundenplan App',
-				text: 'Mit diesem Link kannst du die BBS Viewer app mit meinen Einstellungen nutzen',
+				text: 'Mit diesem Link kannst du die BBS Vanced app mit meinen Einstellungen nutzen',
 				url: exportUrl
 			});
 		} else if (navigator.clipboard) {
