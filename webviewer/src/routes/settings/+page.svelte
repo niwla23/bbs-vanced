@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import TopBar from '@/lib/TopBar.svelte';
 	import {
 		getSettings,
 		saveSettings,
@@ -110,8 +111,8 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<h1 class="text-2xl">Einstellungen</h1>
-		<label class="block pb-2">
+		<TopBar title="Einstellungen" />
+		<label class="block pb-2 pt-12">
 			<span class="font-light">Benutzername</span>
 			<input
 				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"

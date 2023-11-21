@@ -50,3 +50,4 @@ export const availableMotd = [
   'Dit is ‘ne freundliche Diktatur hier.'
 ];
 
+export const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];

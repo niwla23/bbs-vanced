@@ -25,13 +25,13 @@ export async function getExamsServer(pbUser: string, pbPassword: string, course:
   const filterTemplate = "course = {:course} && schoolUsername = {:schoolUsername}"
 
   return await pb.collection('exams').getFullList({
-    sort: '-date',
+    sort: '+date',
     filter: pb.filter(filterTemplate, { course, schoolUsername }),
     requestKey: null
   });
 }
 
-export async function getExamsClient() {
+export async function getExamsClient(): Promise<Exam[]> {
   const resp = await fetch(`/api/exams`);
   const text = await resp.text();
   const parsedData = JSON.parse(text);

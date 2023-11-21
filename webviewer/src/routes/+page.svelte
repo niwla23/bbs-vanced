@@ -17,6 +17,8 @@
 	import { getExamsClient, type Exam } from '@/lib/exams';
 	import { goto } from '$app/navigation';
 	import { areNewNewsAvailable } from '@/lib/news';
+	import Menu from '@/lib/Menu.svelte';
+	import TopBar from '@/lib/TopBar.svelte';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
@@ -108,28 +110,11 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<div class="w-full flex justify-center py-2 px-4 fixed top-0 left-0 backdrop-blur bg-darkest">
-			<div class="w-full max-w-4xl flex gap-2 justify-between">
-				<div class="flex items-center">
-					<p class="text-2xl pr-4">{choosenEmoji}</p>
-					<div>
-						<h1 class="font-bold text-2xl">Stundenplan</h1>
-						<h2 class="text-gray-300 text-xs">By Alwin Lohrie</h2>
-					</div>
-				</div>
-				<div class="flex gap-1">
-					<a href="/addExam" class="flex flex-col justify-center rounded-md px-2 text-xs">
-						<Icon icon="material-symbols:calendar-add-on-rounded" class="h-6 w-6" />
-					</a>
-					<button on:click={loadPast} class="rounded-md px-2 text-xs">
-						<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
-					</button>
-					<a href="/settings" class="flex flex-col justify-center rounded-md px-2 text-xs">
-						<Icon icon="material-symbols:settings" class="h-6 w-6" />
-					</a>
-				</div>
-			</div>
-		</div>
+		<TopBar title="Stundenplan">
+			<button on:click={loadPast} class="rounded-md px-2 text-xs">
+				<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
+			</button>
+		</TopBar>
 		<div class="flex flex-col gap-2 pt-12">
 			{#if exams}
 				{#each filteredTimetable as [day, slots] (day)}
@@ -153,4 +138,5 @@
 			<LoadingScreen />
 		</div>
 	</main>
+	<!-- <Menu /> -->
 </div>
