@@ -30,7 +30,7 @@
 		<!-- 	News -->
 		<!-- </h1> -->
 		<TopBar title="News" />
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-2 pt-12">
 			{#each newsList as newsArticle}
 				<div class="bg-dark p-2 rounded-md">
 					<small class="text-primary">{newsArticle.showtimeStart.split(' ')[0]}</small>
