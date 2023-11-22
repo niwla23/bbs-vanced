@@ -19,6 +19,11 @@
 			onclick: (e) => goto('/addExam')
 		},
 		{
+			icon: 'material-symbols:newspaper',
+			label: 'News',
+			onclick: (e) => goto('/news')
+		},
+		{
 			icon: 'material-symbols:settings',
 			label: 'Einstellungen',
 			onclick: (e) => goto('/settings')

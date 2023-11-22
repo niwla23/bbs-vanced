@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TopBar from '@/lib/TopBar.svelte';
 	import { formatDate } from '@/lib/exams';
 	import type { NewsArticle } from '@/lib/news';
 	import Icon from '@iconify/svelte';
@@ -24,10 +25,11 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<h1 class="font-bold text-2xl">
-			<a href="/"><Icon icon="material-symbols:arrow-left-alt" class="inline h-12" /></a>
-			News
-		</h1>
+		<!-- <h1 class="font-bold text-2xl"> -->
+		<!-- 	<a href="/"><Icon icon="material-symbols:arrow-left-alt" class="inline h-12" /></a> -->
+		<!-- 	News -->
+		<!-- </h1> -->
+		<TopBar title="News" />
 		<div class="flex flex-col gap-2">
 			{#each newsList as newsArticle}
 				<div class="bg-dark p-2 rounded-md">
