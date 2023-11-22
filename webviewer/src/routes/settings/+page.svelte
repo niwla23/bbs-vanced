@@ -111,9 +111,13 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<TopBar title="Einstellungen" />
+		<TopBar title="Einstellungen">
+			<button on:click={exportSettings} class="rounded-md px-2 text-xs">
+				<Icon icon="material-symbols:share" class="h-6 w-6" />
+			</button>
+		</TopBar>
 		<label class="block pb-2 pt-12">
-			<span class="font-light">Benutzername</span>
+			<span class="font-light">Benutzername (für bbs-betriebe.de)</span>
 			<input
 				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
 				placeholder="bbs-musterstadt"
@@ -121,7 +125,7 @@
 			/>
 		</label>
 		<label class="block pb-2">
-			<span class="font-light">Passwort</span>
+			<span class="font-light">Passwort (für bbs-betriebe.de)</span>
 			<input
 				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
 				placeholder="123"
@@ -137,7 +141,7 @@
 				bind:value={className}
 			/>
 		</label>
-		<h2 class="text-xl pt-2">Deine Fächer</h2>
+		<h2 class="text-xl pt-2">Deine Fächer / Kurse</h2>
 		<ul class="flex flex-col gap-2">
 			<form
 				class="flex justify-between items-center p-4 rounded-md bg-dark border border-colborder font-light"

@@ -29,6 +29,28 @@ export default defineConfig({
             type: "image/png",
           },
         ],
+        screenshots: [
+          {
+            src: "screenshots/screen1.jpg",
+            label: "Stundenplan",
+            sizes: "1080x2400"
+          },
+          {
+            src: "screenshots/screen2.jpg",
+            label: "Klausuren",
+            sizes: "1080x2400"
+          },
+          {
+            src: "screenshots/screen3.jpg",
+            label: "News",
+            sizes: "1080x2400"
+          },
+          {
+            src: "screenshots/screen4.jpg",
+            label: "Einstellungen",
+            sizes: "1080x2400",
+          }
+        ]
       },
 
     })
