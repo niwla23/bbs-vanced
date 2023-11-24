@@ -17,7 +17,7 @@ export function getMobileOperatingSystem(): "Windows Phone" | "Android" | "iOS" 
   }
 
   // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+  if (/iPad|iPhone|iPod|Safari|AppleWebKit/.test(userAgent) && !window.MSStream) {
     return "iOS";
   }
 
