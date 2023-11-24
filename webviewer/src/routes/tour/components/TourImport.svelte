@@ -42,8 +42,8 @@
 				</div>
 
 				<div class="w-full flex">
-					<img src="/tour/import1.png" class="w-full rounded-l-md" alt="Import Anleitung 1" />
-					<img src="/tour/import2.png" class="w-full rounded-r-md" alt="Import Anleitung 2" />
+					<img src="/tour/import1.png" class="flex-1 w-1/2 rounded-l-md" alt="Import Anleitung 1" />
+					<img src="/tour/import2.png" class="flex-1 w-1/2 rounded-r-md" alt="Import Anleitung 2" />
 				</div>
 			</div>
 		</section>

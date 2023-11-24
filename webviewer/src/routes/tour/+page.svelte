@@ -15,7 +15,7 @@
 
 	function apply() {
 		saveSettings({
-			courses: $coursesString.trim().split(';'),
+			courses: $coursesString != '' ? $coursesString.trim().split(';') : [],
 			className: $className
 		});
 		goto('/');
