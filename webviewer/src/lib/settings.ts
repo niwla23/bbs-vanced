@@ -2,8 +2,6 @@ import { redirect, type Cookies } from "@sveltejs/kit";
 import JsCookie from "js-cookie";
 
 export interface Settings {
-  username: string;
-  password: string;
   className: string;
   courses: string[];
 }
@@ -46,8 +44,8 @@ export function importSettingsFromJSON(json: string) {
 
 export function areSettingsComplete(settings: Settings) {
   if (!settings.className) return false
-  if (!settings.username) return false
-  if (!settings.password) return false
+  // if (!settings.username) return false
+  // if (!settings.password) return false
   return true
 }
 
@@ -55,7 +53,7 @@ export function areSettingsComplete(settings: Settings) {
 export function checkSettings(cookies: Cookies) {
   const settings = getSettings(cookies)
   if (!settings) {
-    throw redirect(307, `/settings`);
+    throw redirect(307, `/tour`);
   }
 
   if (!areSettingsComplete(settings)) {

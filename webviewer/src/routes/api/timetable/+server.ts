@@ -21,7 +21,7 @@ export const GET: RequestHandler = async (event) => {
   // if it works it aint broken
   const date = new Date(event.url.searchParams.get("date") || new Date())
 
-  const token = await getSessionToken(settings?.username, settings?.password)
+  const token = await getSessionToken("bbs-walsrode", "schueler")
   const timetable = await getTimetable(token, settings?.className, date, true) as TimetableWeek
   const timetableMerged = new Map<Date, TimetableDay>()
 

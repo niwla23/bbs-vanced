@@ -8,11 +8,10 @@
 		importSettingsFromJSON
 	} from '@/lib/settings';
 	import Icon from '@iconify/svelte';
+	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
 
 	let courses = new Set<string>([]);
-	let username = '';
-	let password = '';
 	let className = '';
 
 	function removeCourse(course: string) {
@@ -33,8 +32,6 @@
 	function loadSettings() {
 		let data = getSettings();
 		if (!data) return;
-		username = data.username;
-		password = data.password;
 		className = data.className;
 		courses = new Set(data.courses);
 	}
@@ -43,11 +40,14 @@
 		let trimmedCourses = [...courses].map((course) => course.trim());
 		saveSettings({
 			courses: trimmedCourses,
-			className: className.trim(),
-			username: username.trim(),
-			password
+			className: className.trim()
 		});
 		goto('/');
+	}
+
+	function clear() {
+		Cookies.remove('settings');
+		goto('/tour');
 	}
 
 	function exportSettings() {
@@ -116,24 +116,7 @@
 				<Icon icon="material-symbols:share" class="h-6 w-6" />
 			</button>
 		</TopBar>
-		<label class="block pb-2 pt-12">
-			<span class="font-light">Benutzername (für bbs-betriebe.de)</span>
-			<input
-				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
-				placeholder="bbs-musterstadt"
-				bind:value={username}
-			/>
-		</label>
-		<label class="block pb-2">
-			<span class="font-light">Passwort (für bbs-betriebe.de)</span>
-			<input
-				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
-				placeholder="123"
-				type="password"
-				bind:value={password}
-			/>
-		</label>
-		<label class="block pb-2">
+		<label class="block pt-12 pb-2">
 			<span class="font-light">Deine Klasse (z.B: BG-T-23, BG-22, ...)</span>
 			<input
 				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
@@ -170,15 +153,18 @@
 		<button class="bg-primary p-4 w-full rounded-md border border-colborder mt-2" on:click={save}>
 			Speichern
 		</button>
-		<div class="flex gap-2 pt-2">
-			<button
-				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
-				on:click={exportSettings}>Einstellungen teilen</button
-			>
-			<button
-				class="bg-blue-400 p-4 w-full rounded-md border border-colborder"
-				on:click={importSettings}>Aus Link laden</button
-			>
-		</div>
+		<button class="bg-red-700 p-4 w-full rounded-md border border-colborder mt-2" on:click={clear}>
+			Alles löschen und neu einrichten
+		</button>
+		<!-- <div class="flex gap-2 pt-2"> -->
+		<!-- 	<button -->
+		<!-- 		class="bg-blue-400 p-4 w-full rounded-md border border-colborder" -->
+		<!-- 		on:click={exportSettings}>Einstellungen teilen</button -->
+		<!-- 	> -->
+		<!-- 	<button -->
+		<!-- 		class="bg-blue-400 p-4 w-full rounded-md border border-colborder" -->
+		<!-- 		on:click={importSettings}>Aus Link laden</button -->
+		<!-- 	> -->
+		<!-- </div> -->
 	</main>
 </div>

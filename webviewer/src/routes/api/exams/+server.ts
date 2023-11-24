@@ -21,7 +21,7 @@ export const GET: RequestHandler = async (event) => {
 
   const date = new Date(event.url.searchParams.get("date") || new Date())
 
-  const exams = await getExamsServer(env.PB_USER as string, env.PB_PASSWORD as string, settings.className, settings.username)
+  const exams = await getExamsServer(env.PB_USER as string, env.PB_PASSWORD as string, settings.className, "bbs-walsrode")
 
   event.setHeaders({ "cache-control": "max-age=0" })
   return new Response(JSON.stringify(exams), { headers: { "content-type": "application/json" } });
