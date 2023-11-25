@@ -12,7 +12,7 @@
 </script>
 
 <div class="w-full flex justify-center p-4 h-full items-center">
-	<main class="max-w-4xl w-full h-full lg:h-[80vh] flex flex-col justify-between">
+	<main class="max-w-4xl w-full h-full flex flex-col justify-between">
 		<section>
 			<p>Sehr gut!</p>
 			<p class="pb-4">
@@ -41,9 +41,19 @@
 					/>
 				</div>
 
-				<div class="w-full flex">
-					<img src="/tour/import1.png" class="flex-1 w-1/2 rounded-l-md" alt="Import Anleitung 1" />
-					<img src="/tour/import2.png" class="flex-1 w-1/2 rounded-r-md" alt="Import Anleitung 2" />
+				<div class="flex w-full justify-center">
+					<div class="w-full flex max-w-2xl">
+						<img
+							src="/tour/import1.png"
+							class="flex-1 w-1/2 rounded-l-md"
+							alt="Import Anleitung 1"
+						/>
+						<img
+							src="/tour/import2.png"
+							class="flex-1 w-1/2 rounded-r-md"
+							alt="Import Anleitung 2"
+						/>
+					</div>
 				</div>
 			</div>
 		</section>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
+	import { shareApp } from './shareApp';
 
 	const menuEntries = [
 		{
@@ -27,6 +28,11 @@
 			icon: 'material-symbols:settings',
 			label: 'Einstellungen',
 			onclick: (e) => goto('/settings')
+		},
+		{
+			icon: 'material-symbols:share',
+			label: 'App teilen',
+			onclick: (e) => shareApp('menu_share')
 		}
 	];
 

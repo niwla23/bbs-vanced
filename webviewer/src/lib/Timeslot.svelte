@@ -73,10 +73,12 @@
 						{@html lesson.exam}
 						<Icon icon="material-symbols:verified" class="h-6 w-6 inline" />
 					</p>{/if}
-				{#if externalExam}<p class="text-red-500">
+				{#if externalExam}
+					<p class="text-red-500">
 						{externalExam.topic}
 						<Icon icon="material-symbols:supervised-user-circle" class="h-6 w-6 inline" />
-					</p>{/if}
+					</p>
+				{/if}
 			{/each}
 		{:else}
 			<p class="text-muted">Frei :)</p>

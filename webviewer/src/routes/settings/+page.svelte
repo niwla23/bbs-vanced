@@ -7,6 +7,7 @@
 		settingsToJson,
 		importSettingsFromJSON
 	} from '@/lib/settings';
+	import { shareApp } from '@/lib/shareApp';
 	import Icon from '@iconify/svelte';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -46,6 +47,7 @@
 	}
 
 	function clear() {
+		if (!confirm('Wirklich alle Einstellungen löschen?')) return;
 		Cookies.remove('settings');
 		goto('/tour');
 	}
@@ -112,7 +114,7 @@
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
 		<TopBar title="Einstellungen">
-			<button on:click={exportSettings} class="rounded-md px-2 text-xs">
+			<button on:click={() => shareApp('settings_share')} class="rounded-md px-2 text-xs">
 				<Icon icon="material-symbols:share" class="h-6 w-6" />
 			</button>
 		</TopBar>
