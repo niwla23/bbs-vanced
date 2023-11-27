@@ -12,12 +12,10 @@
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
-	import { runPWAChecks } from '@/lib/pwaLogic';
 	import { availableEmojis } from '@/lib/textRessources';
 	import { getExamsClient, type Exam } from '@/lib/exams';
 	import { goto } from '$app/navigation';
 	import { areNewNewsAvailable } from '@/lib/news';
-	import Menu from '@/lib/Menu.svelte';
 	import TopBar from '@/lib/TopBar.svelte';
 
 	let data: [Date, TimetableDay][] = [];
@@ -76,7 +74,7 @@
 
 	onMount(() => {
 		initialLoad();
-		runPWAChecks();
+		// runPWAChecks();
 		const handleScroll = () => {
 			if (
 				window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&

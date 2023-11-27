@@ -25,6 +25,6 @@ function installPrompt() {
 }
 
 export function runPWAChecks() {
-  iosSettingsImportCheck()
+  //iosSettingsImportCheck()
   // installPrompt()
 }
