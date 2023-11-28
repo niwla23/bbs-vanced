@@ -7,6 +7,7 @@
 	import PocketBase from 'pocketbase';
 
 	let subject = '';
+	let examType = 'klausur';
 	let dateString: string | null = null;
 	let startHour: number | null = null;
 	let endHour: number | null = null;
@@ -51,8 +52,9 @@
 			endHour,
 			topic,
 			date: formatDate(date),
-			schoolUsername: appSettings?.username,
+			schoolUsername: 'bbs-walsrode',
 			course: appSettings?.className,
+			type: examType,
 			createdBy: pb.authStore.model.id
 		};
 
@@ -84,6 +86,7 @@
 								{subject}
 							</option>
 						{/each}
+						<option value="-all-"> Alle Kurse / Fächer </option>
 					</select>
 				</label>
 				<label class="block pb-2">
@@ -124,6 +127,13 @@
 					/>
 				</label>
 
+				<select
+					bind:value={examType}
+					class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
+				>
+					<option value="klausur">Typ: Klausur</option>
+					<option value="termin">Typ: Anderer Termin</option>
+				</select>
 				<button
 					class="bg-primary p-4 w-full rounded-md border border-colborder mt-2"
 					on:click={save}

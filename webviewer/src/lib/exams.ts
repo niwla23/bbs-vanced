@@ -10,6 +10,7 @@ export interface Exam {
   endHour: number
   upvotes: number
   downvotes: number
+  type: "termin" | "klausur"
 }
 
 const pb = new PocketBase('https://bbs-backend.noteqr.de');
@@ -43,7 +44,7 @@ export function isExamInTimeslot(slot: TimetableTimeSlot, date: Date, hours: num
   // if the dates do not match, return false
   if (date.toDateString() != new Date(exam.date).toDateString()) return false
   // if no lesson in the slot matches the subject of the exam, return false
-  if (!slot.find(e => e.subject == exam.subject)) return false
+  if (!slot.find(e => e.subject == exam.subject) && exam.subject != "-all-") return false
   // if not all hours are between startHour and endHour of the exam return false
   if (!hours.every(e => e >= exam.startHour && e <= exam.endHour)) return false
   return true

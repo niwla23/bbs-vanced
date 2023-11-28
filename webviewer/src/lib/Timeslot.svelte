@@ -8,16 +8,6 @@
 	export let hours: number[];
 	export let exams: Exam[];
 
-	// let externalExam: Exam | null;
-
-	// function getExternalExam() {
-	// 	for (const exam of exams) {
-	// 		if (isExamInTimeslot(timeSlot, date, hours, exam)) {
-	// 			// externalExam = exam;
-	// 			return exam;
-	// 		}
-	// 	}
-	// }
 	$: externalExam = (function () {
 		for (const exam of exams) {
 			if (isExamInTimeslot(timeSlot, date, hours, exam)) {
@@ -52,7 +42,9 @@
 	$: backgroundColor = (function () {
 		exams; // this exists so svelte knows that there is a dependency on exams
 		if (isFree()) return 'bg-darkest';
-		if (isExam()) return 'bg-red-800/40';
+		// if (isExam()) return 'bg-red-800/40';
+		if (externalExam && externalExam.type == 'klausur') return 'bg-red-800/40';
+		if (externalExam && externalExam.type == 'termin') return 'bg-blue-800/40';
 		return 'bg-dark';
 	})();
 </script>
@@ -74,7 +66,7 @@
 						<Icon icon="material-symbols:verified" class="h-6 w-6 inline" />
 					</p>{/if}
 				{#if externalExam}
-					<p class="text-red-500">
+					<p class={externalExam.type == 'klausur' ? 'text-red-500' : 'text-blue-500'}>
 						{externalExam.topic}
 						<Icon icon="material-symbols:supervised-user-circle" class="h-6 w-6 inline" />
 					</p>
