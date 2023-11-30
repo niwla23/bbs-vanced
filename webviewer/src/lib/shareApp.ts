@@ -1,6 +1,6 @@
 
 export function shareApp(medium: string) {
-  const exportUrl = `${window.location.origin}/?utm_medium=settings_share`;
+  const exportUrl = `${window.location.origin}/?utm_medium=${medium}`;
 
   if (navigator.share) {
     navigator.share({

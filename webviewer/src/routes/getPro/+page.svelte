@@ -21,6 +21,13 @@
 			</div>
 
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">
+				<Icon icon="mdi:list-box" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<div>
+					<p>Klausurenübersicht</p>
+					<small>Alle deine Klausuren in einer übersichtlichen Liste</small>
+				</div>
+			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-16">
 				<Icon icon="mingcute:save-fill" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
 				<p>Einmalzahlung, kein Abo</p>
 			</div>
@@ -41,7 +48,7 @@
 			</div>
 			<a
 				href="https://a26377.myshopify.com/cart/47369688547653:1?channel=buy_button"
-				class="bg-primary text-on-primary text-center font-bold p-4 rounded-md animate-pulse mt-2"
+				class="bg-primary text-on-primary text-center font-bold p-4 rounded-md mt-2"
 			>
 				Jetzt kaufen - 4,99€
 			</a>

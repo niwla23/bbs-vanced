@@ -11,7 +11,7 @@
 		},
 		{
 			icon: 'material-symbols:eyeglasses',
-			label: 'Klausuren',
+			label: 'Klausurenübersicht (PRO)',
 			onclick: (e) => goto('/exams')
 		},
 		{

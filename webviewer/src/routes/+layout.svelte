@@ -2,7 +2,18 @@
 	import '../app.css';
 	import { navigating } from '$app/stores';
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import Cookies from 'js-cookie';
+	import { hasPro } from './stores';
 	// import { pwaInfo } from 'virtual:pwa-info';
+
+	onMount(() => {
+		if (browser && localStorage.getItem('hasPro') == 'true') {
+			Cookies.set('hasPro', 'true', { expires: 400 });
+			hasPro.set(true);
+		}
+	});
 
 	// $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>

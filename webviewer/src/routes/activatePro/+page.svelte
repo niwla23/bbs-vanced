@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Cookies from 'js-cookie';
 
 	let licenseKey = '';
 
@@ -8,6 +9,7 @@
 		const data = await response.json();
 		if (data.valid) {
 			localStorage.setItem('hasPro', 'true');
+			Cookies.set('hasPro', 'true', { expires: 400 });
 			alert(
 				'Die PRO Version wurde aktiviert! Starte die App neu um alle Funktionen nutzen zu können.'
 			);

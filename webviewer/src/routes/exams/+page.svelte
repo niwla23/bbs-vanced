@@ -3,17 +3,20 @@
 	import { getExamsClient, type Exam } from '@/lib/exams';
 	import { getSettings } from '@/lib/settings';
 	import { onMount } from 'svelte';
+	import { hasPro } from '../stores';
 
 	let exams: Exam[] = [];
 
 	onMount(async () => {
-		const data: Exam[] = await getExamsClient();
-		const cutoffDate = new Date();
-		cutoffDate.setDate(cutoffDate.getDate() - 1);
-		const settings = getSettings();
-		exams = data
-			.filter((v) => new Date(v.date).getTime() > cutoffDate.getTime())
-			.filter((v) => settings?.courses.includes(v.subject));
+		if ($hasPro) {
+			const data: Exam[] = await getExamsClient();
+			const cutoffDate = new Date();
+			cutoffDate.setDate(cutoffDate.getDate() - 1);
+			const settings = getSettings();
+			exams = data
+				.filter((v) => new Date(v.date).getTime() > cutoffDate.getTime())
+				.filter((v) => settings?.courses.includes(v.subject));
+		}
 	});
 
 	function backgroundColor(exam: Exam) {
@@ -46,9 +49,25 @@
 			</div>
 		{/each}
 
-		<div class="flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2">
-			ACHTUNG: Hier werden nur Klausuren angezeigt, die von Schülern eingetragen worden sind! Du
-			kannst weitere über Menü > Klausur eintragen hinzuügen.
-		</div>
+		{#if $hasPro}
+			<div class="flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2">
+				ACHTUNG: Hier werden nur Klausuren angezeigt, die von Schülern eingetragen worden sind! Du
+				kannst weitere über Menü > Klausur eintragen hinzuügen.
+			</div>
+		{:else}
+			<div class="flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2">
+				Wäre es nicht schön wenn du hier eine Übersicht über deine anstehenden Klausuren sehen
+				könntest?
+			</div>
+			<div class="flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2">
+				Alles was dazu fehlt ist das du BBS Vanced PRO kaufst.
+				<a
+					class="bg-primary text-on-primary p-4 w-full block text-center rounded-md"
+					href="/getPro"
+				>
+					Erzähl mir mehr
+				</a>
+			</div>
+		{/if}
 	</main>
 </div>
