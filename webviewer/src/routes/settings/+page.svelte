@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import TopBar from '@/lib/TopBar.svelte';
 	import {
@@ -12,8 +13,11 @@
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
 
+	let hasPro = false;
+
 	let courses = new Set<string>([]);
 	let className = '';
+	let theme = 'lime';
 
 	function removeCourse(course: string) {
 		courses.delete(course);
@@ -35,6 +39,9 @@
 		if (!data) return;
 		className = data.className;
 		courses = new Set(data.courses);
+
+		const fetchedTheme = localStorage.getItem('theme');
+		if (fetchedTheme) theme = fetchedTheme;
 	}
 
 	function save() {
@@ -43,6 +50,7 @@
 			courses: trimmedCourses,
 			className: className.trim()
 		});
+		localStorage.setItem('theme', theme);
 		goto('/');
 	}
 
@@ -100,6 +108,7 @@
 	}
 
 	onMount(() => {
+		hasPro = localStorage.getItem('hasPro') == 'true';
 		loadSettings();
 		const urlParams = new URLSearchParams(window.location.search);
 		const importString = urlParams.get('import');
@@ -109,16 +118,46 @@
 			window.location.href = window.location.origin + window.location.pathname;
 		}
 	});
+
+	function updateTheme() {
+		if (browser) document.documentElement.dataset.theme = theme;
+	}
+
+	$: theme, updateTheme();
 </script>
 
 <div class="w-full flex justify-center p-4">
-	<main class="max-w-4xl w-full">
+	<main class="max-w-4xl w-full pt-12">
 		<TopBar title="Einstellungen">
 			<button on:click={() => shareApp('settings_share')} class="rounded-md px-2 text-xs">
 				<Icon icon="material-symbols:share" class="h-6 w-6" />
 			</button>
 		</TopBar>
-		<label class="block pt-12 pb-2">
+
+		{#if hasPro}
+			<p>Du verwendest BBS Vanced PRO 😀</p>
+		{:else}
+			<p>Du hast kein PRO 😪</p>
+			<button class="w-full bg-primary p-2 rounded-md">PRO kaufen</button>
+		{/if}
+
+		<label class="block pb-2">
+			<span class="font-light">Theme (PRO)</span>
+			<select
+				bind:value={theme}
+				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
+				disabled={!hasPro}
+			>
+				<option value="lime"> Lime </option>
+				<option value="pumpkin"> Pumpkin </option>
+				<option value="pink"> Pink </option>
+				<option value="aqua"> Aqua </option>
+				<option value="blackandwhite"> Black and White </option>
+				<option value="bright">I am mentally ill.</option>
+			</select>
+		</label>
+
+		<label class="block pt-2 pb-2">
 			<span class="font-light">Deine Klasse (z.B: BG-T-23, BG-22, ...)</span>
 			<input
 				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
@@ -126,6 +165,7 @@
 				bind:value={className}
 			/>
 		</label>
+
 		<h2 class="text-xl pt-2">Deine Fächer / Kurse</h2>
 		<ul class="flex flex-col gap-2">
 			<form
@@ -152,7 +192,10 @@
 				</li>
 			{/each}
 		</ul>
-		<button class="bg-primary p-4 w-full rounded-md border border-colborder mt-2" on:click={save}>
+		<button
+			class="bg-primary text-on-primary p-4 w-full rounded-md border border-colborder mt-2"
+			on:click={save}
+		>
 			Speichern
 		</button>
 		<button class="bg-red-700 p-4 w-full rounded-md border border-colborder mt-2" on:click={clear}>

@@ -19,7 +19,7 @@
 			{/if}
 			<div>
 				<h1 class="font-bold text-2xl">{title}</h1>
-				<h2 class="text-gray-300 text-xs">By Alwin Lohrie</h2>
+				<h2 class="text-muted text-xs">By Alwin Lohrie</h2>
 			</div>
 		</div>
 		<div class="flex gap-1">

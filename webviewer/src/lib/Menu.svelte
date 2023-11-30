@@ -47,7 +47,7 @@
 	tabindex="-100"
 >
 	<div
-		class="max-w-2xl w-full bg-dark text-white rounded-md border border-colborder shadow-sm shadow-black p-4 flex flex-col gap-4 text-lg h-min"
+		class="max-w-2xl w-full bg-dark text-brightest rounded-md border border-colborder shadow-sm shadow-black p-4 flex flex-col gap-4 text-lg h-min"
 	>
 		{#each menuEntries as entry}
 			<button class="flex gap-2" on:click={entry.onclick}>

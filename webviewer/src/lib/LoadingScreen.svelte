@@ -10,7 +10,7 @@
 	<div class="text-center flex flex-col items-center">
 		<p class="text-[10rem] md:text-[14rem] animate-spin text-center w-min">{choosenEmoji}</p>
 		<p>Wird geladen ...</p>
-		<small class="text-xs text-gray-300">
+		<small class="text-xs text-muted">
 			{choosenMotd}
 		</small>
 	</div>

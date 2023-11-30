@@ -17,10 +17,12 @@
 	import { goto } from '$app/navigation';
 	import { areNewNewsAvailable } from '@/lib/news';
 	import TopBar from '@/lib/TopBar.svelte';
+	import { browser } from '$app/environment';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
 	let lastLoadTime = new Date().getTime();
+	let hasPro = false;
 
 	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
 
@@ -74,6 +76,9 @@
 
 	onMount(() => {
 		initialLoad();
+		if (browser) {
+			hasPro = localStorage.getItem('hasPro') == 'true';
+		}
 		// runPWAChecks();
 		const handleScroll = () => {
 			if (
@@ -121,6 +126,7 @@
 						<b
 							class="p-1 rounded-md"
 							class:bg-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
+							class:text-on-primary={day.toLocaleDateString() === new Date().toLocaleDateString()}
 						>
 							{weekdayMap[day.getDay()]} - {day.toLocaleDateString()}
 						</b>
@@ -136,5 +142,12 @@
 			<LoadingScreen />
 		</div>
 	</main>
+	{#if !hasPro}
+		<div class="fixed bottom-0 left-0 right-0 p-4 w-full flex">
+			<a href="/getPro" class="w-full bg-primary p-4 rounded-md text-center font-bold text-3xl">
+				Hol dir PRO!
+			</a>
+		</div>
+	{/if}
 	<!-- <Menu /> -->
 </div>
