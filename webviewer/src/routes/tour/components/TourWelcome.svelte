@@ -7,6 +7,13 @@
 			alert('Bitte fülle alle Felder aus');
 			return;
 		}
+
+		if (new RegExp('BG-.*-(22|21)').test($className)) {
+			alert(
+				'thats not a thing.\ndu hast wahrscheinlich deine Klasse falsch geschriben. z.B. heißt BG-T-22 ab der 12 BG-22'
+			);
+			return;
+		}
 		dispatch('next');
 	}
 </script>

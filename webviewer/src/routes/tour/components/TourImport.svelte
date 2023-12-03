@@ -4,7 +4,7 @@
 	const dispatch = createEventDispatcher();
 	function next(importCourses: boolean) {
 		if ($coursesString == '' && importCourses) {
-			alert('bitte füge deine kurse in das textfeld ein.');
+			alert('bitte füge deine kurse in das scheiß textfeld ein.');
 			return;
 		}
 		dispatch('next');
@@ -12,7 +12,7 @@
 </script>
 
 <div class="w-full flex justify-center p-4 h-full items-center">
-	<main class="max-w-4xl w-full h-full flex flex-col justify-between">
+	<main class="max-w-4xl w-full h-full flex flex-col justify-between md:justify-center">
 		<section>
 			<p>Sehr gut!</p>
 			<p class="pb-4">
