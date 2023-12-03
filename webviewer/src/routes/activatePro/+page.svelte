@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Cookies from 'js-cookie';
+	import PocketBase from 'pocketbase';
 
 	let licenseKey = '';
 
