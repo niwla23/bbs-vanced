@@ -26,15 +26,7 @@
 
 		<section>
 			<h1 class="text-xl font-bold">Willkommen bei BBS Vanced!</h1>
-			<label class="block pb-2 pt-2">
-				<span class="font-light">Wie heißt deine Klasse?</span>
-				<input
-					class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
-					placeholder="z.B. BG-T-23 oder BG-22"
-					bind:value={$className}
-				/>
-			</label>
-			<label class="block pb-4 pt-2">
+			<label class="block pt-2 pb-1">
 				<span class="font-light">Welches Level bist du?</span>
 				<div class="w-full flex gap-2">
 					{#each [11, 12, 13] as g}
@@ -46,6 +38,14 @@
 						>
 					{/each}
 				</div>
+			</label>
+			<label class="block pb-4">
+				<span class="font-light">Wie heißt deine Klasse?</span>
+				<input
+					class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
+					placeholder="z.B. BG-T-23 oder BG-22"
+					bind:value={$className}
+				/>
 			</label>
 			<button
 				class="{$grade != 0 && $className != ''
