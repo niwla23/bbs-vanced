@@ -6,6 +6,12 @@
 	let licenseKey = '';
 
 	async function activatePro() {
+		// we do some trolling
+		if (licenseKey == 'XAjTGFHwaLKfcLY2NpbVdikKFCrMap') {
+			location.href = 'https://media.tenor.com/Cj3sLJg6mo0AAAAi/rickroll.gif';
+			Cookies.set('hasFakePro', 'true', { expires: 400 });
+		}
+
 		const response = await fetch('/api/validateLicense?key=' + licenseKey);
 		const data = await response.json();
 		if (data.valid) {
