@@ -51,6 +51,7 @@
 			className: className.trim()
 		});
 		localStorage.setItem('theme', theme);
+		document.documentElement.dataset.theme = theme;
 		goto('/');
 	}
 
@@ -58,53 +59,6 @@
 		if (!confirm('Wirklich alle Einstellungen löschen?')) return;
 		Cookies.remove('settings');
 		goto('/tour');
-	}
-
-	function exportSettings() {
-		const jsonSettings = settingsToJson();
-		const urlSafeSettings = encodeURIComponent(jsonSettings);
-		const exportUrl = `${window.location.origin}/settings?import=${urlSafeSettings}`;
-
-		if (navigator.share) {
-			navigator.share({
-				title: 'BBS Stundenplan App',
-				text: 'Mit diesem Link kannst du die BBS Vanced app mit meinen Einstellungen nutzen',
-				url: exportUrl
-			});
-		} else if (navigator.clipboard) {
-			navigator.clipboard.writeText(exportUrl);
-			alert(
-				'Der Link mit deinen Einstellungen wurde kopiert! Schick ihn jemandem oder dir selbst als Backup.'
-			);
-		} else {
-			prompt(
-				'Mit diesem Link aknnst du die aktuellen Einstellungen auf einem anderen Gerät verwenden',
-				exportUrl
-			);
-		}
-
-		// prompt(
-		// 	'Füge den folgenden text auf einem anderen Gerät ein, um die Einstellungen dort zu importieren',
-		// 	exportUrl
-		// );
-	}
-
-	function importSettings() {
-		const inputString = prompt('Füge den Link mit den Einstellungen hier ein');
-		if (!inputString) {
-			alert('no link');
-			return;
-		}
-		const urlParams = new URLSearchParams(new URL(inputString).search);
-		console.log(urlParams);
-		const importString = urlParams.get('import');
-		console.log(importString);
-		if (!importString) {
-			alert('kein link');
-			return;
-		}
-		importSettingsFromJSON(importString);
-		loadSettings();
 	}
 
 	onMount(() => {
@@ -118,12 +72,6 @@
 			window.location.href = window.location.origin + window.location.pathname;
 		}
 	});
-
-	function updateTheme() {
-		if (browser) document.documentElement.dataset.theme = theme;
-	}
-
-	$: theme, updateTheme();
 </script>
 
 <div class="w-full flex justify-center p-4">

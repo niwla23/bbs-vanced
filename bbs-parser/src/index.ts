@@ -120,7 +120,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
           let currentPropertyData: string | null = unprocessedProperty.trim() === "-" ? null : unprocessedProperty
           switch (tableIndex) {
             case TEACHERS_INDEX:
-              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { teacher: currentPropertyData?.split(" ")[0] });
+              timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { teacher: currentPropertyData });
               break;
             case SUBEJCTS_INDEX:
               timetableDay[hour][i] = Object.assign({}, timetableDay[hour][i], { subject: currentPropertyData });

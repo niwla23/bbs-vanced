@@ -22,7 +22,7 @@
 		<section>
 			<button
 				class="{$grade != 0 && $className != ''
-					? 'bg-primary'
+					? 'bg-primary text-on-primary'
 					: 'bg-dark'} p-4 rounded-md w-full font-bold"
 				on:click={next}>ja zeig her jz</button
 			>

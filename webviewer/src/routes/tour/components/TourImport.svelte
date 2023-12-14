@@ -24,7 +24,7 @@
 				<div class="flex">
 					<p class="font-bold text-3xl w-12">1.</p>
 					<a
-						class="p-2 w-full bg-primary rounded-md block text-center"
+						class="p-2 w-full bg-primary text-on-primary rounded-md block text-center"
 						href="https://virtueller-stundenplan.org/page2/page-2/index.php?ref=../index.php"
 						target="_blank"
 					>
@@ -61,8 +61,9 @@
 			<button class="bg-dark p-4 rounded-md w-full" on:click={() => next(false)}>
 				Ich habe keine Kurse oder möchte sie selbst eintragen.
 			</button>
-			<button class="bg-primary p-4 rounded-md w-full font-bold" on:click={() => next(true)}
-				>Weiter</button
+			<button
+				class="bg-primary text-on-primary p-4 rounded-md w-full font-bold"
+				on:click={() => next(true)}>Weiter</button
 			>
 		</section>
 	</main>

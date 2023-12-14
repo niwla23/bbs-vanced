@@ -32,7 +32,7 @@
 					{#each [11, 12, 13] as g}
 						<button
 							class="p-3 font-bold text-2xl {$grade == g
-								? 'bg-primary'
+								? 'bg-primary text-on-primary'
 								: 'bg-dark'} rounded-md w-full"
 							on:click={() => grade.set(g)}>{g}</button
 						>
@@ -49,7 +49,7 @@
 			</label>
 			<button
 				class="{$grade != 0 && $className != ''
-					? 'bg-primary'
+					? 'bg-primary text-on-primary'
 					: 'bg-dark'} p-4 rounded-md w-full font-bold"
 				on:click={next}>Let's go</button
 			>

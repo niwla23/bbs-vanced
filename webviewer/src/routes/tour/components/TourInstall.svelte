@@ -38,9 +38,9 @@
 					<source src="/tour/installAndroid.mp4" type="video/mp4" />
 				{/if}
 			</video>
-			<button class="bg-primary p-4 rounded-md w-full font-bold" on:click={next}
-				>Hab ich gemacht</button
-			>
+			<button class="bg-primary text-on-primary p-4 rounded-md w-full font-bold" on:click={next}
+				>Hab ich gemacht
+			</button>
 		</section>
 	</main>
 </div>

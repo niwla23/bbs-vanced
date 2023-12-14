@@ -2,6 +2,14 @@
 	import type { TimetableLesson, TimetableTimeSlot } from 'bbs-parser/src/types';
 	import { isExamInTimeslot, type Exam } from './exams';
 	import Icon from '@iconify/svelte';
+	import { hourTimes } from './textRessources';
+	import {
+		convertTimeToDate,
+		getRelativeTime,
+		isTimeslotActive,
+		isTimeslotUpNext
+	} from './timetableHelpers';
+	import { hasPro } from '@/routes/stores';
 
 	export let timeSlot: TimetableTimeSlot;
 	export let date: Date;
@@ -47,13 +55,20 @@
 		if (externalExam && externalExam.type == 'termin') return 'bg-blue-800/40';
 		return 'bg-dark';
 	})();
+
+	$: startTime = hourTimes.start[hours[0]];
+	$: endTime = hourTimes.end[hours[hours.length - 1]];
+	$: startDate = convertTimeToDate(startTime, date);
+	$: endDate = convertTimeToDate(endTime, date);
 </script>
 
 <div
-	class=" {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2"
+	class=" {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative"
 >
-	<div class="text-3xl tracking-tight w-20 font-bold flex justify-center items-center pr-2">
-		<p class="w-min text-primary">{hours.join('/')}</p>
+	<div class="self-stretch w-20 flex flex-col justify-between items-center pr-2">
+		<p class="text-muted text-xs">{$hasPro ? startTime : ''}</p>
+		<p class="w-min text-primary text-3xl tracking-tight font-bold">{hours.join('/')}</p>
+		<p class="text-muted text-xs">{$hasPro ? endTime : ''}</p>
 	</div>
 	<div>
 		{#if timeSlot.length > 0}
@@ -76,4 +91,20 @@
 			<p class="text-muted">Frei :)</p>
 		{/if}
 	</div>
+	{#if $hasPro && isTimeslotActive(startDate, endDate)}
+		<div
+			class="absolute bottom-0 right-0 p-1 px-4 rounded-tl-lg flex items-center gap-1 text-sm border-t border-l border-colborder"
+		>
+			<Icon icon="material-symbols:alarm" class="" />
+			<p>Endet {getRelativeTime(endDate)}</p>
+		</div>
+	{/if}
+	{#if $hasPro && isTimeslotUpNext(startDate, endDate, hours)}
+		<div
+			class="absolute top-0 right-0 p-1 px-4 rounded-bl-lg flex items-center gap-1 text-sm border-b border-l border-colborder"
+		>
+			<Icon icon="material-symbols:alarm" class="" />
+			<p>{getRelativeTime(startDate)}</p>
+		</div>
+	{/if}
 </div>

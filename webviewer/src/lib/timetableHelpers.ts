@@ -1,5 +1,6 @@
 import type { TimetableDay } from "bbs-parser/src/types";
 import type { Settings } from "./settings";
+import { hourTimes } from "./textRessources";
 
 export const weekdayMap = [
   'Sonntag',
@@ -67,4 +68,81 @@ export function getLastIndex(timetable: TimetableDay) {
     }
   }
 }
+
+export function convertTimeToDate(timeString: string, baseDate: Date) {
+  const [hours, minutes] = timeString.split(':');
+  const dateWithTime = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), parseInt(hours), parseInt(minutes));
+  return dateWithTime;
+}
+
+export function isTimeslotActive(startDate: Date, endDate: Date) {
+  const now = new Date().getTime()
+  return startDate.getTime() < now && now < endDate.getTime()
+}
+
+
+function getActiveLesson() {
+  const currentTime = new Date();
+  for (let i = 1; i < hourTimes.start.length; i++) {
+    const startTime = convertTimeToDate(hourTimes.start[i], new Date());
+    const endTime = convertTimeToDate(hourTimes.end[i], new Date());
+
+    if (currentTime >= startTime && currentTime <= endTime) {
+      return i; // Lesson is active
+    }
+  }
+  return null; // No lesson is active
+}
+
+
+function getNextLesson() {
+  const currentTime = new Date();
+
+  for (let i = 1; i < hourTimes.start.length; i++) {
+    const startTime = convertTimeToDate(hourTimes.start[i], new Date());
+
+    if (currentTime < startTime) {
+      // The next lesson has not started yet, return its details
+      return i
+    }
+  }
+
+  return null; // No upcoming lessons
+}
+
+
+export function isTimeslotUpNext(startDate: Date, endDate: Date, hours: number[]) {
+  const now = new Date().getTime()
+  if (startDate.getDate() != new Date().getDate()) return false
+  if (now > startDate.getTime()) return false
+  if (getActiveLesson()) return false
+  return hours.includes(getNextLesson())
+}
+
+// https://www.builder.io/blog/relative-time
+export function getRelativeTime(date: Date) {
+  // Allow dates or times to be passed
+  const timeMs = typeof date === "number" ? date : date.getTime();
+
+  // Get the amount of seconds between the given date and now
+  const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
+
+  // Array reprsenting one minute, hour, day, week, month, etc in seconds
+  const cutoffs = [60, 70000, 86400, 86400 * 7, 86400 * 30, 86400 * 365, Infinity];
+
+  // Array equivalent to the above but in the string representation of the units
+  const units: Intl.RelativeTimeFormatUnit[] = ["second", "minute", "hour", "day", "week", "month", "year"];
+
+  // Grab the ideal cutoff unit
+  const unitIndex = cutoffs.findIndex(cutoff => cutoff > Math.abs(deltaSeconds));
+
+  // Get the divisor to divide from the seconds. E.g. if our unit is "day" our divisor
+  // is one day in seconds, so we can divide our seconds by this to get the # of days
+  const divisor = unitIndex ? cutoffs[unitIndex - 1] : 1;
+
+  // Intl.RelativeTimeFormat do its magic
+  const rtf = new Intl.RelativeTimeFormat(navigator.language, { numeric: "auto", style: "short" });
+  return rtf.format(Math.floor(deltaSeconds / divisor), units[unitIndex]);
+}
+
 
