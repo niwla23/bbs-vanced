@@ -1,8 +1,14 @@
 version: "3"
 services:
-  webviewer:
-    build:
-      context: .
-      dockerfile: webviewer/Dockerfile
+  # webviewer:
+  #   build:
+  #     context: .
+  #     dockerfile: webviewer/Dockerfile
+  #   ports:
+  #     - 8431:80
+
+  redis:
+    image: redis:7.2
+    restart: always
     ports:
-      - 8431:80
+      - 6380:6379

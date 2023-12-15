@@ -3,6 +3,8 @@ import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
 import { getSessionToken, getTimetable } from "bbs-parser"
 import { autoMergeTimeslots } from "bbs-parser/src/helpers"
 import { areSettingsComplete, getSettings } from '@/lib/settings';
+import { createRedis, serialize, deserialize } from "@/lib/cache";
+
 
 function sendJson(data: any) {
   return new Response(JSON.stringify(data))
@@ -21,8 +23,22 @@ export const GET: RequestHandler = async (event) => {
   // if it works it aint broken
   const date = new Date(event.url.searchParams.get("date") || new Date())
 
-  const token = await getSessionToken("bbs-walsrode", "schueler")
-  const timetable = await getTimetable(token, settings?.className, date, true) as TimetableWeek
+  const redis = await createRedis()
+  const cacheKey = `timetable-${settings?.className}-${date.toJSON()}-fullweek:true`
+  const cacheResult = await redis.get(cacheKey)
+
+  let timetable: TimetableWeek
+  if (cacheResult && cacheResult != null && cacheResult.length > 5) {
+    console.log("cache hit")
+    timetable = deserialize(cacheResult)
+  } else {
+    console.log("cache miss")
+    const token = await getSessionToken("bbs-walsrode", "schueler")
+    timetable = await getTimetable(token, settings?.className, date, true) as TimetableWeek
+    await redis.set(cacheKey, serialize(timetable))
+    await redis.expire(cacheKey, 120)
+  }
+
   const timetableMerged = new Map<Date, TimetableDay>()
 
   for (const [day, entries] of timetable.entries()) {

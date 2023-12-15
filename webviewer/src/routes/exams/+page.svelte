@@ -15,7 +15,7 @@
 			const settings = getSettings();
 			exams = data
 				.filter((v) => new Date(v.date).getTime() > cutoffDate.getTime())
-				.filter((v) => settings?.courses.includes(v.subject));
+				.filter((v) => settings?.courses.includes(v.subject) || v.subject == '-all-');
 		}
 	});
 
@@ -42,7 +42,7 @@
 				<div class="">
 					<p>
 						<b>{exam.topic}</b>
-						{exam.subject}
+						{exam.subject != '-all-' ? exam.subject : ''}
 					</p>
 					{new Date(exam.date).toLocaleDateString()}
 				</div>

@@ -8,11 +8,17 @@
 	import { hasPro } from './stores';
 	// import { pwaInfo } from 'virtual:pwa-info';
 
+	let proEvaluationDone = false;
+
 	onMount(() => {
 		if (browser && localStorage.getItem('hasPro') == 'true') {
 			Cookies.set('hasPro', 'true', { expires: 400 });
 			hasPro.set(true);
 		}
+		if (Cookies.get('hasPro') == 'true') {
+			hasPro.set(true);
+		}
+		proEvaluationDone = true;
 	});
 
 	// $: webManifestLink = pwaInfo ? pwaInfo.webManifest.linkTag : '';
@@ -36,7 +42,7 @@
 </svelte:head>
 <div class="scroll-smooth bg-darkest text-brightest min-h-screen h-full w-screen flex select-none">
 	<div class="flex-grow">
-		{#if $navigating}
+		{#if $navigating || !proEvaluationDone}
 			<LoadingScreen />
 		{:else}
 			<slot />
