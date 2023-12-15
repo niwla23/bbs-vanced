@@ -14,6 +14,8 @@
 		if (browser && localStorage.getItem('hasPro') == 'true') {
 			Cookies.set('hasPro', 'true', { expires: 400 });
 			hasPro.set(true);
+		} else {
+			Cookies.set('hasPro', 'false', { expires: 400 });
 		}
 		if (Cookies.get('hasPro') == 'true') {
 			hasPro.set(true);

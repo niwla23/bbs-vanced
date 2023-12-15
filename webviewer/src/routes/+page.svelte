@@ -18,16 +18,17 @@
 	import { areNewNewsAvailable } from '@/lib/news';
 	import TopBar from '@/lib/TopBar.svelte';
 	import { browser } from '$app/environment';
+	import { hasPro } from './stores';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
 	let lastLoadTime = new Date().getTime();
-	let hasPro = false;
+	// let hasPro = false;
 
-	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
-
-	async function loadData(date: Date) {
-		const resp = await fetch(`/api/timetable?date=${formatDateForApi(date)}`);
+	async function loadData(date: Date, useCache = true) {
+		const resp = await fetch(
+			`/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '?nocache'}`
+		);
 		const text = await resp.text();
 		const parsedData = JSON.parse(text);
 		const timetableWithDates: [Date, TimetableDay][] = parsedData.timetableMerged.map(
@@ -55,10 +56,11 @@
 		await loadData(target);
 	}
 
-	async function initialLoad() {
+	async function initialLoad(useCache: boolean) {
+		data = [];
 		const today = new Date();
 		let targetDate = today;
-		await loadData(today);
+		await loadData(today, useCache);
 		if (today.getDay() > 5 || today.getDay() === 0) {
 			await loadFuture();
 			targetDate = getNextMonday(today);
@@ -75,11 +77,7 @@
 	}
 
 	onMount(() => {
-		initialLoad();
-		if (browser) {
-			hasPro = localStorage.getItem('hasPro') == 'true';
-		}
-		// runPWAChecks();
+		initialLoad(true);
 		const handleScroll = () => {
 			if (
 				window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
@@ -114,6 +112,9 @@
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
 		<TopBar title="Stundenplan">
+			<button on:click={() => initialLoad(false)} class="rounded-md px-2 text-xs">
+				<Icon icon="material-symbols:refresh" class="h-6 w-6" />
+			</button>
 			<button on:click={loadPast} class="rounded-md px-2 text-xs">
 				<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
 			</button>
@@ -142,7 +143,7 @@
 			<LoadingScreen />
 		</div>
 	</main>
-	{#if !hasPro}
+	{#if !$hasPro}
 		<div class="fixed bottom-0 left-0 right-0 p-4 w-full flex">
 			<a href="/getPro" class="w-full bg-primary p-4 rounded-md text-center font-bold text-3xl">
 				Hol dir PRO!

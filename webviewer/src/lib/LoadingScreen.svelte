@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { availableEmojis, availableMotd } from './textRessources';
-
-	const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
-	const choosenMotd = availableMotd[Math.floor(Math.random() * availableMotd.length)];
+	import { choosenEmoji, choosenMotd } from './textRessources';
 </script>
 
 <div class="w-full h-full flex justify-center items-center">

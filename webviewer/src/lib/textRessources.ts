@@ -55,4 +55,5 @@ export const hourTimes = {
 }
 
 export const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
+export const choosenMotd = availableMotd[Math.floor(Math.random() * availableMotd.length)];
 
