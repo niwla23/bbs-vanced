@@ -5,16 +5,16 @@
 
 	let licenseKey = '';
 
-	async function activatePro() {
-		// we do some trolling
-		if (licenseKey == 'XAjTGFHwaLKfcLY2NpbVdikKFCrMap') {
-			location.href = 'https://media.tenor.com/Cj3sLJg6mo0AAAAi/rickroll.gif';
-			Cookies.set('hasFakePro', 'true', { expires: 400 });
-		}
+	async function loginAndCheck() {
+		const pb = new PocketBase('https://bbs-backend.noteqr.de');
+		await pb.collection('users').authWithOAuth2({ provider: 'google' });
 
-		const response = await fetch('/api/validateLicense?key=' + licenseKey);
-		const data = await response.json();
-		if (data.valid) {
+		if (!pb.authStore.model) {
+			console.log('no user logged in');
+			return;
+		}
+		console.log(pb.authStore.model.hasPro);
+		if (pb.authStore.model.proKey != '') {
 			localStorage.setItem('hasPro', 'true');
 			Cookies.set('hasPro', 'true', { expires: 400 });
 			alert(
@@ -22,24 +22,28 @@
 			);
 			goto('/');
 		} else {
-			alert(
-				'Der Lizenzschlüssel ist nicht korrekt. Bitte versuche es erneut oder schreibe eine email an bbs-vanced@noteqr.de'
-			);
+			goto('/activatePro/key');
 		}
 	}
 </script>
 
 <div class="w-full h-full grid justify-center items-center">
 	<div class="text-center flex flex-col gap-2 p-4">
-		<p>Gib hier deinen Lizenzschlüssel ein, den du per E-Mail erhalten hast.</p>
-		<input
-			class="bg-dark rounded-md p-2 w-full text-center"
-			placeholder="j3iBxn8iWBNBMloRbssW0ibOfDHz3h"
-			bind:value={licenseKey}
-		/>
-		<button class="w-full p-4 rounded-md bg-primary" on:click={activatePro}>PRO aktivieren</button>
-		<a class="bg-darkest rounded-md p-4 text-center underline" href="/getPro">
+		<p>
+			Bitte melde dich an. Wenn du schon PRO aktivierst hast, wird es auch auf diesem Gerät
+			freigeschaltet. Sonst musst du den Lizenzschlüssel eingeben
+		</p>
+		<button class="w-full p-4 rounded-md bg-primary text-on-primary" on:click={loginAndCheck}>
+			Mit Google anmelden
+		</button>
+		<a class="bg-darkest rounded-md px-4 pt-4 text-center underline" href="/getPro">
 			Ich habe noch keine Lizenz, jetzt kaufen
+		</a>
+		<a
+			class="bg-darkest rounded-md px-4 text-center underline text-muted"
+			href="mailto:bbs-vanced@noteqr.de"
+		>
+			Ich habe ein Problem
 		</a>
 	</div>
 </div>

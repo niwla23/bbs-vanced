@@ -12,7 +12,7 @@
 		<TopBar title="Vanced PRO" showBack />
 		<div class="flex flex-col gap-2 pt-12">
 			<h1>Hol dir jetzt die PRO Version!</h1>
-			<div class="bg-dark p-2 rounded-md flex items-center">
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
 				<Icon icon="mdi:color" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
 				<div>
 					<p>5 Premium Themes</p>
@@ -20,11 +20,18 @@
 				</div>
 			</div>
 
-			<div class="bg-dark p-2 rounded-md flex items-center h-16">
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
 				<Icon icon="mdi:list-box" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
 				<div>
 					<p>Klausurenübersicht</p>
 					<small>Alle deine Klausuren in einer übersichtlichen Liste</small>
+				</div>
+			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
+				<Icon icon="mdi:clock" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<div>
+					<p>Zeiten im Stundenplan</p>
+					<small>Du kannst Anfang und Ende der Stunde sehen und bekommst einen Countdown</small>
 				</div>
 			</div>
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">

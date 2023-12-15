@@ -1,23 +1,73 @@
 <script lang="ts">
 	import TopBar from '@/lib/TopBar.svelte';
-	import { formatDate } from '@/lib/exams';
-	import type { NewsArticle } from '@/lib/news';
-	import Icon from '@iconify/svelte';
-	import PocketBase from 'pocketbase';
-	import { onMount } from 'svelte';
 	import EditGrade from './EditGrade.svelte';
 
-	let grades = {
-		IT: [14, 13, 14, 12, 10],
-		MATHE: [14, 13, 14, 12, 9],
-		ENGLISCH: [14, 13, 14, 12, 9],
-		BUV: [14, 13, 14, 12, 9],
-		IV: [14, 13, 14, 12, 9],
-		Deutsch: [14, 13, 14, 12, 9],
-		Sport: [14, 13, 14, 12, 9],
-		Chemie: [14, 13, 14, 12, 9],
-		Geschichte: [14, 13, 14, 12, 9]
-	};
+	let grades = [
+		[14, 13, 14, 12, 10],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9],
+		[14, 13, 14, 12, 9]
+	];
+
+	let subjectNames = [
+		'IT',
+		'Mathe',
+		'Englisch',
+		'BUV',
+		'IV',
+		'Deutsch',
+		'Sport',
+		'Chemie',
+		'Geschichte',
+		'Praxis'
+	];
+
+	let isGradeGuess = [
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true],
+		[false, true, true, true, true]
+	];
+
+	let isGradeRelevant = [
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, true, true, true],
+		[true, true, false, true, true],
+		[true, true, false, false, true]
+	];
+
+	let currentlyEditing: [number, number] = [0, 0];
+	let editDialogOpen = false;
+
+	function openEditDialog(subjectIndex: number, index: number) {
+		currentlyEditing = [subjectIndex, index];
+		editDialogOpen = true;
+	}
+
+	function handleEditSubmit(event) {
+		editDialogOpen = false;
+		grades[currentlyEditing[0]][currentlyEditing[1]] = event.detail.points;
+		isGradeGuess[currentlyEditing[0]][currentlyEditing[1]] = event.detail.isGuess;
+		grades = grades;
+	}
 </script>
 
 <div class="w-full flex justify-center p-4">
@@ -35,12 +85,20 @@
 							<td class="text-center">13.1</td>
 							<td class="text-center">13.2</td>
 						</tr>
-						{#each Object.entries(grades) as [subject, gradeList]}
+						{#each subjectNames as subject, subjectIndex}
 							<tr>
 								<td>{subject}</td>
 								{#each [0, 1, 2, 3] as i}
 									<td class=" text-center">
-										<button class="w-full h-full p-2 bg-dark rounded-md">{gradeList[i]}</button>
+										<button
+											class="w-full h-full p-2 bg-dark rounded-md"
+											class:font-bold={!isGradeGuess[subjectIndex][i]}
+											class:text-primary={!isGradeGuess[subjectIndex][i]}
+											class:bg-darkest={!isGradeRelevant[subjectIndex][i]}
+											class:text-muted={!isGradeRelevant[subjectIndex][i]}
+											on:click={() => openEditDialog(subjectIndex, i)}
+											>{grades[subjectIndex][i]}</button
+										>
 									</td>
 								{/each}
 							</tr>
@@ -50,10 +108,15 @@
 
 				<h2 class="text-lg font-bold pt-4">Abiprüfungen</h2>
 				<div class="w-full grid grid-rows-3 grid-flow-col gap-2 gap-x-4">
-					{#each ['IT', 'MATHE', 'ENGLISCH', 'BUV', 'IV'] as i}
+					{#each [0, 1, 2, 3, 5] as subjectIndex}
 						<div class="flex-1 flex items-center">
-							<p class="flex-[2]">{i}</p>
-							<button class="w-full h-full flex-1 p-2 bg-dark rounded-md">{grades[i][4]}</button>
+							<p class="flex-[2]">{subjectNames[subjectIndex]}</p>
+							<button
+								class="w-full h-full flex-1 p-2 bg-dark rounded-md"
+								class:font-bold={!isGradeGuess[subjectIndex][4]}
+								class:text-primary={!isGradeGuess[subjectIndex][4]}
+								on:click={() => openEditDialog(subjectIndex, 4)}>{grades[subjectIndex][4]}</button
+							>
 						</div>
 					{/each}
 				</div>
@@ -83,4 +146,12 @@
 		</div>
 	</main>
 </div>
-<EditGrade />
+{#if editDialogOpen}
+	<EditGrade
+		on:submit={handleEditSubmit}
+		subject={subjectNames[currentlyEditing[0]]}
+		index={currentlyEditing[1]}
+		points={grades[currentlyEditing[0]][currentlyEditing[1]]}
+		isGuess={isGradeGuess[currentlyEditing[0]][currentlyEditing[1]]}
+	/>
+{/if}
