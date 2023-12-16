@@ -7,10 +7,12 @@
 
 	async function loginAndCheck() {
 		const pb = new PocketBase('https://bbs-backend.noteqr.de');
+
+		let w = window.open();
 		await pb.collection('users').authWithOAuth2({
 			provider: 'google',
 			urlCallback: (url) => {
-				window.location.href = url;
+				w.location.href = url;
 			}
 		});
 
