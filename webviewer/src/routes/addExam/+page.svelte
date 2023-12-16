@@ -39,7 +39,13 @@
 		}
 
 		const pb = new PocketBase('https://bbs-backend.noteqr.de');
-		await pb.collection('users').authWithOAuth2({ provider: 'google' });
+
+		await pb.collection('users').authWithOAuth2({
+			provider: 'google',
+			urlCallback: (url) => {
+				window.location.href = url;
+			}
+		});
 
 		if (!pb.authStore.model) {
 			console.log('no user logged in');
