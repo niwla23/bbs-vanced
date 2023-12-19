@@ -100,6 +100,7 @@
 				<option value="pumpkin"> Pumpkin </option>
 				<option value="pink"> Pink </option>
 				<option value="aqua"> Aqua </option>
+				<option value="rainbow">Rainbow</option>
 				<option value="blackandwhite"> Black and White </option>
 				<option value="bright">I am mentally ill.</option>
 			</select>

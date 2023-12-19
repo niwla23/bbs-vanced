@@ -131,7 +131,7 @@
 						>
 							{weekdayMap[day.getDay()]} - {day.toLocaleDateString()}
 						</b>
-						<div class="pt-2 flex flex-col gap-2">
+						<div class="component-timetable-day pt-2 flex flex-col gap-2">
 							{#each slots as [hours, slot]}
 								<Timeslot {hours} {exams} date={day} timeSlot={slot} />
 							{/each}

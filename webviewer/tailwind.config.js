@@ -82,6 +82,16 @@ export default {
         'on-primary': '#111',
         'muted': '#595959',
       },
+      rainbow: {
+        'primary': 'rgba(250,250,250,0.6)',
+        'darkest': '#000',
+        'dark': '#121124',
+        'colborder': 'rgba(0,0,0,0)',
+        'secondary': '#262626',
+        'brightest': '#d5d5d5',
+        'on-primary': '#393939',
+        'muted': '#bfbfbf',
+      },
     })
   ],
 }

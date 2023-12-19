@@ -51,8 +51,10 @@
 		exams; // this exists so svelte knows that there is a dependency on exams
 		if (isFree()) return 'bg-darkest';
 		// if (isExam()) return 'bg-red-800/40';
-		if (externalExam && externalExam.type == 'klausur') return 'bg-red-800/40';
-		if (externalExam && externalExam.type == 'termin') return 'bg-blue-800/40';
+		if (externalExam && externalExam.type == 'klausur')
+			return 'bg-red-800/40 component-timeslot-exam';
+		if (externalExam && externalExam.type == 'termin')
+			return 'bg-blue-800/40 component-timeslot-event';
 		return 'bg-dark';
 	})();
 
@@ -63,7 +65,7 @@
 </script>
 
 <div
-	class=" {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative"
+	class="component-timeslot {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative"
 >
 	<div class="self-stretch w-20 flex flex-col justify-between items-center pr-2">
 		<p class="text-muted text-xs">{$hasPro ? startTime : ''}</p>

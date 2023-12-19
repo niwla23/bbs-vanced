@@ -9,7 +9,9 @@
 	export let showBack = false;
 </script>
 
-<div class="w-full flex justify-center py-2 px-4 fixed top-0 left-0 z-20 backdrop-blur bg-darkest">
+<div
+	class="component-topbar w-full flex justify-center py-2 px-4 fixed top-0 left-0 z-20 backdrop-blur bg-darkest"
+>
 	<div class="w-full max-w-4xl flex gap-2 justify-between">
 		<div class="flex items-center">
 			{#if showBack}

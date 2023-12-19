@@ -147,10 +147,6 @@
 				>
 					Mit Google anmelden und speichern
 				</button>
-				<p class="text-gray-400 font-light pt-4">
-					das alles noch beta hier ich hab das noch nicht wirklich getestet und google login damit
-					ihr mir das dings hier nicht zuspammt.
-				</p>
 			</div>
 		{/if}
 	</main>
