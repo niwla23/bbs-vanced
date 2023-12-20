@@ -9,22 +9,24 @@
   }
 
   html[data-theme='rainbow'] .component-topbar {
-    /* background: rgb(255,0,0); */
     background: rgba(255, 255, 255, 0.2);
-    color: white !important
-    /* background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(249,255,0,1) 25%, rgba(1,255,0,1) 52%, rgba(0,21,255,1) 77%, rgba(231,0,255,1) 100%); */
   }
 
   html[data-theme='rainbow'] .component-timeslot {
-    background: rgb(231,0,255);
-    background: radial-gradient(at bottom right, rgba(231,0,255,1) 0%, rgba(40,41,250,1) 100%);
+    box-shadow: none;
   }
   html[data-theme='rainbow'] .component-timeslot-event {
-    background: rgb(231,0,255);
-    background: radial-gradient(at top right, rgba(5,255,0,1) 0%, rgba(74,159,36,1) 100%);
+    border: rgb(120,120,210) 2px solid;
+    background: unset;
+    @apply bg-dark
   }
   html[data-theme='rainbow'] .component-timeslot-exam {
-    background: rgb(231,0,255);
-    background: linear-gradient(45deg, rgba(160,26,26,1) 65%, rgba(131,58,180,1) 85%);
+    border: rgb(210,120,120) 2px solid;
+    background: unset;
+    @apply bg-dark
+  }
+  html[data-theme='rainbow'] .component-timeslot.bg-darkest {
+    background: transparent !important;
+    border: white 1px solid;
   }
 }
