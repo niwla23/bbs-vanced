@@ -3,6 +3,7 @@
 
 	export let points = 0;
 	export let isGuess = false;
+	export let isRelevant = false;
 	export let subject: string;
 	export let index: number;
 
@@ -10,7 +11,7 @@
 
 	function onSubmit(e: Event) {
 		e.preventDefault();
-		dispatch('submit', { points, isGuess });
+		dispatch('submit', { points, isGuess, isRelevant });
 	}
 
 	const gradeIndexToText = ['12.1', '12.2', '13.1', '13.2', 'Abiprüfung'];
@@ -29,6 +30,14 @@
 				class="bg-dark text-brightest p-1 rounded-md w-16"
 				max="15"
 				min="0"
+			/>
+		</label>
+		<label class="flex justify-between items-center gap-2 pb-2">
+			<span>Einbringen</span>
+			<input
+				bind:checked={isRelevant}
+				type="checkbox"
+				class="bg-dark text-brightest p-1 rounded-md w-6 h-6"
 			/>
 		</label>
 		<label class="flex justify-between items-center gap-2 pb-2">

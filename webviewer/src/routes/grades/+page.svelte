@@ -1,9 +1,16 @@
 <script lang="ts">
 	import TopBar from '@/lib/TopBar.svelte';
 	import EditGrade from './EditGrade.svelte';
+	import {
+		countRelevantGrades,
+		totalPointsBlockI,
+		totalPointsBlockII,
+		totalPointsToGrade
+	} from '@/lib/grades';
 
 	let grades = [
 		[14, 13, 14, 12, 10],
+		[14, 13, 14, 12, 9],
 		[14, 13, 14, 12, 9],
 		[14, 13, 14, 12, 9],
 		[14, 13, 14, 12, 9],
@@ -22,13 +29,15 @@
 		'BUV',
 		'IV',
 		'Deutsch',
-		'Sport',
 		'Chemie',
 		'Geschichte',
-		'Praxis'
+		'Religion',
+		'Praxis',
+		'SP/PRA/Span'
 	];
 
 	let isGradeGuess = [
+		[false, true, true, true, true],
 		[false, true, true, true, true],
 		[false, true, true, true, true],
 		[false, true, true, true, true],
@@ -49,8 +58,9 @@
 		[true, true, true, true, true],
 		[true, true, true, true, true],
 		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[true, true, false, true, true],
+		[false, false, true, true, true],
+		[true, false, false, true, true],
+		[true, true, false, false, true],
 		[true, true, false, false, true]
 	];
 
@@ -66,8 +76,13 @@
 		editDialogOpen = false;
 		grades[currentlyEditing[0]][currentlyEditing[1]] = event.detail.points;
 		isGradeGuess[currentlyEditing[0]][currentlyEditing[1]] = event.detail.isGuess;
+		isGradeRelevant[currentlyEditing[0]][currentlyEditing[1]] = event.detail.isRelevant;
 		grades = grades;
 	}
+
+	$: pointsBlockI = totalPointsBlockI(grades, isGradeRelevant);
+	$: pointsBlockII = totalPointsBlockII(grades);
+	$: numRelevantGrades = countRelevantGrades(isGradeRelevant);
 </script>
 
 <div class="w-full flex justify-center p-4">
@@ -87,7 +102,7 @@
 						</tr>
 						{#each subjectNames as subject, subjectIndex}
 							<tr>
-								<td>{subject}</td>
+								<td class="w-0 whitespace-nowrap pr-2 md:pr-12 lg:pr-32">{subject}</td>
 								{#each [0, 1, 2, 3] as i}
 									<td class=" text-center">
 										<button
@@ -125,20 +140,28 @@
 				<table class="w-full">
 					<tbody>
 						<tr>
+							<td>Eingebrachte Semesternoten</td>
+							<td class={`text-right ${numRelevantGrades == 36 ? 'text-primary' : 'text-red-500'}`}
+								>{numRelevantGrades}</td
+							>
+						</tr>
+						<tr>
 							<td>Punkte Block I</td>
-							<td class="text-right">400</td>
+							<td class="text-right">{pointsBlockI.toFixed(0)}</td>
 						</tr>
 						<tr>
 							<td>Punkte Block II</td>
-							<td class="text-right">400</td>
+							<td class="text-right">{pointsBlockII.toFixed(0)}</td>
 						</tr>
 						<tr>
 							<td>Punkte Gesamt</td>
-							<td class="text-right">520</td>
+							<td class="text-right">{(pointsBlockI + pointsBlockII).toFixed(0)}</td>
 						</tr>
 						<tr>
 							<td>Note</td>
-							<td class="text-right font-bold text-xl text-primary">1,80</td>
+							<td class="text-right font-bold text-xl text-primary">
+								{totalPointsToGrade(pointsBlockI + pointsBlockII).toFixed(2)}
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -146,6 +169,8 @@
 		</div>
 	</main>
 </div>
+
+<!-- this is probably the worst way to do this but it kinda works well -->
 {#if editDialogOpen}
 	<EditGrade
 		on:submit={handleEditSubmit}
@@ -153,5 +178,6 @@
 		index={currentlyEditing[1]}
 		points={grades[currentlyEditing[0]][currentlyEditing[1]]}
 		isGuess={isGradeGuess[currentlyEditing[0]][currentlyEditing[1]]}
+		isRelevant={isGradeRelevant[currentlyEditing[0]][currentlyEditing[1]]}
 	/>
 {/if}
