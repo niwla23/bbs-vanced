@@ -21,17 +21,14 @@ export function totalPointsBlockI(grades: number[][], isGradeRelevant: boolean[]
 
 export function totalPointsBlockII(grades: number[][]) {
   let totalPoints = 0
-  for (let i = 0; i <= 5; i++) {
+  for (let i = 0; i <= 4; i++) {
     const blockIIGrade = grades[i][4]
     const blockIIPoints = blockIIGrade * 4
+    console.log(blockIIPoints)
     totalPoints += blockIIPoints
   }
 
   return totalPoints
-}
-
-export function totalPoints(grades: number[][]) {
-  return totalPointsBlockI(grades) + totalPointsBlockII(grades)
 }
 
 export function totalPointsToGrade(points: number) {
