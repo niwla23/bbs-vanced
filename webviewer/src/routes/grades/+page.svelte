@@ -87,7 +87,7 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<TopBar title="Noten" />
+		<TopBar title="Abinotenrechner" />
 		<div class="flex flex-col gap-2 pt-12">
 			<div>
 				<h2 class="text-lg font-bold">Semesternoten</h2>
