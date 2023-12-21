@@ -3,6 +3,7 @@ import type { RequestHandler } from "@sveltejs/kit";
 import { areSettingsComplete, getSettings } from '@/lib/settings';
 import { getExamsServer } from "@/lib/exams";
 import { env } from '$env/dynamic/private'
+import { logEvent } from "@/lib/serverHelpers";
 
 function sendJson(data: any) {
   return new Response(JSON.stringify(data))
@@ -23,6 +24,7 @@ export const GET: RequestHandler = async (event) => {
 
   const exams = await getExamsServer(env.PB_USER as string, env.PB_PASSWORD as string, settings.className, "bbs-walsrode")
 
+  logEvent("exams", { className: settings.className, date, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })
   return new Response(JSON.stringify(exams), { headers: { "content-type": "application/json" } });
 }

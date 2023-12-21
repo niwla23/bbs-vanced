@@ -27,7 +27,7 @@
 
 	async function loadData(date: Date, useCache = true) {
 		const resp = await fetch(
-			`/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '?nocache'}`
+			`/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '&nocache'}`
 		);
 		const text = await resp.text();
 		const parsedData = JSON.parse(text);

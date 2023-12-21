@@ -4,6 +4,7 @@ import { getSessionToken, getTimetable } from "bbs-parser"
 import { autoMergeTimeslots } from "bbs-parser/src/helpers"
 import { areSettingsComplete, getSettings } from '@/lib/settings';
 import { createRedis, serialize, deserialize } from "@/lib/cache";
+import { logEvent } from "@/lib/serverHelpers";
 
 
 function sendJson(data: any) {
@@ -29,9 +30,11 @@ export const GET: RequestHandler = async (event) => {
   const cacheResult = await redis.get(cacheKey)
 
   let timetable: TimetableWeek
+  let cacheHit = false
   if (useCache && cacheResult && cacheResult != null && cacheResult.length > 5) {
     console.log("cache hit")
     timetable = deserialize(cacheResult)
+    cacheHit = true
   } else {
     console.log("cache miss")
     const token = await getSessionToken("bbs-walsrode", "schueler")
@@ -47,6 +50,9 @@ export const GET: RequestHandler = async (event) => {
     timetableMerged.set(day, merged)
   }
 
+
+  console.log("useCache", useCache)
+  logEvent("timetable", { className: settings?.className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })
 
 

@@ -1,5 +1,6 @@
 import type { TimetableTimeSlot } from 'bbs-parser/src/types';
 import PocketBase from 'pocketbase';
+export const pb = new PocketBase('https://bbs-backend.noteqr.de');
 
 export interface Exam {
   date: string
@@ -13,7 +14,6 @@ export interface Exam {
   type: "termin" | "klausur"
 }
 
-const pb = new PocketBase('https://bbs-backend.noteqr.de');
 
 export function formatDate(n: Date) {
   return n.toISOString().replace('T', ' ').replace(/\.\d+Z$/, '');
