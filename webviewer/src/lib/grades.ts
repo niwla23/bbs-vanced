@@ -44,3 +44,15 @@ export function countRelevantGrades(isGradeRelevant: boolean[][]) {
   })
   return totalRelevantGrades
 }
+
+export function pointsToGrade(points: number) {
+  return (17 - points) / 3
+}
+
+export function pointsToGradePlusMinus(points: number) {
+  return ["6", "5-", "5", "5+", "4-", "4", "4+", "3-", "3", "3+", "2-", "2", "2+", "1-", "1", "1+"][points]
+}
+
+export function gradeToPoints(grade: number) {
+  return 17 - (3 * grade)
+}

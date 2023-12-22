@@ -20,6 +20,11 @@
 			onclick: (e) => goto('/addExam')
 		},
 		{
+			icon: 'material-symbols:question-exchange',
+			label: 'Notenumrechner',
+			onclick: (e) => goto('/grades/converter')
+		},
+		{
 			icon: 'material-symbols:newspaper',
 			label: 'News',
 			onclick: (e) => goto('/news')
