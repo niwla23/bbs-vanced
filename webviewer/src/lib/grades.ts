@@ -50,7 +50,7 @@ export function pointsToGrade(points: number) {
 }
 
 export function pointsToGradePlusMinus(points: number) {
-  return ["6", "5-", "5", "5+", "4-", "4", "4+", "3-", "3", "3+", "2-", "2", "2+", "1-", "1", "1+"][points]
+  return ["6", "5-", "5", "5+", "4-", "4", "4+", "3-", "3", "3+", "2-", "2", "2+", "1-", "1", "1+"][Math.round(points)]
 }
 
 export function gradeToPoints(grade: number) {
