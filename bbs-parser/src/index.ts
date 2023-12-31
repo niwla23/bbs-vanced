@@ -87,11 +87,14 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
   const headings = $(tables[TEACHERS_INDEX]).find("thead > tr > th")
   let timetable_week: TimetableWeek = new Map() // this is completly dumb, please fix it
 
+  const klabudatum: string = $('input[name="KlaBuDatum"]').val()
+
   headings.each((index, heading) => {
     const dateString = $($(heading).find("center").contents().get(2)).text().split(".")
     const currentMonth = Number(dateString[1]) - 1 // why, just why javascript. Why are months 0 indexed
     const currentDayOfMonth = Number(dateString[0])
     let currentDate = new Date()
+    currentDate.setFullYear(Number(klabudatum.split(".")[2]))
     currentDate.setMonth(currentMonth, currentDayOfMonth)
     currentDate.setHours(12, 0, 0, 0)
 
