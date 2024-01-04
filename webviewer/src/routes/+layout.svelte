@@ -43,7 +43,7 @@
 	</script>
 </svelte:head>
 <div
-	class="scroll-smooth bg-darkest main-background text-brightest min-h-screen h-full w-screen flex select-none"
+	class="scroll-smooth bg-darkest main-background text-brightest min-h-screen h-full w-full flex select-none"
 >
 	<div class="flex-grow">
 		{#if $navigating || !proEvaluationDone}

@@ -70,6 +70,10 @@
 			document.getElementById(elId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
 		}, 200);
 
+		if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+			loadFuture();
+		}
+
 		// check for news
 		if (await areNewNewsAvailable()) {
 			goto('/news');
