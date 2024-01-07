@@ -27,7 +27,9 @@
 
 	async function loadData(date: Date, useCache = true) {
 		const resp = await fetch(
-			`/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '&nocache'}`
+			`/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '&nocache'}&className=${
+				settings.className
+			}`
 		);
 		const text = await resp.text();
 		const parsedData = JSON.parse(text);
@@ -41,7 +43,7 @@
 			)
 			.sort((a, b) => a[0].getTime() - b[0].getTime());
 
-		exams = await getExamsClient();
+		exams = await getExamsClient(settings.className);
 	}
 
 	async function loadPast() {
@@ -95,6 +97,7 @@
 
 		document.addEventListener('scroll', handleScroll);
 
+		console.log(data, exams);
 		return () => {
 			document.removeEventListener('scroll', handleScroll);
 		};

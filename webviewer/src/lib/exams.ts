@@ -32,8 +32,8 @@ export async function getExamsServer(pbUser: string, pbPassword: string, course:
   });
 }
 
-export async function getExamsClient(): Promise<Exam[]> {
-  const resp = await fetch(`/api/exams`);
+export async function getExamsClient(className: string): Promise<Exam[]> {
+  const resp = await fetch(`/api/exams?className=${className}`);
   const text = await resp.text();
   const parsedData = JSON.parse(text);
 

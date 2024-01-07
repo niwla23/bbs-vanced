@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import { redirect, type Cookies } from "@sveltejs/kit";
 import JsCookie from "js-cookie";
 
@@ -15,7 +16,8 @@ export function getSettings(cookies?: Cookies) {
     encoded = JsCookie.get('settings');
   }
   if (!encoded) {
-    return;
+    if (browser) encoded = localStorage.getItem("settings")
+    if (!encoded) return;
   }
   const data: Settings = JSON.parse(encoded);
   return data
@@ -29,7 +31,7 @@ export function saveSettings(settings: Settings) {
     secure: false,
     sameSite: 'lax'
   });
-
+  localStorage.setItem("settings", JSON.stringify(settings))
 }
 
 export function settingsToJson(cookies?: Cookies) {

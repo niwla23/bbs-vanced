@@ -4,29 +4,23 @@ import { getSessionToken, getTimetable } from "bbs-parser"
 import { autoMergeTimeslots } from "bbs-parser/src/helpers"
 import { areSettingsComplete, getSettings } from '@/lib/settings';
 import { createRedis, serialize, deserialize } from "@/lib/cache";
-import { logEvent } from "@/lib/serverHelpers";
+import { logEvent, sendJson } from "@/lib/serverHelpers";
 
 
-function sendJson(data: any) {
-  return new Response(JSON.stringify(data))
-}
+// function sendJson(data: any) {
+//   return new Response(JSON.stringify(data))
+// }
 
 export const GET: RequestHandler = async (event) => {
-  const settings = getSettings(event.cookies)
-  if (!settings) {
-    return sendJson({ "error": "settings cookie not found" })
-  }
-
-  if (!areSettingsComplete(settings)) {
-    return sendJson({ "error": "settings are incomplete" })
-  }
 
   // if it works it aint broken
   const date = new Date(event.url.searchParams.get("date") || new Date())
+  const className = event.url.searchParams.get("className")
   const useCache = !event.url.searchParams.has("nocache")
+  if (className == null) return sendJson({ "error": "no className given" }, 400)
 
   const redis = await createRedis()
-  const cacheKey = `timetable-${settings?.className}-${date.toJSON()}-fullweek:true`
+  const cacheKey = `timetable-${className}-${date.toJSON()}-fullweek:true`
   const cacheResult = await redis.get(cacheKey)
 
   let timetable: TimetableWeek
@@ -38,7 +32,7 @@ export const GET: RequestHandler = async (event) => {
   } else {
     console.log("cache miss")
     const token = await getSessionToken("bbs-walsrode", "schueler")
-    timetable = await getTimetable(token, settings?.className, date, true) as TimetableWeek
+    timetable = await getTimetable(token, className, date, true) as TimetableWeek
     await redis.set(cacheKey, serialize(timetable))
     await redis.expire(cacheKey, 300)
   }
@@ -52,13 +46,12 @@ export const GET: RequestHandler = async (event) => {
 
 
   console.log("useCache", useCache)
-  logEvent("timetable", { className: settings?.className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
+  logEvent("timetable", { className: className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })
 
 
   return new Response(JSON.stringify({
     timetableMerged: Array.from(timetableMerged.entries()),
-    settings,
     timestamp: new Date().toJSON()
   }), { headers: { "content-type": "application/json" } });
 }

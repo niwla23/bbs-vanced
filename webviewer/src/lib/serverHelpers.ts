@@ -25,3 +25,8 @@ export async function logEvent(ressource: string, data: LogData) {
     ...data
   })
 }
+
+
+export function sendJson(data: any, status?: number) {
+  return new Response(JSON.stringify(data), { status: status || 200 })
+}
