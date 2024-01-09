@@ -15,11 +15,13 @@ export function getSettings(cookies?: Cookies) {
   } else {
     encoded = JsCookie.get('settings');
   }
+
   if (!encoded) {
     if (browser) encoded = localStorage.getItem("settings")
     if (!encoded) return;
   }
   const data: Settings = JSON.parse(encoded);
+  saveSettings(data)
   return data
 }
 
@@ -31,7 +33,7 @@ export function saveSettings(settings: Settings) {
     secure: false,
     sameSite: 'lax'
   });
-  localStorage.setItem("settings", JSON.stringify(settings))
+  if (browser) localStorage.setItem("settings", JSON.stringify(settings))
 }
 
 export function settingsToJson(cookies?: Cookies) {

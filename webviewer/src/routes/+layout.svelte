@@ -11,6 +11,9 @@
 	let proEvaluationDone = false;
 
 	onMount(() => {
+		const settingsLocal = localStorage.getItem('settings');
+		if (settingsLocal != null) Cookies.set('settings', settingsLocal);
+
 		if (browser && localStorage.getItem('hasPro') == 'true') {
 			Cookies.set('hasPro', 'true', { expires: 400 });
 			hasPro.set(true);
