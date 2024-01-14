@@ -152,7 +152,9 @@ export async function saveDataOnline(userData: SubjectUserData[]) {
 export async function subscribeOnlineData(callback: (data: RecordSubscription<RecordModel>) => void) {
   const pb = new PocketBase('https://bbs-backend.noteqr.de');
 
-  if (!pb.authStore.model || !pb.authStore.isValid) {
+  try {
+    await pb.collection("users").getOne(pb.authStore.model.id)
+  } catch (e) {
     const w = window.open();
     await pb.collection('users').authWithOAuth2({
       provider: 'google',
@@ -161,7 +163,6 @@ export async function subscribeOnlineData(callback: (data: RecordSubscription<Re
       }
     });
   }
-
   if (!pb.authStore.model) {
     throw new Error("no user logged in")
   }
