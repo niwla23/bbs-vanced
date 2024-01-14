@@ -1,5 +1,6 @@
 import type { TimetableTimeSlot } from 'bbs-parser/src/types';
-import PocketBase from 'pocketbase';
+import PocketBase, { type RecordModel, type RecordSubscription } from 'pocketbase';
+import { gradeUserDataTemplate, type SubjectUserData } from './grades';
 export const pb = new PocketBase('https://bbs-backend.noteqr.de');
 
 export interface Exam {
@@ -49,3 +50,4 @@ export function isExamInTimeslot(slot: TimetableTimeSlot, date: Date, hours: num
   if (!hours.every(e => e >= exam.startHour && e <= exam.endHour)) return false
   return true
 }
+

@@ -25,6 +25,11 @@
 			onclick: (e) => goto('/grades/converter')
 		},
 		{
+			icon: 'mdi:calculator',
+			label: 'Abirechner',
+			onclick: (e) => goto('/grades')
+		},
+		{
 			icon: 'material-symbols:newspaper',
 			label: 'News',
 			onclick: (e) => goto('/news')

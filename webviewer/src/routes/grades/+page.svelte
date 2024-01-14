@@ -1,27 +1,23 @@
 <script lang="ts">
 	import TopBar from '@/lib/TopBar.svelte';
 	import EditGrade from './EditGrade.svelte';
+	import GradeInfo from './GradeInfo.svelte';
 	import {
 		countRelevantGrades,
+		checkSubjectsForNeededRelevantGrades,
 		totalPointsBlockI,
 		totalPointsBlockII,
-		totalPointsToGrade
+		totalPointsToGrade,
+		gradeUserDataTemplate,
+		saveDataOnline,
+		subscribeOnlineData,
+		type SubjectUserData
 	} from '@/lib/grades';
+	import Icon from '@iconify/svelte';
+	import { onMount } from 'svelte';
+	import { hasPro } from '../stores';
 
-	let grades = [
-		[14, 13, 14, 12, 13],
-		[14, 13, 14, 12, 12],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 13],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 9],
-		[14, 13, 14, 12, 9]
-	];
-
+	let loadingComplete = false;
 	let subjectNames = [
 		'IT',
 		'Mathe',
@@ -36,36 +32,19 @@
 		'SP/PRA/Span'
 	];
 
-	let isGradeGuess = [
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true],
-		[false, true, true, true, true]
-	];
-
-	let isGradeRelevant = [
-		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[true, true, true, true, true],
-		[false, false, true, true, true],
-		[true, false, false, true, true],
-		[true, true, false, false, true],
-		[true, true, false, false, true]
-	];
+	let gradeUserData = gradeUserDataTemplate;
 
 	let currentlyEditing: [number, number] = [0, 0];
 	let editDialogOpen = false;
+	let infoDialogOpen = true;
+
+	function addSignToNumber(n: number) {
+		return (n < 0 ? '' : '+') + n;
+	}
+
+	function getCurrentlyEditingData(x: [number, number]) {
+		return gradeUserData[x[0]].grades[x[1]];
+	}
 
 	function openEditDialog(subjectIndex: number, index: number) {
 		currentlyEditing = [subjectIndex, index];
@@ -74,15 +53,34 @@
 
 	function handleEditSubmit(event) {
 		editDialogOpen = false;
-		grades[currentlyEditing[0]][currentlyEditing[1]] = event.detail.points;
-		isGradeGuess[currentlyEditing[0]][currentlyEditing[1]] = event.detail.isGuess;
-		isGradeRelevant[currentlyEditing[0]][currentlyEditing[1]] = event.detail.isRelevant;
-		grades = grades;
+		let gradeToEdit = gradeUserData[currentlyEditing[0]].grades[currentlyEditing[1]];
+		gradeToEdit.grade = event.detail.points;
+		gradeToEdit.isGuess = event.detail.isGuess;
+		gradeToEdit.relevant = event.detail.isRelevant;
+		gradeUserData = gradeUserData;
 	}
 
-	$: pointsBlockI = totalPointsBlockI(grades, isGradeRelevant);
-	$: pointsBlockII = totalPointsBlockII(grades);
-	$: numRelevantGrades = countRelevantGrades(isGradeRelevant);
+	$: pointsBlockI = totalPointsBlockI(gradeUserData);
+	$: pointsBlockII = totalPointsBlockII(gradeUserData);
+	$: numRelevantGrades = countRelevantGrades(gradeUserData);
+	$: areRelevantGradesOk = checkSubjectsForNeededRelevantGrades(gradeUserData);
+
+	function saveIfPro() {
+		if (hasPro && loadingComplete) saveDataOnline(gradeUserData);
+	}
+	$: gradeUserData, saveIfPro();
+	onMount(async () => {
+		if ($hasPro) {
+			let temp = await subscribeOnlineData((data) => {
+				if (JSON.stringify(data.record.gradesData.userData) != JSON.stringify(gradeUserData)) {
+					gradeUserData = data.record.gradesData.userData;
+					localStorage.setItem('gradesLastUpdate', new Date().getTime().toString());
+				}
+			});
+			gradeUserData = temp;
+			loadingComplete = true;
+		}
+	});
 </script>
 
 <div class="w-full flex justify-center p-4">
@@ -102,18 +100,35 @@
 						</tr>
 						{#each subjectNames as subject, subjectIndex}
 							<tr>
-								<td class="w-0 whitespace-nowrap pr-2 md:pr-12 lg:pr-32">{subject}</td>
+								<td class="w-0 whitespace-nowrap pr-2 md:pr-12 lg:pr-32">
+									{#if subjectIndex < 5}
+										<span class="font-bold">
+											P{subjectIndex + 1}:
+											{subject}
+										</span>
+									{:else}
+										{subject}
+									{/if}
+									{#if areRelevantGradesOk[subjectIndex] == 0}
+										<Icon icon="mdi:check" class="inline text-green-400" />
+									{:else}
+										<span class="text-red-400 font-bold">
+											{addSignToNumber(areRelevantGradesOk[subjectIndex])}
+										</span>
+									{/if}
+								</td>
 								{#each [0, 1, 2, 3] as i}
 									<td class=" text-center">
 										<button
 											class="w-full h-full p-2 bg-dark rounded-md"
-											class:font-bold={!isGradeGuess[subjectIndex][i]}
-											class:text-primary={!isGradeGuess[subjectIndex][i]}
-											class:bg-darkest={!isGradeRelevant[subjectIndex][i]}
-											class:text-muted={!isGradeRelevant[subjectIndex][i]}
+											class:font-bold={!gradeUserData[subjectIndex].grades[i].isGuess}
+											class:text-primary={!gradeUserData[subjectIndex].grades[i].isGuess}
+											class:bg-darkest={!gradeUserData[subjectIndex].grades[i].relevant}
+											class:text-muted={!gradeUserData[subjectIndex].grades[i].relevant}
 											on:click={() => openEditDialog(subjectIndex, i)}
-											>{grades[subjectIndex][i]}</button
 										>
+											{gradeUserData[subjectIndex].grades[i].grade}
+										</button>
 									</td>
 								{/each}
 							</tr>
@@ -128,10 +143,12 @@
 							<p class="flex-[2]">{subjectNames[subjectIndex]}</p>
 							<button
 								class="w-full h-full flex-1 p-2 bg-dark rounded-md"
-								class:font-bold={!isGradeGuess[subjectIndex][4]}
-								class:text-primary={!isGradeGuess[subjectIndex][4]}
-								on:click={() => openEditDialog(subjectIndex, 4)}>{grades[subjectIndex][4]}</button
+								class:font-bold={!gradeUserData[subjectIndex].grades[4].isGuess}
+								class:text-primary={!gradeUserData[subjectIndex].grades[4].isGuess}
+								on:click={() => openEditDialog(subjectIndex, 4)}
 							>
+								{gradeUserData[subjectIndex].grades[4].grade}
+							</button>
 						</div>
 					{/each}
 				</div>
@@ -141,9 +158,9 @@
 					<tbody>
 						<tr>
 							<td>Eingebrachte Semesternoten</td>
-							<td class={`text-right ${numRelevantGrades == 36 ? 'text-primary' : 'text-red-500'}`}
-								>{numRelevantGrades}</td
-							>
+							<td class={`text-right ${numRelevantGrades == 36 ? 'text-primary' : 'text-red-500'}`}>
+								{numRelevantGrades}
+							</td>
 						</tr>
 						<tr>
 							<td>Punkte Block I</td>
@@ -176,8 +193,12 @@
 		on:submit={handleEditSubmit}
 		subject={subjectNames[currentlyEditing[0]]}
 		index={currentlyEditing[1]}
-		points={grades[currentlyEditing[0]][currentlyEditing[1]]}
-		isGuess={isGradeGuess[currentlyEditing[0]][currentlyEditing[1]]}
-		isRelevant={isGradeRelevant[currentlyEditing[0]][currentlyEditing[1]]}
+		points={getCurrentlyEditingData(currentlyEditing).grade}
+		isGuess={getCurrentlyEditingData(currentlyEditing).isGuess}
+		isRelevant={getCurrentlyEditingData(currentlyEditing).relevant}
 	/>
+{/if}
+
+{#if infoDialogOpen}
+	<GradeInfo on:close={() => (infoDialogOpen = false)} />
 {/if}
