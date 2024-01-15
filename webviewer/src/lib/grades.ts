@@ -41,7 +41,8 @@ export const subjectNameOptions = [
 
 export function checkSubjectsForNeededRelevantGrades(userData: SubjectUserData[]) {
   return userData.map((subject, i) => {
-    const count = subject.grades.filter(v => v.relevant).length - 1 // count true values without final exam
+    const count = subject.grades.slice(0, 4).filter(v => v.relevant).length // count true values without final exam
+    console.log(subject.grades, count)
     return numbersOfNeededRelevantGrades[i] - count
   })
 }
