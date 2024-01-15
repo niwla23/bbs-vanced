@@ -1,6 +1,7 @@
 <script lang="ts">
 	import TopBar from '@/lib/TopBar.svelte';
 	import EditGrade from './EditGrade.svelte';
+	import EditSubjectNames from './EditSubjectNames.svelte';
 	import GradeInfo from './GradeInfo.svelte';
 	import {
 		countRelevantGrades,
@@ -11,7 +12,8 @@
 		gradeUserDataTemplate,
 		saveDataOnline,
 		subscribeOnlineData,
-		type SubjectUserData
+		type SubjectUserData,
+		subjectNameOptions
 	} from '@/lib/grades';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
@@ -37,6 +39,7 @@
 	let currentlyEditing: [number, number] = [0, 0];
 	let editDialogOpen = false;
 	let infoDialogOpen = true;
+	let editSubjectNamesOpen = false;
 
 	function addSignToNumber(n: number) {
 		return (n < 0 ? '' : '+') + n;
@@ -98,16 +101,19 @@
 							<td class="text-center">13.1</td>
 							<td class="text-center">13.2</td>
 						</tr>
-						{#each subjectNames as subject, subjectIndex}
+						{#each gradeUserData as subject, subjectIndex}
 							<tr>
-								<td class="w-0 whitespace-nowrap pr-2 md:pr-12 lg:pr-32">
+								<td
+									class="w-0 whitespace-nowrap pr-2 md:pr-12 lg:pr-32 cursor-pointer"
+									on:click={() => (editSubjectNamesOpen = true)}
+								>
 									{#if subjectIndex < 5}
 										<span class="font-bold">
 											P{subjectIndex + 1}:
-											{subject}
+											{subjectNameOptions[subjectIndex][subject.nameOption]}
 										</span>
 									{:else}
-										{subject}
+										{subjectNameOptions[subjectIndex][subject.nameOption]}
 									{/if}
 									{#if areRelevantGradesOk[subjectIndex] == 0}
 										<Icon icon="mdi:check" class="inline text-green-400" />
@@ -135,12 +141,19 @@
 						{/each}
 					</tbody>
 				</table>
+				<p class="text-muted">
+					<span class="inline-block transform rotate-180">↴</span>
+					Tippe auf die Fachnamen, um sie zu ändern
+				</p>
 
 				<h2 class="text-lg font-bold pt-4">Abiprüfungen</h2>
 				<div class="w-full grid grid-rows-3 grid-flow-col gap-2 gap-x-4">
-					{#each [0, 1, 2, 3, 5] as subjectIndex}
+					{#each [0, 1, 2, 3, 4] as subjectIndex}
 						<div class="flex-1 flex items-center">
-							<p class="flex-[2]">{subjectNames[subjectIndex]}</p>
+							<p class="flex-[2]">
+								P{subjectIndex + 1}:
+								{subjectNameOptions[subjectIndex][gradeUserData[subjectIndex].nameOption]}
+							</p>
 							<button
 								class="w-full h-full flex-1 p-2 bg-dark rounded-md"
 								class:font-bold={!gradeUserData[subjectIndex].grades[4].isGuess}
@@ -201,4 +214,16 @@
 
 {#if infoDialogOpen}
 	<GradeInfo on:close={() => (infoDialogOpen = false)} />
+{/if}
+
+{#if editSubjectNamesOpen}
+	<EditSubjectNames
+		{subjectNameOptions}
+		{gradeUserData}
+		on:close={() => (editSubjectNamesOpen = false)}
+		on:submit={(event) => {
+			gradeUserData = event.detail.gradeUserData;
+			editSubjectNamesOpen = false;
+		}}
+	/>
 {/if}

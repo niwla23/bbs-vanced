@@ -39,6 +39,7 @@ export const subjectNameOptions = [
   ["Sport", "Praxis 2", "Spanisch"] // SP / PRA / SPAN
 ];
 
+
 export function checkSubjectsForNeededRelevantGrades(userData: SubjectUserData[]) {
   return userData.map((subject, i) => {
     const count = subject.grades.slice(0, 4).filter(v => v.relevant).length // count true values without final exam
