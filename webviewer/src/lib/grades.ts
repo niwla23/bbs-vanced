@@ -1,4 +1,5 @@
-import PocketBase, { type RecordModel, type RecordSubscription } from "pocketbase"
+import type { RecordModel, RecordSubscription } from "pocketbase";
+import { getAuthenticatedPocketBase } from "./clientAuth";
 
 export interface SubjectUserData {
   nameOption: number;
@@ -120,27 +121,11 @@ export const gradeUserDataTemplate: SubjectUserData[] = [
 
 
 export async function saveDataOnline(userData: SubjectUserData[]) {
-  let lastUpdate = Number(localStorage.getItem('gradesLastUpdate'));
-  console.log(lastUpdate, new Date().getTime() - lastUpdate)
+  const lastUpdate = Number(localStorage.getItem('gradesLastUpdate'));
   if (new Date().getTime() - lastUpdate < 500) return
-  console.log("continue save")
 
-  const pb = new PocketBase('https://bbs-backend.noteqr.de');
-
-  if (!pb.authStore.model || !pb.authStore.isValid) {
-    const w = window.open();
-    await pb.collection('users').authWithOAuth2({
-      provider: 'google',
-      urlCallback: (url) => {
-        w.location.href = url;
-      }
-    });
-  }
-
-  if (!pb.authStore.model) {
-    console.log('no user logged in');
-    return;
-  }
+  const pb = await getAuthenticatedPocketBase();
+  if (!pb.authStore.model) throw new Error("no auth model")
 
   try {
     await pb.collection('users').update(pb.authStore.model.id, { gradesData: { userData } })
@@ -150,22 +135,8 @@ export async function saveDataOnline(userData: SubjectUserData[]) {
 }
 
 export async function subscribeOnlineData(callback: (data: RecordSubscription<RecordModel>) => void) {
-  const pb = new PocketBase('https://bbs-backend.noteqr.de');
-
-  try {
-    await pb.collection("users").getOne(pb.authStore.model.id)
-  } catch (e) {
-    const w = window.open();
-    await pb.collection('users').authWithOAuth2({
-      provider: 'google',
-      urlCallback: (url) => {
-        w.location.href = url;
-      }
-    });
-  }
-  if (!pb.authStore.model) {
-    throw new Error("no user logged in")
-  }
+  const pb = await getAuthenticatedPocketBase()
+  if (!pb.authStore.model) throw new Error("no auth model")
 
   const user = await pb.collection("users").getOne(pb.authStore.model.id)
   if (user.gradesData == null) {
