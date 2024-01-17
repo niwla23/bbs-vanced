@@ -4,7 +4,8 @@ import { logEvent, sendJson } from "@/lib/serverHelpers";
 import { generateAccessToken } from "./shared";
 
 
-const base = "https://api-m.sandbox.paypal.com";
+// const base = "https://api-m.sandbox.paypal.com";
+const base = env.PAYPAL_BASE_URL
 
 
 export const POST: RequestHandler = async (event) => {
