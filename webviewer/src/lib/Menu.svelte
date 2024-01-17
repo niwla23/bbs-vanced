@@ -43,6 +43,11 @@
 			icon: 'material-symbols:share',
 			label: 'App teilen',
 			onclick: (e) => shareApp('menu_share')
+		},
+		{
+			icon: 'mdi:legal',
+			label: 'Rechtliches',
+			onclick: (e) => goto('/legal')
 		}
 	];
 

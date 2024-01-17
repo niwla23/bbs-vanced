@@ -102,7 +102,11 @@
 		<p class="text-sm text-center pb-2">
 			PRO für {pb ? pb.authStore.model?.email : 'wird geladen'} kaufen
 		</p>
-		<p class="font-bold text-primary text-4xl text-center pb-8">4,99€</p>
+		<p class="font-bold text-primary text-4xl text-center pb-4">4,99€</p>
+		<small>
+			Mit dem Kauf stimmst du den <a href="/legal/agb" class="underline">AGB</a>
+			zu.
+		</small>
 		<div id="paypal_buttons" />
 		<a class="bg-darkest rounded-md p-4 text-center underline" href="/activatePro/key">
 			Ich habe einen Lizenzschlüssel
