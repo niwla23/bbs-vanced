@@ -35,6 +35,10 @@
 				</div>
 			</div>
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">
+				<Icon icon="mdi:heart" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<p>Abirechner</p>
+			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-16">
 				<Icon icon="mingcute:save-fill" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
 				<p>Einmalzahlung, kein Abo</p>
 			</div>
@@ -49,19 +53,21 @@
 				/>
 				<p>Unterstütze die Entwicklung</p>
 			</div>
-			<div class="bg-dark p-2 rounded-md flex items-center h-16">
-				<Icon icon="mdi:heart" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
-				<p>Weitere Funktionen in Entwicklung</p>
+			<div class="h-32" />
+			<div class="flex flex-col fixed bottom-0 w-full left-0">
+				<div class="h-16 bg-gradient-to-b from-transparent to-darkest" />
+				<div class="bg-darkest flex flex-col gap-2 p-2 pt-0">
+					<a
+						href="/activatePro/buy"
+						class="bg-primary text-on-primary text-center font-bold p-4 rounded-md mt-2"
+					>
+						Jetzt kaufen - 4,99€
+					</a>
+					<a class="bg-dark rounded-md p-4 text-center" href="/activatePro">
+						Ich habe gekauft, jetzt aktivieren
+					</a>
+				</div>
 			</div>
-			<a
-				href="https://a26377.myshopify.com/cart/47369688547653:1?channel=buy_button"
-				class="bg-primary text-on-primary text-center font-bold p-4 rounded-md mt-2"
-			>
-				Jetzt kaufen - 4,99€
-			</a>
-			<a class="bg-dark rounded-md p-4 text-center" href="/activatePro">
-				Ich habe gekauft, jetzt aktivieren
-			</a>
 		</div>
 	</main>
 </div>
