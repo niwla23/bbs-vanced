@@ -37,6 +37,7 @@ export const POST: RequestHandler = async (event) => {
 
     if (response.status == 201) {
       console.log("succesful purchase")
+      fetch("http://ntfy.sh/506f633d-ab54-4bfb-8c72-71aaa5727832_ohfuck_bigmac", { method: "POST", body: "BBS Vanced PRO Transaction completed" })
       await pbAuth()
       const userId = jsonResponse.purchase_units[0].payments.captures[0].custom_id.split("-")[0]
       await pb.collection("users").update(userId, { proKey: `paypal-${new Date().toJSON()}` })

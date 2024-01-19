@@ -12,17 +12,16 @@
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
-	import { availableEmojis } from '@/lib/textRessources';
 	import { getExamsClient, type Exam } from '@/lib/exams';
 	import { goto } from '$app/navigation';
 	import { areNewNewsAvailable } from '@/lib/news';
 	import TopBar from '@/lib/TopBar.svelte';
-	import { browser } from '$app/environment';
 	import { hasPro } from './stores';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
 	let lastLoadTime = new Date().getTime();
+	let settings: Settings;
 	// let hasPro = false;
 
 	async function loadData(date: Date, useCache = true) {
@@ -59,6 +58,7 @@
 	}
 
 	async function initialLoad(useCache: boolean) {
+		settings = await getSettings();
 		data = [];
 		const today = new Date();
 		let targetDate = today;
@@ -103,7 +103,7 @@
 		};
 	});
 
-	let settings = getSettings() as Settings;
+	// let settings = (await getSettings()) as Settings;
 
 	function filterWeekTimetable(timetable: [Date, TimetableDay][]) {
 		const all = timetable.map(([day, v]) => {

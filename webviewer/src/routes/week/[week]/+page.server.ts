@@ -6,7 +6,7 @@ import { areSettingsComplete, getSettings } from '@/lib/settings';
 import { redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (input) => {
-  const settings = getSettings(input.cookies)
+  const settings = await getSettings(input.cookies)
   if (!settings) {
     throw redirect(307, `/settings`);
   }

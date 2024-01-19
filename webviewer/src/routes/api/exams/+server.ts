@@ -1,6 +1,5 @@
 
 import type { RequestHandler } from "@sveltejs/kit";
-import { areSettingsComplete, getSettings } from '@/lib/settings';
 import { getExamsServer } from "@/lib/exams";
 import { env } from '$env/dynamic/private'
 import { logEvent, sendJson } from "@/lib/serverHelpers";

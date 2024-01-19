@@ -20,7 +20,6 @@
 			console.log('no user logged in');
 			return;
 		}
-		console.log(pb.authStore.model.hasPro);
 		if (pb.authStore.model.proKey != '') {
 			localStorage.setItem('hasPro', 'true');
 			Cookies.set('hasPro', 'true', { expires: 400 });

@@ -2,7 +2,6 @@ import type { RequestHandler } from "@sveltejs/kit";
 import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
 import { getSessionToken, getTimetable } from "bbs-parser"
 import { autoMergeTimeslots } from "bbs-parser/src/helpers"
-import { areSettingsComplete, getSettings } from '@/lib/settings';
 import { createRedis, serialize, deserialize } from "@/lib/cache";
 import { logEvent, sendJson } from "@/lib/serverHelpers";
 
@@ -12,7 +11,6 @@ import { logEvent, sendJson } from "@/lib/serverHelpers";
 // }
 
 export const GET: RequestHandler = async (event) => {
-
   // if it works it aint broken
   const date = new Date(event.url.searchParams.get("date") || new Date())
   const className = event.url.searchParams.get("className")

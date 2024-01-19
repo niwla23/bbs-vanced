@@ -34,8 +34,8 @@
 		courses = courses;
 	}
 
-	function loadSettings() {
-		let data = getSettings();
+	async function loadSettings() {
+		let data = await getSettings();
 		if (!data) return;
 		className = data.className;
 		courses = new Set(data.courses);
@@ -44,12 +44,16 @@
 		if (fetchedTheme) theme = fetchedTheme;
 	}
 
-	function save() {
+	async function save() {
 		let trimmedCourses = [...courses].map((course) => course.trim());
-		saveSettings({
-			courses: trimmedCourses,
-			className: className.trim()
-		});
+		await saveSettings(
+			{
+				courses: trimmedCourses,
+				className: className.trim()
+			},
+			hasPro
+			// true
+		);
 		localStorage.setItem('theme', theme);
 		document.documentElement.dataset.theme = theme;
 		goto('/');
@@ -96,12 +100,12 @@
 				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
 				disabled={!hasPro}
 			>
-				<option value="lime"> Lime </option>
-				<option value="pumpkin"> Pumpkin </option>
-				<option value="pink"> Pink </option>
-				<option value="aqua"> Aqua </option>
+				<option value="lime">Lime</option>
+				<option value="pumpkin">Pumpkin</option>
+				<option value="pink">Pink</option>
+				<option value="aqua">Aqua</option>
 				<option value="rainbow">Rainbow</option>
-				<option value="blackandwhite"> Black and White </option>
+				<option value="blackandwhite">Black and White</option>
 				<option value="bright">I am mentally ill.</option>
 			</select>
 		</label>

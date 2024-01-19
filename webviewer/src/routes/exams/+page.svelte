@@ -12,7 +12,7 @@
 			const data: Exam[] = await getExamsClient();
 			const cutoffDate = new Date();
 			cutoffDate.setDate(cutoffDate.getDate() - 1);
-			const settings = getSettings();
+			const settings = await getSettings();
 			exams = data
 				.filter((v) => new Date(v.date).getTime() > cutoffDate.getTime())
 				.filter((v) => settings?.courses.includes(v.subject) || v.subject == '-all-');

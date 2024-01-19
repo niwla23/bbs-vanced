@@ -1,13 +1,28 @@
 import { browser } from "$app/environment";
 import { redirect, type Cookies } from "@sveltejs/kit";
 import JsCookie from "js-cookie";
+import { getAuthenticatedPocketBase } from "./clientAuth";
 
 export interface Settings {
   className: string;
   courses: string[];
 }
 
-export function getSettings(cookies?: Cookies) {
+export async function getSettings(cookies?: Cookies) {
+  if (browser && localStorage.getItem("hasPro") == "true") {
+    const pb = await getAuthenticatedPocketBase()
+    if (!pb.authStore.model) {
+      console.error("no model")
+      return
+    }
+    const user = await pb.collection("users").getOne(pb.authStore.model.id)
+    if (user.settings) {
+      return user.settings
+    }
+  }
+  console.log("we are not loading from cloud because user is poor")
+
+
   let encoded = undefined
   // server function will inject cookies
   if (cookies) {
@@ -15,17 +30,22 @@ export function getSettings(cookies?: Cookies) {
   } else {
     encoded = JsCookie.get('settings');
   }
+  console.log("did the cookie thing")
 
   if (!encoded) {
+    console.log("no data in cookie :(")
     if (browser) encoded = localStorage.getItem("settings")
+    console.log("ur mom")
     if (!encoded) return;
   }
   const data: Settings = JSON.parse(encoded);
-  saveSettings(data)
+  await saveSettings(data)
+
+  console.log("about to return them sweet settigns")
   return data
 }
 
-export function saveSettings(settings: Settings) {
+export async function saveSettings(settings: Settings) {
   const expiryDate = new Date();
   expiryDate.setFullYear(expiryDate.getFullYear() + 10);
   JsCookie.set('settings', JSON.stringify(settings), {
@@ -34,10 +54,19 @@ export function saveSettings(settings: Settings) {
     sameSite: 'lax'
   });
   if (browser) localStorage.setItem("settings", JSON.stringify(settings))
+  if (browser && localStorage.getItem("hasPro") == "true") {
+    console.log("saving settings from backend")
+    const pb = await getAuthenticatedPocketBase()
+    if (!pb.authStore.model) {
+      console.error("no model")
+      return
+    }
+    await pb.collection("users").update(pb.authStore.model.id, { settings: JSON.stringify(settings) })
+  }
 }
 
-export function settingsToJson(cookies?: Cookies) {
-  const settings = getSettings(cookies)
+export async function settingsToJson(cookies?: Cookies) {
+  const settings = await getSettings(cookies)
   return JSON.stringify(settings)
 }
 
@@ -54,8 +83,8 @@ export function areSettingsComplete(settings: Settings) {
 }
 
 
-export function checkSettings(cookies: Cookies) {
-  const settings = getSettings(cookies)
+export async function checkSettings(cookies: Cookies) {
+  const settings = await getSettings(cookies)
   if (!settings) {
     throw redirect(307, `/tour`);
   }

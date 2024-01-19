@@ -27,6 +27,6 @@ function getLogicalDate() {
   return now
 }
 
-export const load: PageServerLoad = (input) => {
-  checkSettings(input.cookies)
+export const load: PageServerLoad = async (input) => {
+  await checkSettings(input.cookies)
 }

@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { grade, className } from '../stores';
+	import { getAuthenticatedPocketBase } from '@/lib/clientAuth';
+	import Swal from 'sweetalert2';
+	import { getSettings, saveSettings } from '@/lib/settings';
 	const dispatch = createEventDispatcher();
 	function next() {
 		if ($grade == 0 || $className == '') {
@@ -15,6 +18,19 @@
 			return;
 		}
 		dispatch('next');
+	}
+
+	async function proLogin() {
+		const pb = await getAuthenticatedPocketBase();
+		const user = await pb.collection('users').getOne(pb.authStore.model!.id);
+		if (user.proKey && user.proKey != '') {
+			localStorage.setItem('hasPro', 'true');
+			let settings = await getSettings();
+			await saveSettings(settings);
+			window.location.pathname = '/';
+		} else {
+			Swal.fire('Netter Versuch, aber du hast kein PRO :(');
+		}
 	}
 </script>
 
@@ -34,8 +50,10 @@
 							class="p-3 font-bold text-2xl {$grade == g
 								? 'bg-primary text-on-primary'
 								: 'bg-dark'} rounded-md w-full"
-							on:click={() => grade.set(g)}>{g}</button
+							on:click={() => grade.set(g)}
 						>
+							{g}
+						</button>
 					{/each}
 				</div>
 			</label>
@@ -47,12 +65,17 @@
 					bind:value={$className}
 				/>
 			</label>
+			<button class="bg-dark p-4 rounded-md w-full mb-2" on:click={proLogin}>
+				Ich hab PRO, anmelden
+			</button>
 			<button
 				class="{$grade != 0 && $className != ''
 					? 'bg-primary text-on-primary'
 					: 'bg-dark'} p-4 rounded-md w-full font-bold"
-				on:click={next}>Let's go</button
+				on:click={next}
 			>
+				Let's go
+			</button>
 		</section>
 	</main>
 </div>

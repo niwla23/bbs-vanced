@@ -5,6 +5,7 @@
 	import { getSettings } from '@/lib/settings';
 	import Icon from '@iconify/svelte';
 	import PocketBase from 'pocketbase';
+	import { onMount } from 'svelte';
 
 	let subject = '';
 	let examType = 'klausur';
@@ -13,7 +14,7 @@
 	let endHour: number | null = null;
 	let topic = 'Klausur';
 
-	const appSettings = getSettings();
+	let appSettings;
 
 	async function save() {
 		if (subject == '' || !dateString || !startHour || !endHour || topic == '') {
@@ -68,6 +69,10 @@
 		await pb.collection('exams').create(data);
 		goto('/');
 	}
+
+	onMount(async () => {
+		appSettings = await getSettings();
+	});
 </script>
 
 <div class="w-full flex justify-center p-4">
@@ -93,7 +98,7 @@
 								{subject}
 							</option>
 						{/each}
-						<option value="-all-"> Alle Kurse / Fächer </option>
+						<option value="-all-">Alle Kurse / Fächer</option>
 					</select>
 				</label>
 				<label class="block pb-2">
