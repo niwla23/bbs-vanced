@@ -34,9 +34,16 @@
 					<small>Du kannst Anfang und Ende der Stunde sehen und bekommst einen Countdown</small>
 				</div>
 			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
+				<Icon icon="mdi:calculator" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<div>
+					<p>Abirechner</p>
+					<small>Erhalte eine Prognose deiner Abinote</small>
+				</div>
+			</div>
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">
-				<Icon icon="mdi:heart" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
-				<p>Abirechner</p>
+				<Icon icon="mdi:sync" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<p>Einstellungssynchonisierung</p>
 			</div>
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">
 				<Icon icon="mingcute:save-fill" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
@@ -53,7 +60,7 @@
 				/>
 				<p>Unterstütze die Entwicklung</p>
 			</div>
-			<div class="h-32" />
+			<div class="h-40" />
 			<div class="flex flex-col fixed bottom-0 w-full left-0">
 				<div class="h-16 bg-gradient-to-b from-transparent to-darkest" />
 				<div class="bg-darkest flex flex-col gap-2 p-2 pt-0">
