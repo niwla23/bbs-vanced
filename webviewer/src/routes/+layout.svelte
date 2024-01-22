@@ -12,7 +12,7 @@
 
 	onMount(() => {
 		const settingsLocal = localStorage.getItem('settings');
-		if (settingsLocal != null) Cookies.set('settings', settingsLocal);
+		if (settingsLocal != null) Cookies.set('settings', settingsLocal, { expires: 400 });
 
 		if (browser && localStorage.getItem('hasPro') == 'true') {
 			Cookies.set('hasPro', 'true', { expires: 400 });
