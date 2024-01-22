@@ -102,7 +102,9 @@
 		<p class="text-sm text-center pb-2">
 			PRO für {pb ? pb.authStore.model?.email : 'wird geladen'} kaufen
 		</p>
-		<p class="font-bold text-primary text-4xl text-center pb-4">4,99€</p>
+		<p class="font-bold text-primary text-4xl text-center pb-4">
+			{Number(env.PUBLIC_PRO_PRICE).toFixed(2)}€
+		</p>
 		<small>
 			Mit dem Kauf stimmst du den <a href="/legal/agb" class="underline">AGB</a>
 			zu.

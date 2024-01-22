@@ -1,5 +1,6 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { env } from '$env/dynamic/private'
+import { env as publicEnv } from '$env/dynamic/public';
 import { logEvent, sendJson } from "@/lib/serverHelpers";
 import { generateAccessToken } from "./shared";
 
@@ -23,7 +24,7 @@ export const POST: RequestHandler = async (event) => {
         custom_id: `${userId}-${new Date().toJSON()}`,
         amount: {
           currency_code: "EUR",
-          value: "4.99",
+          value: publicEnv.PUBLIC_PRO_PRICE,
         },
       },
     ],

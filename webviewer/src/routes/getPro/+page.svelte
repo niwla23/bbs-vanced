@@ -1,10 +1,7 @@
 <script lang="ts">
 	import TopBar from '@/lib/TopBar.svelte';
-	import { formatDate } from '@/lib/exams';
-	import type { NewsArticle } from '@/lib/news';
 	import Icon from '@iconify/svelte';
-	import PocketBase from 'pocketbase';
-	import { onMount } from 'svelte';
+	import { env } from '$env/dynamic/public';
 </script>
 
 <div class="w-full flex justify-center p-4">
@@ -68,7 +65,7 @@
 						href="/activatePro/buy"
 						class="bg-primary text-on-primary text-center font-bold p-4 rounded-md mt-2"
 					>
-						Jetzt kaufen - 4,99€
+						Jetzt kaufen - {Number(env.PUBLIC_PRO_PRICE).toFixed(2)}€
 					</a>
 					<a class="bg-dark rounded-md p-4 text-center" href="/activatePro">
 						Ich habe gekauft, jetzt aktivieren
