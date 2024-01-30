@@ -30,3 +30,6 @@
     border: white 1px solid;
   }
 }
+
+
+* { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
