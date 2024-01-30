@@ -15,9 +15,16 @@
 		},
 		{
 			icon: 'material-symbols:eyeglasses',
-			label: 'Klausurenübersicht (PRO)',
+			label: 'Klausurenübersicht',
+			isPro: true,
 			onclick: (e) => goto('/exams')
 		},
+		// {
+		// 	icon: 'material-symbols:eyeglasses',
+		// 	label: 'Andere Stundenpläne',
+		// 	isPro: true,
+		// 	onclick: (e) => goto('/exams')
+		// },
 		{
 			icon: 'material-symbols:calendar-add-on',
 			label: 'Klausur eintragen',
@@ -31,6 +38,7 @@
 		{
 			icon: 'mdi:calculator',
 			label: 'Abirechner',
+			isPro: true,
 			onclick: (e) => goto('/grades')
 		},
 		{
@@ -44,14 +52,14 @@
 			onclick: (e) => goto('/settings')
 		},
 		{
-			icon: 'material-symbols:share',
-			label: 'App teilen',
-			onclick: (e) => shareApp('menu_share')
-		},
-		{
 			icon: 'mdi:legal',
 			label: 'Rechtliches',
 			onclick: (e) => goto('/legal')
+		},
+		{
+			icon: 'material-symbols:share',
+			label: 'App teilen',
+			onclick: (e) => shareApp('menu_share')
 		}
 	];
 
@@ -72,7 +80,12 @@
 		{#each menuEntries as entry}
 			<button class="flex gap-2" on:click={entry.onclick}>
 				<Icon icon={entry.icon} class="h-6 w-6" />
-				<p>{entry.label}</p>
+				<p class="flex items-center gap-2">
+					<span>{entry.label}</span>
+					{#if entry.isPro}
+						<span class="bg-primary/30 p-1 rounded-lg text-xs text-on-primary">PRO</span>
+					{/if}
+				</p>
 			</button>
 		{/each}
 	</div>
