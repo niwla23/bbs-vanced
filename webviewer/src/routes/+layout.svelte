@@ -6,6 +6,7 @@
 	import { browser } from '$app/environment';
 	import Cookies from 'js-cookie';
 	import { hasPro } from './stores';
+	import NewsBanner from '@/lib/NewsBanner.svelte';
 	// import { pwaInfo } from 'virtual:pwa-info';
 
 	let proEvaluationDone = false;
@@ -52,6 +53,7 @@
 		{#if $navigating || !proEvaluationDone}
 			<LoadingScreen />
 		{:else}
+			<NewsBanner />
 			<slot />
 		{/if}
 	</div>

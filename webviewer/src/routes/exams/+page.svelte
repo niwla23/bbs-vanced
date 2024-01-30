@@ -5,7 +5,11 @@
 	import { onMount } from 'svelte';
 	import { hasPro } from '../stores';
 
+	import { fade, scale, fly } from 'svelte/transition';
+
 	let exams: Exam[] = [];
+
+	const animate = (n) => fly(n, { y: -100 });
 
 	onMount(async () => {
 		if ($hasPro) {
@@ -32,6 +36,7 @@
 	<main class="max-w-4xl w-full flex flex-col gap-2">
 		{#each exams as exam}
 			<div
+				transition:animate
 				class="{backgroundColor(
 					exam
 				)} flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2 flex items-center"

@@ -4,7 +4,6 @@
 	import Menu from './Menu.svelte';
 
 	let showMenu = false;
-
 	export let title: string;
 	export let showBack = false;
 </script>

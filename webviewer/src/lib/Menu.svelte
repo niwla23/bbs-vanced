@@ -3,6 +3,10 @@
 	import Icon from '@iconify/svelte';
 	import { shareApp } from './shareApp';
 
+	import { fade, scale, fly, slide } from 'svelte/transition';
+
+	const animate = (n) => fly(n, { x: -300 });
+
 	const menuEntries = [
 		{
 			icon: 'material-symbols:home',
@@ -60,6 +64,7 @@
 	on:keypress={(e) => e.key == 'Escape' && onClose()}
 	role="button"
 	tabindex="-100"
+	transition:animate
 >
 	<div
 		class="max-w-2xl w-full bg-dark text-brightest rounded-md border border-colborder shadow-sm shadow-black p-4 flex flex-col gap-4 text-lg h-min"

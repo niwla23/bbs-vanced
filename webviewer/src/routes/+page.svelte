@@ -17,12 +17,14 @@
 	import { areNewNewsAvailable } from '@/lib/news';
 	import TopBar from '@/lib/TopBar.svelte';
 	import { hasPro } from './stores';
+	import { fade, scale, slide, fly } from 'svelte/transition';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
 	let lastLoadTime = new Date().getTime();
 	let settings: Settings;
-	// let hasPro = false;
+
+	const animate = (n) => scale(n, {});
 
 	async function loadData(date: Date, useCache = true) {
 		const resp = await fetch(
@@ -70,16 +72,17 @@
 		setTimeout(() => {
 			const elId = formatDateForApi(targetDate);
 			document.getElementById(elId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
-		}, 200);
+		}, 400);
 
 		if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
 			loadFuture();
 		}
 
 		// check for news
-		if (await areNewNewsAvailable()) {
-			goto('/news');
-		}
+		// replaced with banner
+		// if (await areNewNewsAvailable()) {
+		// 	goto('/news');
+		// }
 	}
 
 	onMount(() => {
@@ -126,10 +129,11 @@
 				<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
 			</button>
 		</TopBar>
+
 		<div class="flex flex-col gap-2 pt-12">
 			{#if exams}
 				{#each filteredTimetable as [day, slots] (day)}
-					<div class="py-2 flex-grow">
+					<div class="py-2 flex-grow" transition:animate>
 						<a id={formatDateForApi(day)} aria-hidden="true" class="block relative -top-16" />
 						<b
 							class="p-1 rounded-md"
