@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { hasPro } from '../stores';
+	import { slide, scale } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 
@@ -12,6 +13,7 @@
 
 <div
 	class="fixed inset-0 w-full h-full flex justify-center items-center p-2 bg-dark/80 backdrop-blur-md z-30"
+	out:scale
 >
 	<div class="text-center p-4 max-w-lg">
 		<h1 class="font-bold text-xl">Willkommen beim Abirechner</h1>

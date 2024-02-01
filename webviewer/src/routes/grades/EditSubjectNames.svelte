@@ -1,4 +1,5 @@
 <script lang="ts">
+	import UiButton from '@/lib/UiButton.svelte';
 	import type { SubjectUserData } from '@/lib/grades';
 	import { createEventDispatcher } from 'svelte';
 
@@ -19,7 +20,7 @@
 </script>
 
 <div
-	class="absolute inset-0 w-full min-h-full h-fit flex justify-center items-center p-2 bg-darkest z-30"
+	class="fixed inset-0 w-full min-h-full h-fit flex justify-center items-center p-2 bg-darkest z-30"
 >
 	<div class="text-center p-4 max-w-lg w-full">
 		<h1 class="font-bold text-xl pb-4">Kurse bearbeiten</h1>
@@ -50,8 +51,6 @@
 			{/each}
 		</div>
 
-		<button class="w-full bg-primary text-on-primary p-4 rounded-md mt-4" on:click={onSubmit}>
-			Verstanden
-		</button>
+		<UiButton appearance="primary" class="mt-4" on:click={onSubmit}>Speichern</UiButton>
 	</div>
 </div>

@@ -7,9 +7,11 @@
 	import Cookies from 'js-cookie';
 	import { hasPro } from './stores';
 	import NewsBanner from '@/lib/NewsBanner.svelte';
+	import { fly } from 'svelte/transition';
 	// import { pwaInfo } from 'virtual:pwa-info';
 
 	let proEvaluationDone = false;
+	export let data;
 
 	onMount(() => {
 		const settingsLocal = localStorage.getItem('settings');
@@ -47,15 +49,21 @@
 		}
 	</script>
 </svelte:head>
-<div
-	class="scroll-smooth bg-darkest main-background text-brightest min-h-screen h-full w-full flex select-none"
->
-	<div class="flex-grow">
-		{#if $navigating || !proEvaluationDone}
-			<LoadingScreen />
-		{:else}
-			<NewsBanner />
-			<slot />
-		{/if}
+
+{#key data.url}
+	<div
+		class="scroll-smooth bg-darkest main-background text-brightest min-h-screen h-full w-full flex select-none"
+	>
+		<div class="flex-grow">
+			{#if $navigating || !proEvaluationDone}
+				<!-- <LoadingScreen /> -->
+				<p>wer das liest ist doof</p>
+			{:else}
+				<NewsBanner />
+				<div in:fly={{ x: -200, duration: 300, delay: 300 }} out:fly={{ x: 200, duration: 300 }}>
+					<slot />
+				</div>
+			{/if}
+		</div>
 	</div>
-</div>
+{/key}
