@@ -124,10 +124,10 @@
 	<main class="max-w-4xl w-full">
 		<TopBar title="Stundenplan">
 			<UiButton on:click={() => initialLoad(false)} class="px-2 text-xs">
-				<Icon icon="material-symbols:refresh" class="h-6 w-6" />
+				<Icon icon="mingcute:refresh-2-line" class="h-6 w-6" />
 			</UiButton>
 			<UiButton on:click={loadPast} class="px-2 text-xs">
-				<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
+				<Icon icon="mingcute:square-arrow-up-line" class="h-6 w-6" />
 			</UiButton>
 		</TopBar>
 

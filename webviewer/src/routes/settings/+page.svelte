@@ -86,7 +86,7 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full pt-12">
-		<TopBar title="Einstellungen">
+		<TopBar title="Einstellungen" icon="mingcute:settings-3-line">
 			<button on:click={() => shareApp('settings_share')} class="rounded-md px-2 text-xs">
 				<Icon icon="material-symbols:share" class="h-6 w-6" />
 			</button>

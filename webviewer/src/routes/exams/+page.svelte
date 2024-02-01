@@ -31,7 +31,7 @@
 	}
 </script>
 
-<TopBar title="Klausuren" />
+<TopBar title="Klausuren" icon="mingcute:eyeglass-line" />
 <div class="pt-16 w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full flex flex-col gap-2">
 		{#each exams as exam}

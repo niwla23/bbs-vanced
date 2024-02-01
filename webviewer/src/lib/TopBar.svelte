@@ -7,6 +7,7 @@
 	let showMenu = false;
 	export let title: string;
 	export let showBack = false;
+	export let icon: string | null = null;
 </script>
 
 <div
@@ -16,6 +17,8 @@
 		<div class="flex items-center">
 			{#if showBack}
 				<a href="/"><Icon icon="material-symbols:arrow-left-alt" class="text-2xl mr-2" /></a>
+			{:else if icon}
+				<Icon {icon} class="text-3xl mr-4 ml-1 text-primary" />
 			{:else}
 				<p class="text-2xl pr-4">{choosenEmoji}</p>
 			{/if}
@@ -27,7 +30,7 @@
 		<div class="flex gap-1">
 			<slot />
 			<UiButton on:click={() => (showMenu = true)} class="rounded-md px-2 text-xs">
-				<Icon icon="material-symbols:menu" class="h-6 w-6" />
+				<Icon icon="mingcute:menu-line" class="h-6 w-6" />
 			</UiButton>
 		</div>
 	</div>

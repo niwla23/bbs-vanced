@@ -10,12 +10,12 @@
 
 	const menuEntries = [
 		{
-			icon: 'material-symbols:home',
+			icon: 'mingcute:home-1-line',
 			label: 'Stundenplan',
 			onclick: (e) => goto('/')
 		},
 		{
-			icon: 'material-symbols:eyeglasses',
+			icon: 'mingcute:eyeglass-line',
 			label: 'Klausurenübersicht',
 			isPro: true,
 			onclick: (e) => goto('/exams')
@@ -27,38 +27,38 @@
 		// 	onclick: (e) => goto('/exams')
 		// },
 		{
-			icon: 'material-symbols:calendar-add-on',
+			icon: 'mingcute:calendar-add-line',
 			label: 'Klausur eintragen',
 			onclick: (e) => goto('/addExam')
 		},
 		{
-			icon: 'material-symbols:question-exchange',
+			icon: 'mingcute:currency-dollar-line',
 			label: 'Notenumrechner',
 			onclick: (e) => goto('/grades/converter')
 		},
 		{
-			icon: 'mdi:calculator',
+			icon: 'solar:calculator-minimalistic-linear',
 			label: 'Abirechner',
 			isPro: true,
 			onclick: (e) => goto('/grades')
 		},
 		{
-			icon: 'material-symbols:newspaper',
+			icon: 'mingcute:news-line',
 			label: 'News',
 			onclick: (e) => goto('/news')
 		},
 		{
-			icon: 'material-symbols:settings',
+			icon: 'mingcute:settings-3-line',
 			label: 'Einstellungen',
 			onclick: (e) => goto('/settings')
 		},
 		{
-			icon: 'mdi:legal',
+			icon: 'mingcute:toilet-paper-line',
 			label: 'Rechtliches',
 			onclick: (e) => goto('/legal')
 		},
 		{
-			icon: 'material-symbols:share',
+			icon: 'mingcute:share-2-line',
 			label: 'App teilen',
 			onclick: (e) => shareApp('menu_share')
 		}

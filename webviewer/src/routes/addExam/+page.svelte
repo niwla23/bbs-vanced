@@ -82,7 +82,7 @@
 		<!-- 	Klausur hinzufügen -->
 		<!-- </h1> -->
 
-		<TopBar title="Klausur eintragen" showBack />
+		<TopBar title="Klausur eintragen" icon="mingcute:calendar-add-line" />
 
 		{#if appSettings}
 			<div class="pt-12">

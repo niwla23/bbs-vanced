@@ -34,7 +34,7 @@
 		<!-- 	<a href="/"><Icon icon="material-symbols:arrow-left-alt" class="inline h-12" /></a> -->
 		<!-- 	News -->
 		<!-- </h1> -->
-		<TopBar title="Notenumrechner" />
+		<TopBar title="Notenumrechner" icon="mingcute:currency-dollar-line" />
 		<div class="flex flex-col gap-2 pt-12">
 			<h2 class="text-xl">Notenpunkte zu Note</h2>
 			<label class="block">

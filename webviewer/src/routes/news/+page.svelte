@@ -29,7 +29,7 @@
 		<!-- 	<a href="/"><Icon icon="material-symbols:arrow-left-alt" class="inline h-12" /></a> -->
 		<!-- 	News -->
 		<!-- </h1> -->
-		<TopBar title="News" showBack />
+		<TopBar title="News" icon="mingcute:news-line" />
 		<div class="flex flex-col gap-2 pt-12">
 			{#each newsList as newsArticle}
 				<div class="bg-dark p-2 rounded-md">
