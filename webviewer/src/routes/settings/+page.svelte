@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import PocketBase from 'pocketbase';
 	import TopBar from '@/lib/TopBar.svelte';
 	import {
 		getSettings,
@@ -12,6 +13,9 @@
 	import Icon from '@iconify/svelte';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
+	import UiButton from '@/lib/UiButton.svelte';
+	import { slide, fly } from 'svelte/transition';
+	import { quintInOut, quintOut, sineOut } from 'svelte/easing';
 
 	let hasPro = false;
 
@@ -62,6 +66,8 @@
 	function clear() {
 		if (!confirm('Wirklich alle Einstellungen löschen?')) return;
 		Cookies.remove('settings');
+		localStorage.removeItem('settings');
+		const pb = new PocketBase('https://bbs-backend.noteqr.de');
 		goto('/tour');
 	}
 
@@ -120,6 +126,9 @@
 		</label>
 
 		<h2 class="text-xl pt-2">Deine Fächer / Kurse</h2>
+		<UiButton appearance="normal" class="mb-2" on:click={() => goto('/settings/updateCourses')}>
+			Kurse aus Stundenplan aktualisieren
+		</UiButton>
 		<ul class="flex flex-col gap-2">
 			<form
 				class="flex justify-between items-center p-4 rounded-md bg-dark border border-colborder font-light"
@@ -134,35 +143,19 @@
 					<Icon icon="material-symbols:add" />
 				</button>
 			</form>
-			{#each courses as course}
+			{#each courses as course (course)}
 				<li
+					transition:slide={{ axis: 'y', duration: 200 }}
 					class="flex justify-between items-center p-4 rounded-md bg-dark border border-colborder font-light"
 				>
 					<span>{course}</span>
-					<button class="bg-red-500 p-1 rounded-md" on:click={() => removeCourse(course)}>
+					<UiButton class="bg-red-500 p-1 rounded-md w-min" on:click={() => removeCourse(course)}>
 						<Icon icon="material-symbols:remove" />
-					</button>
+					</UiButton>
 				</li>
 			{/each}
 		</ul>
-		<button
-			class="bg-primary text-on-primary p-4 w-full rounded-md border border-colborder mt-2"
-			on:click={save}
-		>
-			Speichern
-		</button>
-		<button class="bg-red-700 p-4 w-full rounded-md border border-colborder mt-2" on:click={clear}>
-			Alles löschen und neu einrichten
-		</button>
-		<!-- <div class="flex gap-2 pt-2"> -->
-		<!-- 	<button -->
-		<!-- 		class="bg-blue-400 p-4 w-full rounded-md border border-colborder" -->
-		<!-- 		on:click={exportSettings}>Einstellungen teilen</button -->
-		<!-- 	> -->
-		<!-- 	<button -->
-		<!-- 		class="bg-blue-400 p-4 w-full rounded-md border border-colborder" -->
-		<!-- 		on:click={importSettings}>Aus Link laden</button -->
-		<!-- 	> -->
-		<!-- </div> -->
+		<UiButton appearance="primary" on:click={save} class="mt-2">Speichern</UiButton>
+		<UiButton appearance="danger" on:click={clear} class="mt-2">Reset App</UiButton>
 	</main>
 </div>

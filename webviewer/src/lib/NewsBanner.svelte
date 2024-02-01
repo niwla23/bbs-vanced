@@ -31,11 +31,18 @@
 		localStorage.setItem('lastNewsId', newsArticle.id);
 		newsArticle = null;
 	}
+
+	function handleClick() {
+		if (newsArticle && newsArticle.linkUrl) {
+			location.href = newsArticle.linkUrl;
+			markRead();
+		}
+	}
 </script>
 
 {#if newsArticle}
 	<div class="fixed top-0 left-0 w-full z-30 p-4" transition:animate>
-		<div class="rounded-md flex justify-between bg-primary text-on-primary">
+		<div class="rounded-md flex justify-between bg-primary text-on-primary" on:click={handleClick}>
 			<div class="p-2 rounded-md">
 				<h2 class="font-semibold text-xl">{newsArticle.title}</h2>
 				<div>{@html newsArticle.content}</div>

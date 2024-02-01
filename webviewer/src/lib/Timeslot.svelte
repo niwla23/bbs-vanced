@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="component-timeslot {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative"
+	class="component-timeslot {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative transform active:scale-[99%] transition-all ease-out"
 >
 	{#if !weekView}
 		<div class="self-stretch w-20 flex flex-col justify-between items-center pr-2">

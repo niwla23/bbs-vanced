@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { coursesString } from '../stores';
+
+	export let showIDontWantThisBtn = true;
+
 	const dispatch = createEventDispatcher();
 	function next(importCourses: boolean) {
 		if ($coursesString == '' && importCourses) {
@@ -17,8 +20,9 @@
 			<p>Sehr gut!</p>
 			<p class="pb-4">
 				Jetzt können wir deine Kurse aus virtueller-stundenplan.org importieren. Logge dich dort ein
-				und geh auf <b>Meine Anwesenheiten. Kopiere den Text unter "Kurse" und füge ihn hier ein.</b
-				>
+				und geh auf <b>
+					Meine Anwesenheiten. Kopiere den Text unter "Kurse" und füge ihn hier ein.
+				</b>
 			</p>
 			<div class="flex flex-col gap-2 bg-dark p-2 rounded-md">
 				<div class="flex">
@@ -58,13 +62,17 @@
 			</div>
 		</section>
 		<section class="flex flex-col gap-2 pt-4">
-			<button class="bg-dark p-4 rounded-md w-full" on:click={() => next(false)}>
-				Ich habe keine Kurse oder möchte sie selbst eintragen.
-			</button>
+			{#if showIDontWantThisBtn}
+				<button class="bg-dark p-4 rounded-md w-full" on:click={() => next(false)}>
+					Ich habe keine Kurse oder möchte sie selbst eintragen.
+				</button>
+			{/if}
 			<button
 				class="bg-primary text-on-primary p-4 rounded-md w-full font-bold"
-				on:click={() => next(true)}>Weiter</button
+				on:click={() => next(true)}
 			>
+				Weiter
+			</button>
 		</section>
 	</main>
 </div>

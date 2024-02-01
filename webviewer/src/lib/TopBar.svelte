@@ -2,6 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { choosenEmoji } from './textRessources';
 	import Menu from './Menu.svelte';
+	import UiButton from './UiButton.svelte';
 
 	let showMenu = false;
 	export let title: string;
@@ -25,9 +26,9 @@
 		</div>
 		<div class="flex gap-1">
 			<slot />
-			<button on:click={() => (showMenu = true)} class="rounded-md px-2 text-xs">
+			<UiButton on:click={() => (showMenu = true)} class="rounded-md px-2 text-xs">
 				<Icon icon="material-symbols:menu" class="h-6 w-6" />
-			</button>
+			</UiButton>
 		</div>
 	</div>
 	{#if showMenu}

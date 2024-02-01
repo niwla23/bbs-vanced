@@ -9,6 +9,7 @@ export interface NewsArticle {
   title: string;
   showtimeStart: string;
   showtimeEnd: string;
+  linkUrl: string | null;
 }
 
 

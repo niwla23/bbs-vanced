@@ -4,6 +4,7 @@
 	import { shareApp } from './shareApp';
 
 	import { fade, scale, fly, slide } from 'svelte/transition';
+	import UiButton from './UiButton.svelte';
 
 	const animate = (n) => fly(n, { x: -300 });
 
@@ -78,7 +79,7 @@
 		class="max-w-2xl w-full bg-dark text-brightest rounded-md border border-colborder shadow-sm shadow-black p-4 flex flex-col gap-4 text-lg h-min"
 	>
 		{#each menuEntries as entry}
-			<button class="flex gap-2" on:click={entry.onclick}>
+			<UiButton class="flex gap-2" on:click={entry.onclick}>
 				<Icon icon={entry.icon} class="h-6 w-6" />
 				<p class="flex items-center gap-2">
 					<span>{entry.label}</span>
@@ -86,7 +87,7 @@
 						<span class="bg-primary/30 p-1 rounded-lg text-xs text-on-primary">PRO</span>
 					{/if}
 				</p>
-			</button>
+			</UiButton>
 		{/each}
 	</div>
 </div>

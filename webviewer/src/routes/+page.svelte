@@ -18,6 +18,7 @@
 	import TopBar from '@/lib/TopBar.svelte';
 	import { hasPro } from './stores';
 	import { fade, scale, slide, fly } from 'svelte/transition';
+	import UiButton from '@/lib/UiButton.svelte';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
@@ -122,12 +123,12 @@
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
 		<TopBar title="Stundenplan">
-			<button on:click={() => initialLoad(false)} class="rounded-md px-2 text-xs">
+			<UiButton on:click={() => initialLoad(false)} class="px-2 text-xs">
 				<Icon icon="material-symbols:refresh" class="h-6 w-6" />
-			</button>
-			<button on:click={loadPast} class="rounded-md px-2 text-xs">
+			</UiButton>
+			<UiButton on:click={loadPast} class="px-2 text-xs">
 				<Icon icon="material-symbols:arrow-upward" class="h-6 w-6" />
-			</button>
+			</UiButton>
 		</TopBar>
 
 		<div class="flex flex-col gap-2 pt-12">
