@@ -43,7 +43,6 @@ export const GET: RequestHandler = async (event) => {
   }
 
 
-  console.log("useCache", useCache)
   logEvent("timetable", { className: className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })
 

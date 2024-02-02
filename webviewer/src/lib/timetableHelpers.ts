@@ -59,6 +59,16 @@ export function filterTimetable(settings: Settings, timetable: TimetableDay): Ti
 }
 
 
+export function filterWeekTimetable(settings: Settings, timetable: [Date, TimetableDay][]) {
+  const all = timetable.map(([day, v]) => {
+    const filtered = filterTimetable(settings, v);
+    return [day, filtered];
+  });
+
+  return all;
+}
+
+
 export function getLastIndex(timetable: TimetableDay) {
   let lastIndex = timetable.length;
   while (lastIndex--) {
@@ -145,4 +155,15 @@ export function getRelativeTime(date: Date) {
   return rtf.format(Math.floor(deltaSeconds / divisor), units[unitIndex]);
 }
 
-
+export async function getTimetableWithDatesClient(date: Date, useCache: boolean, settings: Settings, fetchFunction = fetch) {
+  const resp = await fetchFunction(
+    `/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '&nocache'}&className=${settings.className
+    }`
+  );
+  const text = await resp.text();
+  const parsedData = JSON.parse(text);
+  const timetableWithDates: [Date, TimetableDay][] = parsedData.timetableMerged.map(
+    ([day, data]) => [new Date(day), data]
+  );
+  return timetableWithDates
+}

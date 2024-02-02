@@ -1,10 +1,12 @@
 <script lang="ts">
 	import {
 		filterTimetable,
+		filterWeekTimetable,
 		formatDateForApi,
 		getNextMonday,
 		getPreviousMonday,
-		weekdayMap
+		weekdayMap,
+		getTimetableWithDatesClient
 	} from '@/lib/timetableHelpers';
 	import type { TimetableDay } from 'bbs-parser/src/types';
 	import Timeslot from '@/lib/Timeslot.svelte';
@@ -13,8 +15,6 @@
 	import Icon from '@iconify/svelte';
 	import LoadingScreen from '@/lib/LoadingScreen.svelte';
 	import { getExamsClient, type Exam } from '@/lib/exams';
-	import { goto } from '$app/navigation';
-	import { areNewNewsAvailable } from '@/lib/news';
 	import TopBar from '@/lib/TopBar.svelte';
 	import { hasPro } from './stores';
 	import { fade, scale, slide, fly } from 'svelte/transition';
@@ -28,16 +28,8 @@
 	const animate = (n) => scale(n, {});
 
 	async function loadData(date: Date, useCache = true) {
-		const resp = await fetch(
-			`/api/timetable?date=${formatDateForApi(date)}${useCache ? '' : '&nocache'}&className=${
-				settings.className
-			}`
-		);
-		const text = await resp.text();
-		const parsedData = JSON.parse(text);
-		const timetableWithDates: [Date, TimetableDay][] = parsedData.timetableMerged.map(
-			([day, data]) => [new Date(day), data]
-		);
+		//here
+		const timetableWithDates = await getTimetableWithDatesClient(date, useCache, settings);
 		let mergedData = [...data, ...timetableWithDates];
 		data = mergedData
 			.filter(
@@ -106,18 +98,9 @@
 			document.removeEventListener('scroll', handleScroll);
 		};
 	});
-
-	// let settings = (await getSettings()) as Settings;
-
-	function filterWeekTimetable(timetable: [Date, TimetableDay][]) {
-		const all = timetable.map(([day, v]) => {
-			const filtered = filterTimetable(settings, v);
-			return [day, filtered];
-		});
-
-		return all;
-	}
-	$: filteredTimetable = data ? (filterWeekTimetable(data) as [Date, TimetableDay][]) : [];
+	$: filteredTimetable = data
+		? (filterWeekTimetable(settings, data) as [Date, TimetableDay][])
+		: [];
 </script>
 
 <div class="w-full flex justify-center p-4">
