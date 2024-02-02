@@ -1,5 +1,5 @@
 import { pb, pbAuth, sendJson } from "@/lib/serverHelpers";
-import { filterWeekTimetable, getTimetableWithDatesClient } from "@/lib/timetableHelpers";
+import { filterWeekTimetable, getNextMonday, getTimetableWithDatesClient } from "@/lib/timetableHelpers";
 import { createRedis, serialize, deserialize } from "@/lib/cache";
 import type { RequestHandler } from "@sveltejs/kit";
 import type { TimetableDay } from "bbs-parser/src/types";
@@ -39,7 +39,7 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
   const res = await resend.emails.send({
     from: 'noreply@notifications.noteqr.de',
     to: user.notificationEmail,
-    subject: `Stundenplanänderung`,
+    subject: `Stundenplanänderung ${formattedDate}`,
     html
   });
 
@@ -52,7 +52,10 @@ export const POST: RequestHandler = async (event) => {
 
   const users = await pb.collection("users").getFullList({ filter: "notificationEmail != '' && settings != null" })
   for (const user of users) {
-    const timetableWithDates = await getTimetableWithDatesClient(new Date(2024, 1, 5), true, user.settings, event.fetch);
+    const timetableWithDates = [
+      ...await getTimetableWithDatesClient(new Date(), true, user.settings, event.fetch),
+      ...await getTimetableWithDatesClient(getNextMonday(new Date()), true, user.settings, event.fetch)
+    ]
     const filteredTimetable = filterWeekTimetable(user.settings, timetableWithDates) as [Date, TimetableDay][]
     for (const [date, currentData] of filteredTimetable) {
       const key = `saved_timetables:${user.id}:${date.toJSON().split("T")[0]}`

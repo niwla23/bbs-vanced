@@ -37,32 +37,35 @@
 
 <Html lang="en">
 	<Head />
-	<Preview preview="Stundenplanänderung" />
+	<Preview preview="Stundenplanänderung {formattedDate}" />
 	<Section style={main}>
 		<Container style={container}>
 			<Text style={paragraph}>
 				Dein Stundenplan für <b>{formattedDate}</b>
 				wurde geändert.
 			</Text>
+
+			<Text style={{ fontWeight: '800', fontSize: '20px' }}>neuer Stundenplan:</Text>
+
 			{#each newData as [hours, slot]}
-				<Text style={{ fontWeight: 800, fontSize: '18px' }}>{hours.join('/')}:</Text>
 				{#each slot as lesson}
 					<Text style={{ paddingLeft: '32px', margin: '0px' }}>
-						{lesson.subject} - {lesson.teacher} @ {lesson.room}
+						<b>{hours.join('/')}</b>
+						: {lesson.subject} - {lesson.teacher} @ {lesson.room}
 					</Text>
 				{/each}
 				<Text />
 			{/each}
 
 			<Text style={{ marginTop: '32px', fontWeight: '800', fontSize: '20px' }}>
-				Alter Stundenplan:
+				alter Stundenplan:
 			</Text>
 
 			{#each oldData as [hours, slot]}
-				<Text style={{ fontWeight: 800, fontSize: '18px' }}>{hours.join('/')}:</Text>
 				{#each slot as lesson}
 					<Text style={{ paddingLeft: '32px', margin: '0px' }}>
-						{lesson.subject} - {lesson.teacher} @ {lesson.room}
+						<b>{hours.join('/')}</b>
+						: {lesson.subject} - {lesson.teacher} @ {lesson.room}
 					</Text>
 				{/each}
 				<Text />
