@@ -51,7 +51,7 @@
 				{#each slot as lesson}
 					<Text style={{ paddingLeft: '32px', margin: '0px' }}>
 						<b>{hours.join('/')}</b>
-						: {lesson.subject} - {lesson.teacher} @ {lesson.room}
+						: {@html lesson.subject} - {@html lesson.teacher} @ {@html lesson.room}
 					</Text>
 				{/each}
 				<Text />
@@ -65,7 +65,7 @@
 				{#each slot as lesson}
 					<Text style={{ paddingLeft: '32px', margin: '0px' }}>
 						<b>{hours.join('/')}</b>
-						: {lesson.subject} - {lesson.teacher} @ {lesson.room}
+						: {@html lesson.subject} - {@html lesson.teacher} @ {@html lesson.room}
 					</Text>
 				{/each}
 				<Text />
