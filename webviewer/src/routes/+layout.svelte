@@ -9,6 +9,7 @@
 	import NewsBanner from '@/lib/NewsBanner.svelte';
 	import { fly } from 'svelte/transition';
 	import { subscribeNotificationsClient } from '@/lib/notifications';
+	import { get } from 'svelte/store';
 
 	let proEvaluationDone = false;
 	export let data;
@@ -28,7 +29,9 @@
 		}
 		proEvaluationDone = true;
 
-		subscribeNotificationsClient();
+		if (get(hasPro)) {
+			subscribeNotificationsClient();
+		}
 	});
 </script>
 
