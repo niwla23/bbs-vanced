@@ -27,10 +27,10 @@ export const numbersOfNeededRelevantGrades = [
 
 export const subjectNameOptions = [
   ["IT", "PP", "BRC"], // P1 (IT / PP / BRC)
-  ["Mathe", "Deutsch", "Englisch"], // P2
-  ["Mathe", "Deutsch", "Englisch"], // P3
-  ["BUV", "IV", "Bio", "Deutsch"], // P4
-  ["BUV", "IV", "Bio", "Deutsch"], // P5
+  ["Mathe", "Deutsch", "Englisch", "Bio"], // P2
+  ["Mathe", "Deutsch", "Englisch", "Bio"], // P3
+  ["BUV", "IV", "Bio", "Deutsch", "Englisch"], // P4
+  ["BUV", "IV", "Bio", "Deutsch", "Englisch"], // P5
   ["Deutsch", "Chemie", "Bio", "Mathe", "Englisch", "BUV", "IV"], // subject could be in P2-5 
   ["Deutsch", "Chemie", "Bio", "Mathe", "Englisch", "BUV", "IV"], // subject could be in P2-5 
   ["Geschichte"], // Geschichte

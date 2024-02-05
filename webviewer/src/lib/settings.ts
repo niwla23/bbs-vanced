@@ -20,8 +20,6 @@ export async function getSettings(cookies?: Cookies) {
       return user.settings
     }
   }
-  console.log("we are not loading from cloud because user is poor")
-
 
   let encoded = undefined
   // server function will inject cookies
@@ -30,18 +28,14 @@ export async function getSettings(cookies?: Cookies) {
   } else {
     encoded = JsCookie.get('settings');
   }
-  console.log("did the cookie thing")
 
   if (!encoded) {
-    console.log("no data in cookie :(")
     if (browser) encoded = localStorage.getItem("settings")
-    console.log("ur mom")
     if (!encoded) return;
   }
   const data: Settings = JSON.parse(encoded);
   await saveSettings(data)
 
-  console.log("about to return them sweet settigns")
   return data
 }
 
@@ -55,7 +49,6 @@ export async function saveSettings(settings: Settings) {
   });
   if (browser) localStorage.setItem("settings", JSON.stringify(settings))
   if (browser && localStorage.getItem("hasPro") == "true") {
-    console.log("saving settings from backend")
     const pb = await getAuthenticatedPocketBase()
     if (!pb.authStore.model) {
       console.error("no model")

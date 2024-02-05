@@ -50,7 +50,7 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
   const textOptions = ["Tippe hier zum Ansehen", "Es gibt Hoffnung", "Ausfall? Bitteee 🥺🥺", "hier raufklickern bitte"]
   const randomElement = textOptions[Math.floor(Math.random() * textOptions.length)];
 
-  sendNotification(user.id, { title: "Stundenplanänderung", body: randomElement })
+  sendNotification(user.id, { title: `Stundenplanänderung ${formattedDate}`, body: randomElement })
 }
 
 export const POST: RequestHandler = async (event) => {
@@ -76,7 +76,7 @@ export const POST: RequestHandler = async (event) => {
       }
 
       if (serializedCurrentData != serializedOldData) {
-        console.log(`change detected for user ${user.notificationEmail} on day ${date}: `, serializedCurrentData)
+        console.log(`[changeDetect] change detected for user ${user.notificationEmail} on day ${date}: `, serializedCurrentData)
         handleChange(user, date, serializedCurrentData, serializedOldData)
         await redis.set(key, serializedCurrentData)
         await redis.expire(key, 604800) // 7 Tage

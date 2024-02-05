@@ -20,8 +20,9 @@ export async function sendNotification(userId: string, data: Payload) {
     filter: pb.filter("user.id={:userId} && environment={:environment}", { userId, environment: env.NODE_ENV })
   })
 
+  console.log(`[push] sending push messages to subscriptions of user ${userId}`)
   for (const subscription of subscriptions) {
-    console.log("sending")
+    console.log(`[push] sending push message`)
     await webpush.sendNotification(subscription.subscription, JSON.stringify(data));
   }
 }

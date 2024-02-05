@@ -24,11 +24,9 @@ export const GET: RequestHandler = async (event) => {
   let timetable: TimetableWeek
   let cacheHit = false
   if (useCache && cacheResult && cacheResult != null && cacheResult.length > 5) {
-    console.log("cache hit")
     timetable = deserialize(cacheResult)
     cacheHit = true
   } else {
-    console.log("cache miss")
     const token = await getSessionToken("bbs-walsrode", "schueler")
     timetable = await getTimetable(token, className, date, true) as TimetableWeek
     await redis.set(cacheKey, serialize(timetable))
