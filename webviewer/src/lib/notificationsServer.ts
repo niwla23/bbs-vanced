@@ -21,6 +21,7 @@ export async function sendNotification(userId: string, data: Payload) {
   })
 
   for (const subscription of subscriptions) {
+    console.log("sending")
     await webpush.sendNotification(subscription.subscription, JSON.stringify(data));
   }
 }

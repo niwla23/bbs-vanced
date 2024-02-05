@@ -8,6 +8,7 @@ import { Resend } from 'resend';
 import { env } from "$env/dynamic/private";
 import TimetableChangeEmail from '$lib/emails/timetableChange.svelte';
 import { render } from 'svelte-email';
+import { sendNotification } from "@/lib/notificationsServer";
 
 function formatDateToGermanLongDate(date: Date): string {
   const daysOfWeek = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
@@ -36,21 +37,27 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
     }
   });
 
-  const res = await resend.emails.send({
-    from: 'noreply@notifications.noteqr.de',
-    to: user.notificationEmail,
-    subject: `Stundenplanänderung ${formattedDate}`,
-    html
-  });
+  if (user.notificationEmail) {
+    const res = await resend.emails.send({
+      from: 'noreply@notifications.noteqr.de',
+      to: user.notificationEmail,
+      subject: `Stundenplanänderung ${formattedDate}`,
+      html
+    });
+    console.log(res)
+  }
 
-  console.log(res)
+  const textOptions = ["Tippe hier zum Ansehen", "Es gibt Hoffnung", "Ausfall? Bitteee 🥺🥺", "hier raufklickern bitte"]
+  const randomElement = textOptions[Math.floor(Math.random() * textOptions.length)];
+
+  sendNotification(user.id, { title: "Stundenplanänderung", body: randomElement })
 }
 
 export const POST: RequestHandler = async (event) => {
   pbAuth()
   const redis = await createRedis()
 
-  const users = await pb.collection("users").getFullList({ filter: "notificationEmail != '' && settings != null" })
+  const users = await pb.collection("users").getFullList({ filter: "proKey != '' && settings != null" })
   for (const user of users) {
     const timetableWithDates = [
       ...await getTimetableWithDatesClient(new Date(), true, user.settings, event.fetch),
@@ -72,6 +79,7 @@ export const POST: RequestHandler = async (event) => {
         console.log(`change detected for user ${user.notificationEmail} on day ${date}: `, serializedCurrentData)
         handleChange(user, date, serializedCurrentData, serializedOldData)
         await redis.set(key, serializedCurrentData)
+        await redis.expire(key, 604800) // 7 Tage
       }
     }
   }
