@@ -86,3 +86,42 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(respond());
 });
+
+
+// Register event listener for the 'push' event.
+self.addEventListener('push', function(event) {
+  const payload = event.data.json()
+  console.log(payload)
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title, {
+      icon: "/android-chrome-192x192.png",
+      lang: "de",
+      vibrate: [200, 50, 300],
+      ...payload
+    })
+  );
+});
+
+
+self.addEventListener("notificationclick", (event) => {
+  console.log("On notification click: ", event.notification.tag);
+
+  event.notification.close();
+
+  // This looks to see if the current is already open and
+  // focuses if it is
+  event.waitUntil(
+    clients
+      .matchAll({
+        type: "window",
+
+      })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if (client.url === "/" && "focus" in client) return client.focus();
+        }
+        if (clients.openWindow) return clients.openWindow("/");
+      }),
+  );
+});

@@ -57,3 +57,4 @@ export async function subscribeNotificationsClient() {
     await subscriptionsCollection.create({ user: pb.authStore.model.id, subscription, subscriptionHash: hash, environment: process.env.NODE_ENV })
   }
 }
+

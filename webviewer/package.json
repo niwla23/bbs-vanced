@@ -46,6 +46,7 @@
     "@paypal/paypal-js": "^8.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@types/js-cookie": "^3.0.3",
+    "@types/web-push": "^3.6.3",
     "bbs-parser": "workspace:*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -62,6 +63,7 @@
     "sweetalert2": "^11.10.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6",
-    "vite-tsconfig-paths": "^4.2.0"
+    "vite-tsconfig-paths": "^4.2.0",
+    "web-push": "^3.6.7"
   }
 }
