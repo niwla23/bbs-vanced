@@ -15,7 +15,7 @@ export async function sendNotification(userId: string, data: Payload) {
     env.PRIVATE_VAPID_KEY,
   );
 
-  pbAuth()
+  await pbAuth()
   const subscriptions = await pb.collection("pushSubscriptions").getFullList({
     filter: pb.filter("user.id={:userId} && environment={:environment}", { userId, environment: env.NODE_ENV })
   })

@@ -54,8 +54,10 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
 }
 
 export const POST: RequestHandler = async (event) => {
-  pbAuth()
+  console.log("[changeDetect] received request to check for timetable updates")
+  await pbAuth()
   const redis = await createRedis()
+  console.log("[changeDetect] got access to redis and the backend")
 
   const users = await pb.collection("users").getFullList({ filter: "proKey != '' && settings != null" })
   for (const user of users) {
