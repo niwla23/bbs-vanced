@@ -16,6 +16,8 @@
 	import UiButton from '@/lib/UiButton.svelte';
 	import { slide, fly } from 'svelte/transition';
 	import { quintInOut, quintOut, sineOut } from 'svelte/easing';
+	import { subscribeNotificationsClient } from '@/lib/notifications';
+	import Swal from 'sweetalert2';
 
 	let hasPro = false;
 
@@ -71,6 +73,11 @@
 		goto('/tour');
 	}
 
+	function toggleNotifications() {
+		subscribeNotificationsClient();
+		Swal.fire('Aktiviert!');
+	}
+
 	onMount(() => {
 		hasPro = localStorage.getItem('hasPro') == 'true';
 		loadSettings();
@@ -124,6 +131,13 @@
 				bind:value={className}
 			/>
 		</label>
+
+		<div class="pt-2 pb-2 flex align-baseline w-full justify-between">
+			<p class="font-light">Benachrichtigungen über Stundenplanänderungen</p>
+			<UiButton appearance="normal" class="max-w-[20rem]" on:click={toggleNotifications}>
+				Aktivieren
+			</UiButton>
+		</div>
 
 		<h2 class="text-xl pt-2">Deine Fächer / Kurse</h2>
 		<UiButton appearance="normal" class="mb-2" on:click={() => goto('/settings/updateCourses')}>

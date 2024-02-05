@@ -54,6 +54,6 @@ export async function subscribeNotificationsClient() {
     const result = await subscriptionsCollection.getFirstListItem(pb.filter("subscriptionHash = {:hash}", { hash }))
     await subscriptionsCollection.update(result.id, {})
   } catch (e) {
-    await subscriptionsCollection.create({ user: pb.authStore.model.id, subscription, subscriptionHash: hash })
+    await subscriptionsCollection.create({ user: pb.authStore.model.id, subscription, subscriptionHash: hash, environment: process.env.NODE_ENV })
   }
 }
