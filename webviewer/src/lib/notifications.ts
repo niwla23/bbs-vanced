@@ -45,7 +45,7 @@ export async function subscribeNotificationsClient() {
   }
 
   // Keep your server in sync with the latest subscriptionId
-  console.log(subscription)
+  console.log("subscription", subscription)
 
   const hash = sha256(JSON.stringify(subscription))
   const pb = await getAuthenticatedPocketBase()

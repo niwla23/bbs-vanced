@@ -97,7 +97,6 @@ self.addEventListener('push', function(event) {
     self.registration.showNotification(payload.title, {
       icon: "/android-chrome-192x192.png",
       lang: "de",
-      vibrate: [200, 50, 300],
       ...payload
     })
   );

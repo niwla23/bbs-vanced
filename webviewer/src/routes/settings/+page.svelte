@@ -15,7 +15,6 @@
 	import { onMount } from 'svelte';
 	import UiButton from '@/lib/UiButton.svelte';
 	import { slide, fly } from 'svelte/transition';
-	import { quintInOut, quintOut, sineOut } from 'svelte/easing';
 	import { subscribeNotificationsClient } from '@/lib/notifications';
 	import Swal from 'sweetalert2';
 
@@ -73,9 +72,22 @@
 		goto('/tour');
 	}
 
-	function toggleNotifications() {
-		subscribeNotificationsClient();
-		Swal.fire('Aktiviert!');
+	async function toggleNotifications() {
+		if (!hasPro) {
+			goto('/getPro');
+			return;
+		}
+		console.log('yy');
+
+		try {
+			await subscribeNotificationsClient();
+			Swal.fire('Aktiviert!');
+		} catch (e) {
+			Swal.fire(
+				'Fehler',
+				'Keine Berechtigung erhalten. Eventuell musst du Benachrichtigungen in den Systemeinstellungen aktivieren'
+			);
+		}
 	}
 
 	onMount(() => {

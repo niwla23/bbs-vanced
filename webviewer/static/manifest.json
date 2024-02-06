@@ -1,10 +1,11 @@
 {
+  "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/web-manifest.json",
   "name": "BBS Vanced",
   "short_name": "BBS Vanced",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "lang": "en",
+  "background_color": "#000",
+  "lang": "de",
   "scope": "/",
   "description": "zeigt dir den stundenplan",
   "theme_color": "#0C0A09",
@@ -40,6 +41,12 @@
       "src": "screenshots/screen4.jpg",
       "label": "Einstellungen",
       "sizes": "1080x2400"
+    },
+    {
+      "src": "screenshots/screenshot-wide1.png",
+      "label": "Stundenplan Desktop",
+      "sizes": "1408x963",
+      "form_factor": "wide"
     }
   ]
 }

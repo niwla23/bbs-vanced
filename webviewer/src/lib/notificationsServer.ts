@@ -8,6 +8,10 @@ interface Payload extends NotificationOptions {
 }
 
 export async function sendNotification(userId: string, data: Payload) {
+  if (!data.badge) {
+    data.badge = "/logo-inverted.svg"
+  }
+
   webpush.setGCMAPIKey(env.GCM_API_KEY ? env.GCM_API_KEY : null);
   webpush.setVapidDetails(
     'mailto:webmaster@noteqr.de',
@@ -23,6 +27,10 @@ export async function sendNotification(userId: string, data: Payload) {
   console.log(`[push] sending push messages to subscriptions of user ${userId}`)
   for (const subscription of subscriptions) {
     console.log(`[push] sending push message`)
-    await webpush.sendNotification(subscription.subscription, JSON.stringify(data));
+    try {
+      await webpush.sendNotification(subscription.subscription, JSON.stringify(data), { urgency: "high" });
+    } catch (e) {
+      console.error("error sending notification", e)
+    }
   }
 }
