@@ -5,6 +5,7 @@
 
 	import { fade, scale, fly, slide } from 'svelte/transition';
 	import UiButton from './UiButton.svelte';
+	import { document } from 'postcss';
 
 	const animate = (n) => fly(n, { x: -300 });
 
@@ -61,6 +62,11 @@
 			icon: 'mingcute:share-2-line',
 			label: 'App teilen',
 			onclick: (e) => shareApp('menu_share')
+		},
+		{
+			icon: 'mingcute:bug-line',
+			label: 'Fehler melden',
+			onclick: (e) => (window.location.href = 'https://forms.gle/kRwhumz48RjZhTTe9')
 		}
 	];
 
