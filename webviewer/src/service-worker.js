@@ -65,7 +65,7 @@ self.addEventListener('fetch', (event) => {
       }
 
 
-      if (response.status === 200) {
+      if (response.status === 200 && event.request.url.startsWith("http")) {
         cache.put(event.request, response.clone());
       }
 
