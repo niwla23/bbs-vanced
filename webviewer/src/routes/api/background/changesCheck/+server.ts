@@ -1,5 +1,5 @@
 import { pb, pbAuth, sendJson } from "@/lib/serverHelpers";
-import { filterWeekTimetable, getNextMonday, getTimetableWithDatesClient } from "@/lib/timetableHelpers";
+import { filterWeekTimetable, formatDateForApi, getNextMonday, getTimetableWithDatesClient } from "@/lib/timetableHelpers";
 import { createRedis, serialize, deserialize } from "@/lib/cache";
 import type { RequestHandler } from "@sveltejs/kit";
 import type { TimetableDay } from "bbs-parser/src/types";
@@ -50,7 +50,7 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
   const textOptions = ["Tippe hier zum Ansehen", "Es gibt Hoffnung", "Ausfall? Bitteee 🥺🥺", "hier raufklickern bitte"]
   const randomElement = textOptions[Math.floor(Math.random() * textOptions.length)];
 
-  sendNotification(user.id, { title: `Stundenplanänderung ${formattedDate}`, body: randomElement })
+  sendNotification(user.id, { title: `Stundenplanänderung ${formattedDate}`, body: randomElement, data: { targetUrl: `/#${formatDateForApi(date)}` } })
 }
 
 export const POST: RequestHandler = async (event) => {

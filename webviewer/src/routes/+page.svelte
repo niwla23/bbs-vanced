@@ -63,7 +63,10 @@
 			targetDate = getNextMonday(today);
 		}
 		setTimeout(() => {
-			const elId = formatDateForApi(targetDate);
+			const elId =
+				window.location.hash == ''
+					? formatDateForApi(targetDate)
+					: window.location.hash.replace('#', '');
 			document.getElementById(elId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
 		}, 400);
 
