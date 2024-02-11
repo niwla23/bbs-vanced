@@ -9,6 +9,7 @@
   "scope": "/",
   "description": "zeigt dir den stundenplan",
   "theme_color": "#0C0A09",
+  "edge_side_panel": {},
   "icons": [
     {
       "src": "android-chrome-192x192.png",
