@@ -54,6 +54,34 @@ export const hourTimes = {
   end: ["-", "8:40", "9:25", "10:30", "11:15", "12:20", "13:05", "14:10", "14:55", "15:50", "16:35"]
 }
 
+export const hourStartTimesRaw = [
+  [5, 0],
+  [7, 55],
+  [8, 40],
+  [9, 45],
+  [10, 30],
+  [11, 35],
+  [12, 20],
+  [13, 25],
+  [14, 10],
+  [15, 5],
+  [15, 50]
+]
+
+export const hourEndTimesRaw = [
+  [6, 0],
+  [8, 40],
+  [9, 25],
+  [10, 30],
+  [11, 15],
+  [12, 20],
+  [13, 5],
+  [14, 10],
+  [14, 55],
+  [15, 50],
+  [16, 35]
+]
+
 export const choosenEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
 export const choosenMotd = availableMotd[Math.floor(Math.random() * availableMotd.length)];
 

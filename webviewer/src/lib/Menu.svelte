@@ -3,9 +3,9 @@
 	import Icon from '@iconify/svelte';
 	import { shareApp } from './shareApp';
 
-	import { fade, scale, fly, slide } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import UiButton from './UiButton.svelte';
-	import { document } from 'postcss';
+	import ProBadge from './ProBadge.svelte';
 
 	const animate = (n) => fly(n, { x: -300 });
 
@@ -90,7 +90,7 @@
 				<p class="flex items-center gap-2">
 					<span>{entry.label}</span>
 					{#if entry.isPro}
-						<span class="bg-primary/30 p-1 rounded-lg text-xs text-on-primary">PRO</span>
+						<ProBadge />
 					{/if}
 				</p>
 			</UiButton>

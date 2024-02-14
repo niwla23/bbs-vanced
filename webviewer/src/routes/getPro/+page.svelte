@@ -9,13 +9,6 @@
 		<TopBar title="Vanced PRO" showBack />
 		<div class="flex flex-col gap-2 pt-12">
 			<h1>Hol dir jetzt die PRO Version!</h1>
-			<div class="bg-dark p-2 rounded-md flex items-center h-24">
-				<Icon icon="mdi:color" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
-				<div>
-					<p>5 Premium Themes</p>
-					<small>Aqua, Pink, Pumpkin, Black and White und Mentally Ill</small>
-				</div>
-			</div>
 
 			<div class="bg-dark p-2 rounded-md flex items-center h-24">
 				<Icon icon="mdi:list-box" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
@@ -38,6 +31,37 @@
 					<small>Erhalte eine Prognose deiner Abinote</small>
 				</div>
 			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
+				<Icon
+					icon="mingcute:notification-line"
+					class="flex-shrink-0 w-12 text-3xl pr-2 text-primary"
+				/>
+				<div>
+					<p>Push-Benachrichtigungen</p>
+					<small>
+						Du bekommst sofort eine Nachricht auf dein Handy wenn sich der Stundenplan ändert
+					</small>
+				</div>
+			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
+				<Icon
+					icon="fluent:calendar-sync-16-regular"
+					class="flex-shrink-0 w-12 text-3xl pr-2 text-primary"
+				/>
+				<div>
+					<p>Kalendersynchronisierung</p>
+					<small>
+						Dein Stundenplan als ICal Kalender. Du siehst deinen Stundenplan in deiner Kalenderapp.
+					</small>
+				</div>
+			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
+				<Icon icon="mdi:color" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<div>
+					<p>5 Premium Themes</p>
+					<small>Aqua, Pink, Pumpkin, Black and White und Mentally Ill</small>
+				</div>
+			</div>
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">
 				<Icon icon="mdi:sync" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
 				<p>Einstellungssynchonisierung</p>
@@ -49,13 +73,6 @@
 			<div class="bg-dark p-2 rounded-md flex items-center h-16">
 				<Icon icon="tabler:ad-off" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
 				<p>Keine Werbung für PRO mehr</p>
-			</div>
-			<div class="bg-dark p-2 rounded-md flex items-center h-16">
-				<Icon
-					icon="material-symbols:support"
-					class="flex-shrink-0 w-12 text-3xl pr-2 text-primary"
-				/>
-				<p>Unterstütze die Entwicklung</p>
 			</div>
 			<div class="h-40" />
 			<div class="flex flex-col fixed bottom-0 w-full left-0">

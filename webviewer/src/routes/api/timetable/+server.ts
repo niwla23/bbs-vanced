@@ -1,14 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
-import { getSessionToken, getTimetable } from "bbs-parser"
-import { autoMergeTimeslots } from "bbs-parser/src/helpers"
-import { createRedis, serialize, deserialize } from "@/lib/cache";
-import { logEvent, sendJson } from "@/lib/serverHelpers";
-
-
-// function sendJson(data: any) {
-//   return new Response(JSON.stringify(data))
-// }
+import { getMergedTimetableServer, logEvent, sendJson } from "@/lib/serverHelpers";
 
 export const GET: RequestHandler = async (event) => {
   // if it works it aint broken
@@ -17,29 +8,8 @@ export const GET: RequestHandler = async (event) => {
   const useCache = !event.url.searchParams.has("nocache")
   if (className == null) return sendJson({ "error": "no className given" }, 400)
 
-  const redis = await createRedis()
-  const cacheKey = `timetable-${className}-${date.toJSON()}-fullweek:true`
-  const cacheResult = await redis.get(cacheKey)
-
-  let timetable: TimetableWeek
-  let cacheHit = false
-  if (useCache && cacheResult && cacheResult != null && cacheResult.length > 5) {
-    timetable = deserialize(cacheResult)
-    cacheHit = true
-  } else {
-    const token = await getSessionToken("bbs-walsrode", "schueler")
-    timetable = await getTimetable(token, className, date, true) as TimetableWeek
-    await redis.set(cacheKey, serialize(timetable))
-    await redis.expire(cacheKey, 300)
-  }
-
-  const timetableMerged = new Map<Date, TimetableDay>()
-
-  for (const [day, entries] of timetable.entries()) {
-    const merged = autoMergeTimeslots(entries)
-    timetableMerged.set(day, merged)
-  }
-
+  // insert code here
+  const { timetableMerged, cacheHit } = await getMergedTimetableServer(className, date, useCache)
 
   logEvent("timetable", { className: className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })

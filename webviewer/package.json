@@ -53,6 +53,7 @@
     "concurrently": "^8.2.2",
     "croner": "^8.0.0",
     "form-data": "^4.0.0",
+    "ical-generator": "^6.0.1",
     "js-cookie": "^3.0.5",
     "js-sha256": "^0.11.0",
     "lucide-react": "^0.268.0",

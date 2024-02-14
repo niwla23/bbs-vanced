@@ -167,3 +167,4 @@ export async function getTimetableWithDatesClient(date: Date, useCache: boolean,
   );
   return timetableWithDates
 }
+

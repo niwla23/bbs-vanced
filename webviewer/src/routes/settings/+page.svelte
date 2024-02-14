@@ -1,14 +1,8 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import PocketBase from 'pocketbase';
 	import TopBar from '@/lib/TopBar.svelte';
-	import {
-		getSettings,
-		saveSettings,
-		settingsToJson,
-		importSettingsFromJSON
-	} from '@/lib/settings';
+	import { getSettings, saveSettings, importSettingsFromJSON } from '@/lib/settings';
 	import { shareApp } from '@/lib/shareApp';
 	import Icon from '@iconify/svelte';
 	import Cookies from 'js-cookie';
@@ -17,12 +11,16 @@
 	import { slide, fly } from 'svelte/transition';
 	import { subscribeNotificationsClient } from '@/lib/notifications';
 	import Swal from 'sweetalert2';
+	import ProBadge from '@/lib/ProBadge.svelte';
+	import { document } from 'postcss';
+	import { getAuthenticatedPocketBase } from '@/lib/clientAuth';
 
 	let hasPro = false;
 
 	let courses = new Set<string>([]);
 	let className = '';
 	let theme = 'lime';
+	let icalTimetableUrl = 'loading...';
 
 	function removeCourse(course: string) {
 		courses.delete(course);
@@ -100,6 +98,14 @@
 			loadSettings();
 			window.location.href = window.location.origin + window.location.pathname;
 		}
+
+		if (hasPro) {
+			getAuthenticatedPocketBase().then((pb) => {
+				icalTimetableUrl = `${window.origin}/api/timetable/ical?userId=${pb.authStore.model.id}`;
+			});
+		} else {
+			icalTimetableUrl = 'Mit PRO kannst du deinen Stundenplan in deinen Kalender syncen';
+		}
 	});
 </script>
 
@@ -144,12 +150,26 @@
 			/>
 		</label>
 
-		<div class="pt-2 pb-2 flex align-baseline w-full justify-between">
-			<p class="font-light">Benachrichtigungen über Stundenplanänderungen</p>
+		<div class="pt-2 pb-2 flex gap-2 align-baseline w-full justify-between">
+			<p class="font-light">Benachrichtigungen über Stundenplanänderungen <ProBadge /></p>
 			<UiButton appearance="normal" class="max-w-[20rem]" on:click={toggleNotifications}>
 				Aktivieren
 			</UiButton>
 		</div>
+
+		<h2 class="text-xl pt-2">
+			Kalenderintegration <ProBadge />
+		</h2>
+
+		<label class="block pt-2 pb-2">
+			<span class="font-light">Stundenplan ICal URL (Kopieren und im Kalender hinzufügen)</span>
+			<input
+				class="w-full bg-dark border border-colborder p-2 rounded-md font-thin"
+				disabled
+				placeholder="z.B.: BG-22"
+				value={icalTimetableUrl}
+			/>
+		</label>
 
 		<h2 class="text-xl pt-2">Deine Fächer / Kurse</h2>
 		<UiButton appearance="normal" class="mb-2" on:click={() => goto('/settings/updateCourses')}>
