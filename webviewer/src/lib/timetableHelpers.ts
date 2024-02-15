@@ -1,6 +1,6 @@
 import type { TimetableDay } from "bbs-parser/src/types";
 import type { Settings } from "./settings";
-import { hourTimes } from "./textRessources";
+import { hourEndTimesRaw, hourStartTimesRaw, hourTimes } from "./textRessources";
 
 export const weekdayMap = [
   'Sonntag',
@@ -168,3 +168,19 @@ export async function getTimetableWithDatesClient(date: Date, useCache: boolean,
   return timetableWithDates
 }
 
+
+export function getTimesForSlot(date: Date, hours: number[]) {
+  const startHour = hours[0]
+  const endHour = hours[hours.length - 1]
+
+  const startMoment = new Date(date.getTime())
+  const endMoment = new Date(date.getTime())
+
+  const hourStartTime = hourStartTimesRaw[startHour]
+  const hourEndTime = hourEndTimesRaw[endHour]
+
+  startMoment.setHours(hourStartTime[0], hourStartTime[1])
+  endMoment.setHours(hourEndTime[0], hourEndTime[1])
+
+  return { start: startMoment, end: endMoment }
+}

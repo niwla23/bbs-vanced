@@ -12,15 +12,16 @@
 	import { subscribeNotificationsClient } from '@/lib/notifications';
 	import Swal from 'sweetalert2';
 	import ProBadge from '@/lib/ProBadge.svelte';
-	import { document } from 'postcss';
 	import { getAuthenticatedPocketBase } from '@/lib/clientAuth';
 
 	let hasPro = false;
 
 	let courses = new Set<string>([]);
 	let className = '';
+	let notificationEmail = '';
 	let theme = 'lime';
 	let icalTimetableUrl = 'loading...';
+	let icalExamsUrl = 'loading...';
 
 	function removeCourse(course: string) {
 		courses.delete(course);
@@ -45,9 +46,12 @@
 
 		const fetchedTheme = localStorage.getItem('theme');
 		if (fetchedTheme) theme = fetchedTheme;
+		const pb = await getAuthenticatedPocketBase();
+		notificationEmail = pb.authStore.model.notificationEmail;
 	}
 
 	async function save() {
+		const pb = await getAuthenticatedPocketBase();
 		let trimmedCourses = [...courses].map((course) => course.trim());
 		await saveSettings(
 			{
@@ -57,6 +61,8 @@
 			hasPro
 			// true
 		);
+
+		await pb.collection('users').update(pb.authStore.model.id, { notificationEmail });
 		localStorage.setItem('theme', theme);
 		document.documentElement.dataset.theme = theme;
 		goto('/');
@@ -102,9 +108,11 @@
 		if (hasPro) {
 			getAuthenticatedPocketBase().then((pb) => {
 				icalTimetableUrl = `${window.origin}/api/timetable/ical?userId=${pb.authStore.model.id}`;
+				icalExamsUrl = `${window.origin}/api/exams/ical?userId=${pb.authStore.model.id}`;
 			});
 		} else {
 			icalTimetableUrl = 'Mit PRO kannst du deinen Stundenplan in deinen Kalender syncen';
+			icalExamsUrl = 'Und auch deine Klausuren';
 		}
 	});
 </script>
@@ -150,24 +158,41 @@
 			/>
 		</label>
 
-		<div class="pt-2 pb-2 flex gap-2 align-baseline w-full justify-between">
-			<p class="font-light">Benachrichtigungen über Stundenplanänderungen <ProBadge /></p>
-			<UiButton appearance="normal" class="max-w-[20rem]" on:click={toggleNotifications}>
+		<h2 class="text-xl pt-2">
+			Benachrichtigungen <ProBadge />
+		</h2>
+		<div class="pt-2 pb-2 flex gap-4 items-center w-full justify-between">
+			<p class="font-light flex-grow">Pushnachrichten</p>
+			<UiButton appearance="normal" class="max-w-[20rem] !p-2" on:click={toggleNotifications}>
 				Aktivieren
 			</UiButton>
 		</div>
+		<label class="block pb-2">
+			<span class="font-light">Email für Benachrichtigungen</span>
+			<input
+				class="w-full bg-dark border border-colborder p-2 rounded-md placeholder:text-brightest/25 placeholder:font-thin"
+				placeholder="Deaktiviert"
+				bind:value={notificationEmail}
+			/>
+		</label>
 
 		<h2 class="text-xl pt-2">
 			Kalenderintegration <ProBadge />
 		</h2>
+		<small>URLs kopieren und in deiner Kalenderapp als ICal Kalender hinzufügen</small>
 
 		<label class="block pt-2 pb-2">
-			<span class="font-light">Stundenplan ICal URL (Kopieren und im Kalender hinzufügen)</span>
+			<span class="font-light">Stundenplan ICal URL</span>
 			<input
 				class="w-full bg-dark border border-colborder p-2 rounded-md font-thin"
-				disabled
-				placeholder="z.B.: BG-22"
 				value={icalTimetableUrl}
+			/>
+		</label>
+		<label class="block pb-2">
+			<span class="font-light">Arbeiten ICal URL</span>
+			<input
+				class="w-full bg-dark border border-colborder p-2 rounded-md font-thin"
+				value={icalExamsUrl}
 			/>
 		</label>
 

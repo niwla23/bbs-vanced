@@ -10,7 +10,7 @@ import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
 
 
 interface LogData {
-  date: Date
+  date?: Date
   url: string
   className?: string
   hasPro?: boolean

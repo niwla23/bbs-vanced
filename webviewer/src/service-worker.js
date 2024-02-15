@@ -65,7 +65,7 @@ self.addEventListener('fetch', (event) => {
       }
 
 
-      if (response.status === 200 && event.request.url.startsWith("http")) {
+      if (response.status === 200 && event.request.url.startsWith("http") && !event.request.url.includes("/api")) {
         cache.put(event.request, response.clone());
       }
 

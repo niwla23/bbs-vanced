@@ -2,25 +2,9 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { getMergedTimetableServer, logEvent, pb, pbAuth, sendJson } from "@/lib/serverHelpers";
 import ical, { ICalCalendarMethod } from 'ical-generator';
-import { filterWeekTimetable, getNextMonday } from "@/lib/timetableHelpers";
-import type { TimetableDay, TimetableTimeSlot } from "bbs-parser/src/types";
-import { hourEndTimesRaw, hourStartTimesRaw } from "@/lib/textRessources";
+import { filterWeekTimetable, getNextMonday, getTimesForSlot } from "@/lib/timetableHelpers";
+import type { TimetableDay } from "bbs-parser/src/types";
 
-function getTimesForSlot(date: Date, hours: number[]) {
-  const startHour = hours[0]
-  const endHour = hours[hours.length - 1]
-
-  const startMoment = new Date(date.getTime())
-  const endMoment = new Date(date.getTime())
-
-  const hourStartTime = hourStartTimesRaw[startHour]
-  const hourEndTime = hourEndTimesRaw[endHour]
-
-  startMoment.setHours(hourStartTime[0], hourStartTime[1])
-  endMoment.setHours(hourEndTime[0], hourEndTime[1])
-
-  return { start: startMoment, end: endMoment }
-}
 
 export const GET: RequestHandler = async (event) => {
   // if it works it aint broken
@@ -60,7 +44,7 @@ export const GET: RequestHandler = async (event) => {
 
 
 
-  logEvent("timetable_ical", { className: user.settings.className, date, cacheAllow: true, cacheHit: cacheHit1 && cacheHit2, url: event.url.toString(), user: user.id })
+  logEvent("timetable_ical", { className: user.settings.className, date, cacheAllow: true, cacheHit: cacheHit1 && cacheHit2, url: event.url.toString(), hasPro: user.proKey != "", user: user.id })
 
   event.setHeaders({ "cache-control": "max-age=0" })
   return new Response(calendar.toString())
