@@ -8,7 +8,7 @@
 		weekdayMap,
 		getTimetableWithDatesClient
 	} from '@/lib/timetableHelpers';
-	import type { TimetableDay } from 'bbs-parser/src/types';
+	import type { TimetableDay, TimetableTimeSlot } from 'bbs-parser/src/types';
 	import Timeslot from '@/lib/Timeslot.svelte';
 	import { getSettings, type Settings } from '@/lib/settings';
 	import { onMount } from 'svelte';
@@ -19,6 +19,7 @@
 	import { hasPro } from './stores';
 	import { fade, scale, slide, fly } from 'svelte/transition';
 	import UiButton from '@/lib/UiButton.svelte';
+	import Swal from 'sweetalert2';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
@@ -73,12 +74,16 @@
 		if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
 			loadFuture();
 		}
+	}
 
-		// check for news
-		// replaced with banner
-		// if (await areNewNewsAvailable()) {
-		// 	goto('/news');
-		// }
+	function akuteUnlust(slot: TimetableTimeSlot) {
+		for (const lesson of slot) {
+			lesson.subject = `<del>${lesson.subject}</del>`;
+			lesson.room = `<del>${lesson.room}</del>`;
+			lesson.teacher = `<del>${lesson.teacher}</del> (unterrichtsfrei)`;
+		}
+
+		return slot;
 	}
 
 	onMount(() => {
@@ -131,7 +136,27 @@
 						</b>
 						<div class="component-timetable-day pt-2 flex flex-col gap-2">
 							{#each slots as [hours, slot]}
-								<Timeslot {hours} {exams} date={day} timeSlot={slot} />
+								<Timeslot
+									{hours}
+									{exams}
+									date={day}
+									timeSlot={slot}
+									on:longpress={async (e) => {
+										e.preventDefault();
+										const res = await Swal.fire({
+											title: 'Akute Unlust?',
+											text: 'Willst du das da steht das ausfällt?',
+											confirmButtonText: 'Weg damit',
+											cancelButtonText: 'hä nein warum',
+											showCancelButton: true,
+											backdrop: false,
+											customClass: 'bg-dark text-brightest'
+										});
+										if (res.isConfirmed) {
+											slot = akuteUnlust(slot);
+										}
+									}}
+								/>
 							{/each}
 						</div>
 					</div>

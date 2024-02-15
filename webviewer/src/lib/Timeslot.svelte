@@ -10,6 +10,7 @@
 		isTimeslotUpNext
 	} from './timetableHelpers';
 	import { hasPro } from '@/routes/stores';
+	import { longpress } from './actions/longpress';
 
 	export let timeSlot: TimetableTimeSlot;
 	export let date: Date;
@@ -57,6 +58,7 @@
 	}
 
 	$: backgroundColor = (function () {
+		timeSlot;
 		exams; // this exists so svelte knows that there is a dependency on exams
 		if (isFree()) return 'bg-darkest';
 		// if (isExam()) return 'bg-red-800/40';
@@ -75,6 +77,8 @@
 
 <div
 	class="component-timeslot {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative transform active:scale-[99%] transition-all ease-out"
+	use:longpress
+	on:longpress
 >
 	{#if !weekView}
 		<div class="self-stretch w-20 flex flex-col justify-between items-center pr-2">
