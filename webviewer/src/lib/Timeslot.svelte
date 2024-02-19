@@ -11,6 +11,7 @@
 	} from './timetableHelpers';
 	import { hasPro } from '@/routes/stores';
 	import { longpress } from './actions/longpress';
+	import { press, tap } from 'svelte-gestures';
 
 	export let timeSlot: TimetableTimeSlot;
 	export let date: Date;
@@ -77,8 +78,8 @@
 
 <div
 	class="component-timeslot {backgroundColor} rounded-md border border-colborder shadow-sm shadow-black flex items-center p-2 relative transform active:scale-[99%] transition-all ease-out"
-	use:longpress
-	on:longpress
+	use:press={{ timeframe: 500, triggerBeforeFinished: true }}
+	on:press
 >
 	{#if !weekView}
 		<div class="self-stretch w-20 flex flex-col justify-between items-center pr-2">

@@ -1,6 +1,6 @@
 import type { Action } from "svelte/action";
 
-export const longpress: Action = (node: HTMLElement, threshold = 500) => {
+export const longpress: Action = (node: HTMLElement, threshold = 1100) => {
   const handle_mousedown = () => {
     const timeout = setTimeout(() => {
       node.dispatchEvent(new CustomEvent('longpress'));

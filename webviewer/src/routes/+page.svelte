@@ -141,7 +141,7 @@
 									{exams}
 									date={day}
 									timeSlot={slot}
-									on:longpress={async (e) => {
+									on:press={async (e) => {
 										e.preventDefault();
 										const res = await Swal.fire({
 											title: 'Akute Unlust?',

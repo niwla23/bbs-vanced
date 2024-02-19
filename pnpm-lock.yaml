@@ -93,6 +93,9 @@ importers:
       svelte-email:
         specifier: ^0.0.4
         version: 0.0.4
+      svelte-gestures:
+        specifier: ^4.0.0
+        version: 4.0.0
       sweetalert2:
         specifier: ^11.10.3
         version: 11.10.3
@@ -6563,6 +6566,10 @@ packages:
       postcss-scss: 4.0.7(postcss@8.4.28)
       svelte: 4.2.0
     dev: true
+
+  /svelte-gestures@4.0.0:
+    resolution: {integrity: sha512-YrryRlKGY2CJm3AtEjFt9+RdQ7/pqNio4O7Apb9ed6oMBEkd6BFoOuv9mBApAEBIx08+iBDXQujbYCvakGePPw==}
+    dev: false
 
   /svelte-hmr@0.15.3(svelte@4.2.0):
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}
