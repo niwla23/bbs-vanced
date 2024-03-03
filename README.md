@@ -1,3 +1,5 @@
+https://bbs.noteqr.de
+
 # bbs-parser
 Unofficial Parser for bbs-betriebe.de 
 
