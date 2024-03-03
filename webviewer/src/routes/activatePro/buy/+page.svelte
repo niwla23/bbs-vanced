@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { env } from '$env/dynamic/public';
+	import { PUBLIC_PRO_PRICE } from '$env/static/public';
+	import UiButton from '@/lib/UiButton.svelte';
 	import { getAuthenticatedPocketBase } from '@/lib/clientAuth';
 	import { loadScript } from '@paypal/paypal-js';
 	import type Client from 'pocketbase';
@@ -9,6 +11,18 @@
 
 	let paypal;
 	let pb: Client;
+	let promoCode = '';
+	let promoPrice: number | null = null;
+
+	async function checkPromoCode() {
+		const result = await fetch(`/api/orders/checkPromoCode?code=${promoCode}`);
+		const data = await result.json();
+		if (data.error) {
+			Swal.fire('Code nicht gefunden');
+			return;
+		}
+		promoPrice = data.price;
+	}
 
 	async function activatePaypal() {
 		pb = await getAuthenticatedPocketBase();
@@ -20,7 +34,13 @@
 			async createOrder() {
 				try {
 					if (!pb.authStore.model) throw new Error('no user logged in');
-					const response = await fetch(`/api/orders?userId=${pb.authStore.model.id}`, {
+
+					const url = new URL('/api/orders', window.location.origin);
+					url.searchParams.append('userId', pb.authStore.model.id);
+					if (promoCode != '') {
+						url.searchParams.append('promoCode', promoCode);
+					}
+					const response = await fetch(url, {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json'
@@ -98,13 +118,33 @@
 </script>
 
 <div class="w-full h-full grid justify-center items-center">
-	<div class="flex flex-col gap-2 p-4">
-		<p class="text-sm text-center pb-2">
+	<div class="flex flex-col gap-1 p-4">
+		<p class="pb-2">
 			PRO für {pb ? pb.authStore.model?.email : 'wird geladen'} kaufen
 		</p>
-		<p class="font-bold text-primary text-4xl text-center pb-4">
-			{Number(env.PUBLIC_PRO_PRICE).toFixed(2)}€
-		</p>
+		<label class="">
+			<p>Promo-Code</p>
+			<div class="flex">
+				<input placeholder="ABCDEF" bind:value={promoCode} class="p-1 bg-dark rounded-md w-full" />
+				<UiButton appearance="primary" class="!p-2 flex-1 rounded-l-none" on:click={checkPromoCode}>
+					Anwenden
+				</UiButton>
+			</div>
+		</label>
+		{#if promoPrice}
+			<div class="flex justify-between gap-2">
+				<p>Rabatt</p>
+				<p class="text-xl text-center">
+					{(Number(env.PUBLIC_PRO_PRICE) - promoPrice).toFixed(2)}€
+				</p>
+			</div>
+		{/if}
+		<div class="flex justify-between items-baseline gap-2 pb-4">
+			<p>Preis</p>
+			<p class="font-bold text-primary text-xl text-center">
+				{promoPrice?.toFixed(2) || Number(env.PUBLIC_PRO_PRICE).toFixed(2)}€
+			</p>
+		</div>
 		<small>
 			Mit dem Kauf stimmst du den <a href="/legal/agb" class="underline">AGB</a>
 			zu.

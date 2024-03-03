@@ -54,7 +54,7 @@
 				<!-- <LoadingScreen /> -->
 			{:else}
 				<NewsBanner />
-				<div out:fly={{ x: 200, duration: 300 }}>
+				<div class="h-full w-full" out:fly={{ x: 200, duration: 300 }}>
 					<slot />
 				</div>
 			{/if}

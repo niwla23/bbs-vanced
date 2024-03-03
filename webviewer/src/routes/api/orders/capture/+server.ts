@@ -41,6 +41,8 @@ export const POST: RequestHandler = async (event) => {
       await pbAuth()
       const userId = jsonResponse.purchase_units[0].payments.captures[0].custom_id.split("-")[0]
       await pb.collection("users").update(userId, { proKey: `paypal-${new Date().toJSON()}` })
+      const dbOrder = await pb.collection("orders").getFirstListItem(pb.filter('paypalId = {:orderId}', { orderId }))
+      await pb.collection("orders").update(dbOrder.id, { captured: true, paypalCaptureData: jsonResponse, user: userId })
     }
 
     return sendJson(jsonResponse, response.status)

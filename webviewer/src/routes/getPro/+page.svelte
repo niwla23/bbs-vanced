@@ -37,7 +37,7 @@
 					class="flex-shrink-0 w-12 text-3xl pr-2 text-primary"
 				/>
 				<div>
-					<p>Push-Benachrichtigungen</p>
+					<p>Push-Benachrichtigungen (nicht für iOS >= 17.4)</p>
 					<small>
 						Du bekommst sofort eine Nachricht auf dein Handy wenn sich der Stundenplan ändert
 					</small>
