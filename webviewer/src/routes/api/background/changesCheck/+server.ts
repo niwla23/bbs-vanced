@@ -27,6 +27,16 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
   const newData = deserialize(newDataSerialized)
   const formattedDate = formatDateToGermanLongDate(date)
 
+  // ignore if date is in the past
+  const normalizedDate = new Date(date.getTime())
+  const normalizedNow = new Date()
+  normalizedDate.setHours(0, 0, 0, 0)
+  normalizedNow.setHours(0, 0, 0, 0)
+  if (normalizedDate.getTime() < normalizedNow.getTime()) {
+    console.log("[changeDetect] detected change is in the past, doing nothing")
+    return
+  }
+
   const resend = new Resend(env.RESEND_API_KEY)
   const html = render({
     template: TimetableChangeEmail,

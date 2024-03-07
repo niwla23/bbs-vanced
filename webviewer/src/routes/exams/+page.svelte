@@ -57,7 +57,7 @@
 		{#if $hasPro}
 			<div class="flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2">
 				ACHTUNG: Hier werden nur Klausuren angezeigt, die von Schülern eingetragen worden sind! Du
-				kannst weitere über Menü > Klausur eintragen hinzuügen.
+				kannst weitere über Menü > Klausur eintragen hinzufügen.
 			</div>
 		{:else}
 			<div class="flex-grow rounded-md border border-colborder shadow-sm shadow-black p-2">
