@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { env } from '$env/dynamic/public';
-	import { PUBLIC_PRO_PRICE } from '$env/static/public';
 	import UiButton from '@/lib/UiButton.svelte';
 	import { getAuthenticatedPocketBase } from '@/lib/clientAuth';
 	import { loadScript } from '@paypal/paypal-js';

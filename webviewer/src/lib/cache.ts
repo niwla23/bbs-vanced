@@ -1,13 +1,16 @@
 import { env } from '$env/dynamic/private';
-import { createClient } from 'redis';
+import { createClient, type RedisClientType } from 'redis';
 
-
-const redis = createClient({
-  url: `redis://${env.REDIS_HOST}:${env.REDIS_PORT}`
-});
-redis.on('error', err => console.log('[redis]', err));
+let redis: RedisClientType
 
 export async function createRedis() {
+  if (!redis) {
+    redis = createClient({
+      url: `redis://${env.REDIS_HOST}:${env.REDIS_PORT}`
+    });
+    redis.on('error', err => console.log('[redis]', err));
+  }
+
   if (!redis.isOpen) {
     await redis.connect()
   }
