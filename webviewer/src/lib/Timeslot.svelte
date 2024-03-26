@@ -72,8 +72,8 @@
 
 	$: startTime = hourTimes.start[hours[0]];
 	$: endTime = hourTimes.end[hours[hours.length - 1]];
-	$: startDate = convertTimeToDate(startTime, date);
-	$: endDate = convertTimeToDate(endTime, date);
+	$: startDate = startTime ? convertTimeToDate(startTime, date) : null;
+	$: endDate = endTime ? convertTimeToDate(endTime, date) : null;
 </script>
 
 <div

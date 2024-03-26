@@ -14,6 +14,9 @@
 	let newsArticle: NewsArticle | null = null;
 
 	onMount(async () => {
+		// do not show news on unconfigured app
+		if (localStorage.getItem('settings') == null) return;
+
 		const filterTemplate = 'showtimeStart <= {:now}';
 		pb.autoCancellation(false);
 		const result = await pb
