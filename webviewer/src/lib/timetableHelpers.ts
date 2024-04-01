@@ -86,6 +86,7 @@ export function convertTimeToDate(timeString: string, baseDate: Date) {
 }
 
 export function isTimeslotActive(startDate: Date, endDate: Date) {
+  if (!startDate || !endDate) return false
   const now = new Date().getTime()
   return startDate.getTime() < now && now < endDate.getTime()
 }
@@ -122,6 +123,8 @@ function getNextLesson() {
 
 
 export function isTimeslotUpNext(startDate: Date, endDate: Date, hours: number[]) {
+
+  if (!startDate) return false
   const now = new Date().getTime()
   if (startDate.getDate() != new Date().getDate()) return false
   if (now > startDate.getTime()) return false

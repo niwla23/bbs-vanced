@@ -10,7 +10,6 @@
 		isTimeslotUpNext
 	} from './timetableHelpers';
 	import { hasPro } from '@/routes/stores';
-	import { longpress } from './actions/longpress';
 	import { press, tap } from 'svelte-gestures';
 
 	export let timeSlot: TimetableTimeSlot;
