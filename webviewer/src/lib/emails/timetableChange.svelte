@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { TimetableDay } from 'bbs-parser/src/types';
+	import type { ProcessedChange } from '@/routes/api/background/changesCheck/+server';
 	import { Button, Container, Head, Hr, Html, Img, Preview, Section, Text } from 'svelte-email';
 
-	export let formattedDate: Date;
-	export let oldData: TimetableDay;
-	export let newData: TimetableDay;
+	export let changesSummary: string;
+	export let changes: ProcessedChange[];
 
 	const fontFamily =
 		'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
@@ -37,38 +37,37 @@
 
 <Html lang="en">
 	<Head />
-	<Preview preview="Stundenplanänderung {formattedDate}" />
+	<Preview preview="Stundenplanänderung {changesSummary}" />
 	<Section style={main}>
 		<Container style={container}>
-			<Text style={paragraph}>
-				Dein Stundenplan für <b>{formattedDate}</b>
-				wurde geändert.
-			</Text>
+			{#each changes as changeDay}
+				<Text style={{ marginTop: '32px', fontWeight: '800', fontSize: '20px' }}>
+					<b>{changeDay.formattedDate}</b>
+				</Text>
 
-			<Text style={{ fontWeight: '800', fontSize: '20px' }}>neuer Stundenplan:</Text>
+				<Text style={paragraph}>neuer Stundenplan:</Text>
 
-			{#each newData as [hours, slot]}
-				{#each slot as lesson}
-					<Text style={{ paddingLeft: '32px', margin: '0px' }}>
-						<b>{hours.join('/')}</b>
-						: {@html lesson.subject} - {@html lesson.teacher} @ {@html lesson.room}
-					</Text>
+				{#each changeDay.newData as [hours, slot]}
+					{#each slot as lesson}
+						<Text style={{ paddingLeft: '32px', margin: '0px' }}>
+							<b>{hours.join('/')}</b>
+							: {@html lesson.subject} - {@html lesson.teacher} @ {@html lesson.room}
+						</Text>
+					{/each}
+					<Text />
 				{/each}
-				<Text />
-			{/each}
 
-			<Text style={{ marginTop: '32px', fontWeight: '800', fontSize: '20px' }}>
-				alter Stundenplan:
-			</Text>
+				<Text style={paragraph}>alter Stundenplan:</Text>
 
-			{#each oldData as [hours, slot]}
-				{#each slot as lesson}
-					<Text style={{ paddingLeft: '32px', margin: '0px' }}>
-						<b>{hours.join('/')}</b>
-						: {@html lesson.subject} - {@html lesson.teacher} @ {@html lesson.room}
-					</Text>
+				{#each changeDay.oldData as [hours, slot]}
+					{#each slot as lesson}
+						<Text style={{ paddingLeft: '32px', margin: '0px' }}>
+							<b>{hours.join('/')}</b>
+							: {@html lesson.subject} - {@html lesson.teacher} @ {@html lesson.room}
+						</Text>
+					{/each}
+					<Text />
 				{/each}
-				<Text />
 			{/each}
 			<Hr style={hr} />
 			<Text style={footer}>BBS Vanced by Alwin Lohrie</Text>

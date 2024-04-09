@@ -22,7 +22,14 @@ function formatDateToGermanLongDate(date: Date): string {
   return `${dayOfWeek}, ${dayOfMonth}. ${month} ${year}`;
 }
 
-async function handleChange(user: RecordModel, date: Date, newDataSerialized: string, oldDataSerialized: string) {
+export interface ProcessedChange {
+  date: Date;
+  formattedDate: string;
+  oldData: TimetableDay;
+  newData: TimetableDay;
+}
+
+function processChange(date: Date, newDataSerialized: string, oldDataSerialized: string): ProcessedChange | null {
   const oldData = deserialize(oldDataSerialized)
   const newData = deserialize(newDataSerialized)
   const formattedDate = formatDateToGermanLongDate(date)
@@ -34,33 +41,33 @@ async function handleChange(user: RecordModel, date: Date, newDataSerialized: st
   normalizedNow.setHours(0, 0, 0, 0)
   if (normalizedDate.getTime() < normalizedNow.getTime()) {
     console.log("[changeDetect] detected change is in the past, doing nothing")
-    return
+    return null
   }
 
+  return { date, formattedDate, oldData, newData }
+}
+
+function generateChangesSummary(changes: ProcessedChange[]) {
+  const changesSummary = changes.map(change => change.formattedDate.split(",")[0]).join(", ") // we dont talk about this
+  if (changesSummary.length > 70) return changesSummary.slice(0, 67) + "...";
+  return changesSummary
+}
+
+async function handleChanges(user: RecordModel, changes: ProcessedChange[]) {
+  const changesSummary = generateChangesSummary(changes);
   const resend = new Resend(env.RESEND_API_KEY)
-  const html = render({
-    template: TimetableChangeEmail,
-    props: {
-      formattedDate,
-      oldData,
-      newData,
-    }
-  });
+  const html = render({ template: TimetableChangeEmail, props: { changes, changesSummary } });
 
   if (user.notificationEmail) {
-    const res = await resend.emails.send({
+    await resend.emails.send({
       from: 'noreply@notifications.noteqr.de',
       to: user.notificationEmail,
-      subject: `Stundenplanänderung ${formattedDate}`,
+      subject: `Stundenplanänderung ${changesSummary}`,
       html
     });
-    console.log(res)
   }
 
-  const textOptions = ["Tippe hier zum Ansehen", "Es gibt Hoffnung", "Ausfall? Bitteee 🥺🥺", "hier raufklickern bitte"]
-  const randomElement = textOptions[Math.floor(Math.random() * textOptions.length)];
-
-  sendNotification(user.id, { title: `Stundenplanänderung ${formattedDate}`, body: randomElement, data: { targetUrl: `/#${formatDateForApi(date)}` } })
+  sendNotification(user.id, { title: `Stundenplanänderung`, body: changesSummary, data: { targetUrl: `/#${formatDateForApi(changes[0].date)}` } })
 }
 
 export const POST: RequestHandler = async (event) => {
@@ -71,9 +78,11 @@ export const POST: RequestHandler = async (event) => {
 
   const users = await pb.collection("users").getFullList({ filter: "proKey != '' && settings != null" })
   for (const user of users) {
+    const changesFoundForUser = []
+
     const timetableWithDates = [
       ...await getTimetableWithDatesClient(new Date(), true, user.settings, event.fetch),
-      ...await getTimetableWithDatesClient(getNextMonday(new Date()), true, user.settings, event.fetch)
+      // ...await getTimetableWithDatesClient(getNextMonday(new Date()), true, user.settings, event.fetch)
     ]
     const filteredTimetable = filterWeekTimetable(user.settings, timetableWithDates) as [Date, TimetableDay][]
     for (const [date, currentData] of filteredTimetable) {
@@ -84,16 +93,22 @@ export const POST: RequestHandler = async (event) => {
 
       if (serializedOldData == null) {
         await redis.set(key, serializedCurrentData)
+        await redis.expire(key, 604800) // 7 Tage
         continue
       }
 
       if (serializedCurrentData != serializedOldData) {
         console.log(`[changeDetect] change detected for user ${user.notificationEmail} on day ${date}: `, serializedCurrentData)
-        handleChange(user, date, serializedCurrentData, serializedOldData)
+        // handleChange(user, date, serializedCurrentData, serializedOldData)
+        const processedChange = processChange(date, serializedCurrentData, serializedOldData)
+        if (processedChange != null) changesFoundForUser.push(processedChange)
         await redis.set(key, serializedCurrentData)
         await redis.expire(key, 604800) // 7 Tage
       }
     }
+
+    // if changes were detected, notify user
+    if (changesFoundForUser.length > 0) await handleChanges(user, changesFoundForUser)
   }
   return sendJson({ success: true, "error": null }, 200)
 }
