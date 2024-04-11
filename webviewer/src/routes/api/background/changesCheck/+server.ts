@@ -82,7 +82,7 @@ export const POST: RequestHandler = async (event) => {
 
     const timetableWithDates = [
       ...await getTimetableWithDatesClient(new Date(), true, user.settings, event.fetch),
-      // ...await getTimetableWithDatesClient(getNextMonday(new Date()), true, user.settings, event.fetch)
+      ...await getTimetableWithDatesClient(getNextMonday(new Date()), true, user.settings, event.fetch)
     ]
     const filteredTimetable = filterWeekTimetable(user.settings, timetableWithDates) as [Date, TimetableDay][]
     for (const [date, currentData] of filteredTimetable) {
