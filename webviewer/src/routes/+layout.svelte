@@ -47,7 +47,7 @@
 
 {#key data.url}
 	<div
-		class="scroll-smooth bg-darkest main-background text-brightest min-h-screen h-full w-full flex select-none"
+		class="scroll-smooth bg-darkest main-background text-brightest min-h-screen h-full w-full flex select-none bg-fixed bg-cover"
 	>
 		<div class="flex-grow">
 			{#if $navigating || !proEvaluationDone}

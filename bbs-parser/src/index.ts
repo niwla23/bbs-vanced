@@ -208,3 +208,17 @@ export async function getTimetable(token: string, course: string, date: Date, fu
 }
 
 
+export async function getClassesList(token: string) {
+  const res = await axios.get(`${base_url}/page-3/index.php?KlaBuDatum=${getDatestamp(new Date())}&Klasse=&Schule=0`, {
+    headers: { ...default_headers, "Cookie": `PHPSESSID=${token}` }
+  })
+
+  const $ = load(res.data);
+  const classSelectEl = $("select[name='Klasse']")
+  let classNames: string[] = []
+  for (const classNameEl of classSelectEl.first().children()) {
+    let val = $(classNameEl).val();
+    if (val && val != "") classNames.push(val.toString());
+  }
+  return classNames
+}

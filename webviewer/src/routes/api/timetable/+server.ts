@@ -9,7 +9,7 @@ export const GET: RequestHandler = async (event) => {
   if (className == null) return sendJson({ "error": "no className given" }, 400)
 
   // insert code here
-  const { timetableMerged, cacheHit } = await getMergedTimetableServer(className, date, useCache)
+  const { timetableMerged, cacheHit } = await getMergedTimetableServer(className, date, useCache, null, 300)
 
   logEvent("timetable", { className: className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })

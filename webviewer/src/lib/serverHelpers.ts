@@ -5,7 +5,7 @@ export const pb = new PocketBase('https://bbs-backend.noteqr.de');
 pb.autoCancellation(false)
 import { autoMergeTimeslots } from "bbs-parser/src/helpers";
 import { createRedis, deserialize, serialize } from "./cache";
-import { getSessionToken, getTimetable } from "bbs-parser";
+import { getDatestamp, getSessionToken, getTimetable } from "bbs-parser";
 import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
 
 
@@ -37,21 +37,26 @@ export function sendJson(data: any, status?: number) {
   return new Response(JSON.stringify(data), { status: status || 200 })
 }
 
-export async function getMergedTimetableServer(className: string, date: Date, useCache: boolean) {
+export async function getMergedTimetableServer(className: string, date: Date, useCache: boolean, sessionToken: string | null = null, maxCacheAge = 300) {
   const redis = await createRedis()
-  const cacheKey = `timetable-${className}-${date.toJSON()}-fullweek:true`
+  const cacheKey = `timetable-${className}-${getDatestamp(date)}-fullweek:true`
   const cacheResult = await redis.get(cacheKey)
+  const cacheTimestamp = await redis.get(cacheKey + ":timestamp")
+  const cacheAge = new Date().getTime() - parseInt(cacheTimestamp ?? "0")
 
   let timetable: TimetableWeek
   let cacheHit = false
-  if (useCache && cacheResult && cacheResult != null && cacheResult.length > 5) {
+  if (useCache && cacheResult && cacheResult != null && cacheResult.length > 5 && (cacheAge / 1000) < maxCacheAge) {
     timetable = deserialize(cacheResult)
     cacheHit = true
   } else {
-    const token = await getSessionToken("bbs-walsrode", "schueler")
-    timetable = await getTimetable(token, className, date, true) as TimetableWeek
+    if (!sessionToken) {
+      sessionToken = await getSessionToken("bbs-walsrode", "schueler")
+    }
+    timetable = await getTimetable(sessionToken, className, date, true) as TimetableWeek
     await redis.set(cacheKey, serialize(timetable))
-    await redis.expire(cacheKey, 300)
+    await redis.set(cacheKey + ":timestamp", new Date().getTime())
+    await redis.expire(cacheKey, 21600) // 6h 
   }
 
   const timetableMerged = new Map<Date, TimetableDay>()
@@ -62,6 +67,6 @@ export async function getMergedTimetableServer(className: string, date: Date, us
 
   }
 
-  return { timetableMerged, cacheHit }
+  return { timetableMerged, timetableRaw: timetable, cacheHit }
 }
 
