@@ -4,6 +4,7 @@
 	import { formatDate } from '@/lib/exams';
 	import { getDatestamp } from 'bbs-parser';
 	import type { TimetableLesson } from 'bbs-parser/src/types';
+	import type { LayerGroup } from 'leaflet';
 	import { onMount, onDestroy } from 'svelte';
 
 	const roomsStatic = {
@@ -17,23 +18,13 @@
 			building: 'E',
 			coordinates: [52.870116098258194, 9.599385585522702]
 		},
-		E005: {
+		E008: {
 			level: 0,
 			building: 'E',
 
 			coordinates: [52.87021, 9.5996] // fix
 		},
-		E006: {
-			level: 0,
-			building: 'E',
-			coordinates: [52.87014, 9.59958] // fix
-		},
-		E007: {
-			level: 0,
-			building: 'E',
-			coordinates: [52.87007, 9.59956] // fix
-		},
-		E008: {
+		E005: {
 			level: 0,
 			building: 'E',
 			coordinates: [52.86993, 9.59953] // fix
@@ -74,13 +65,95 @@
 			level: 0,
 			building: 'H',
 			coordinates: [52.86954, 9.5976]
+		},
+
+		// D
+
+		D005: {
+			level: 0,
+			building: 'D',
+			coordinates: [52.87063, 9.59935]
+		},
+
+		// B
+
+		B102: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87031, 9.59884]
+		},
+		B103: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87034, 9.59868]
+		},
+		B104: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87036, 9.59848]
+		},
+		B105: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87068, 9.59864]
+		},
+		B106: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87068, 9.59886]
+		},
+		B107: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87067, 9.59896]
+		},
+
+		B202: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87031, 9.59884]
+		},
+		B203: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87034, 9.59868]
+		},
+		B204: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87036, 9.59848]
+		},
+		B205: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87068, 9.59864]
+		},
+		B206: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87068, 9.59886]
+		},
+		B207: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87067, 9.59896]
 		}
 	};
 
+	let now = new Date();
+	let minDate = new Date();
+	minDate.setDate(minDate.getDate() - 1);
+
+	let maxDate = new Date();
+	maxDate.setDate(maxDate.getDate() + 3);
+
+	let leaflet: typeof import('leaflet');
 	let mapElement;
 	let map;
-	let date = new Date(2024, 7, 6);
+	let roomMarkerGroup: LayerGroup;
+	let date = new Date();
 	let roomsData;
+	let currentLevel = 0;
 
 	// todo: use shared type with server
 	type RoomMapping = {
@@ -112,8 +185,28 @@
 	}
 	$: date, loadData();
 
+	function drawRooms(level: number) {
+		if (!leaflet) return;
+		roomMarkerGroup.clearLayers();
+
+		for (const [roomName, roomProps] of Object.entries(roomsStatic)) {
+			if (roomProps.level != level) continue;
+			leaflet
+				.marker(roomProps.coordinates, {
+					icon: leaflet.divIcon({
+						className: 'text-labels', // Set class for CSS styling
+
+						html: `<span style="color:black;">${roomName}</span>`
+					})
+				})
+				.bindPopup((layer) => roomDataToText(roomsData.rooms[roomName]), {})
+				.addTo(roomMarkerGroup);
+		}
+	}
+	$: currentLevel, drawRooms(currentLevel);
+
 	onMount(async () => {
-		const leaflet = await import('leaflet');
+		leaflet = await import('leaflet');
 
 		// 52.870370905875234, 9.599009913085602
 		map = leaflet.map(mapElement).setView([52.8703709, 9.59900991], 18);
@@ -139,19 +232,9 @@
 		svgElement.innerHTML = `<g transform="rotate(-82, 0, 0)">${schoolPlan}</g>`;
 
 		leaflet.svgOverlay(svgElement, planBound, { opacity: 0.99, interactive: true }).addTo(map);
-
-		for (const [roomName, roomProps] of Object.entries(roomsStatic)) {
-			leaflet
-				.marker(roomProps.coordinates, {
-					icon: leaflet.divIcon({
-						className: 'text-labels', // Set class for CSS styling
-
-						html: `<span style="color:black;">${roomName}</span>`
-					})
-				})
-				.bindPopup((layer) => roomDataToText(roomsData.rooms[roomName]), {})
-				.addTo(map);
-		}
+		roomMarkerGroup = leaflet.layerGroup();
+		roomMarkerGroup.addTo(map);
+		drawRooms(currentLevel);
 
 		// Add a draggable marker
 		var marker = leaflet
@@ -190,28 +273,49 @@
 <main class="w-full">
 	<TopBar title="Raumplan" icon="mingcute:news-line" />
 	<div class="h-screen mt-16" bind:this={mapElement} />
-	<div class="p-4 bg-darkest absolute bottom-0 z-[9999] w-screen flex gap-2 items-middle">
-		<div class="flex-2 flex-grow">Datum: {getDatestamp(date)}</div>
-		<UiButton
-			appearance="normal"
-			class="flex-1"
-			on:click={() => {
-				date.setDate(date.getDate() - 1);
-				date = date;
-			}}
-		>
-			&lt;
-		</UiButton>
-		<UiButton
-			appearance="normal"
-			class="flex-1"
-			on:click={() => {
-				date.setDate(date.getDate() + 1);
-				date = date;
-			}}
-		>
-			&gt;
-		</UiButton>
+	<div class="p-4 bg-darkest absolute bottom-0 z-[9999] w-screen flex gap-4 items-middle">
+		<div class="flex-2 flex-grow">
+			Datum: {getDatestamp(date)}
+			<div class="flex gap-2">
+				<UiButton
+					appearance="normal"
+					class="flex-1"
+					on:click={() => {
+						date.setDate(date.getDate() - 1);
+						date = date;
+					}}
+				>
+					&lt;
+				</UiButton>
+				<UiButton
+					appearance="normal"
+					class="flex-1"
+					on:click={() => {
+						date.setDate(date.getDate() + 1);
+						date = date;
+					}}
+				>
+					&gt;
+				</UiButton>
+			</div>
+		</div>
+		<div>
+			<p>Etage</p>
+
+			<div class="flex gap-2">
+				{#each [0, 1, 2] as level}
+					<UiButton
+						appearance="normal"
+						class="flex-1"
+						on:click={() => {
+							currentLevel = level;
+						}}
+					>
+						{level}
+					</UiButton>
+				{/each}
+			</div>
+		</div>
 	</div>
 </main>
 

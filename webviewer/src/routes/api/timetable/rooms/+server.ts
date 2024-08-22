@@ -9,7 +9,11 @@ import { getClassesList, getSessionToken } from "bbs-parser";
 
 function getCleanRoomsFromString(x: string): string[] {
   // Trim the input to remove any leading/trailing whitespace
-  const trimmed = x.trim();
+  const cleaned = x.replace(/<(\w+)>(.*?)<\/\1>/g, '$2');
+  let trimmed = cleaned.trim();
+  if (["+", "-"].includes(trimmed[0])) {
+    trimmed = trimmed.slice(1)
+  }
 
   // Handle prefix stripping (e.g., A:B048 to B048)
   const colonIndex = trimmed.indexOf(':');

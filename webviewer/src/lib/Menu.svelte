@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="fixed inset-0 p-8 h-screen w-screen flex justify-center items-center bg-darkest/90"
+	class="fixed inset-0 p-8 h-screen w-screen flex justify-center items-center bg-darkest/90 z-[2500]"
 	on:click={() => onClose()}
 	on:keypress={(e) => e.key == 'Escape' && onClose()}
 	role="button"
@@ -82,7 +82,7 @@
 	transition:animate
 >
 	<div
-		class="max-w-2xl w-full bg-dark text-brightest rounded-md border border-colborder shadow-sm shadow-black p-4 flex flex-col gap-4 text-lg h-min"
+		class="max-w-2xl w-full bg-dark text-brightest rounded-md border border-colborder shadow-sm shadow-black p-4 flex flex-col gap-4 text-lg h-min z-[2500]"
 	>
 		{#each menuEntries as entry}
 			<UiButton class="flex gap-2" on:click={entry.onclick}>

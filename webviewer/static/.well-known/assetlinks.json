@@ -1,0 +1,23 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "de.noteqr.bbs.twa",
+      "sha256_cert_fingerprints": [
+        "4A:C2:B0:50:F7:62:20:DA:6D:3C:AC:4C:40:22:C7:15:02:A7:3A:20:67:13:5E:DD:0A:40:BC:02:D4:91:26:83"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "check_validation"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "de.noteqr.bbs.twa"
+    }
+  }
+]
