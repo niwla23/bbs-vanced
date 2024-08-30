@@ -10,6 +10,7 @@ export interface NewsArticle {
   showtimeStart: string;
   showtimeEnd: string;
   linkUrl: string | null;
+  fullscreen: boolean;
 }
 
 
