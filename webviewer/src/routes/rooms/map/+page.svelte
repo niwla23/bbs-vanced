@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import TopBar from '@/lib/TopBar.svelte';
 	import UiButton from '@/lib/UiButton.svelte';
 	import { formatDate } from '@/lib/exams';
@@ -140,12 +141,11 @@
 		}
 	};
 
-	let now = new Date();
-	let minDate = new Date();
-	minDate.setDate(minDate.getDate() - 1);
-
-	let maxDate = new Date();
-	maxDate.setDate(maxDate.getDate() + 3);
+	let allowedDates = [0, 1, 2].map((i) => {
+		let d = new Date();
+		d.setDate(d.getDate() + i);
+		return d;
+	});
 
 	let leaflet: typeof import('leaflet');
 	let mapElement;
@@ -154,6 +154,7 @@
 	let date = new Date();
 	let roomsData;
 	let currentLevel = 0;
+	let isLoading = true;
 
 	// todo: use shared type with server
 	type RoomMapping = {
@@ -181,7 +182,9 @@
 	}
 
 	async function loadData() {
+		isLoading = true;
 		roomsData = await getRoomsForDateClient(date);
+		isLoading = false;
 	}
 	$: date, loadData();
 
@@ -236,30 +239,32 @@
 		roomMarkerGroup.addTo(map);
 		drawRooms(currentLevel);
 
-		// Add a draggable marker
-		var marker = leaflet
-			.marker([52.8703709, 9.59900991], {
-				draggable: true
-			})
-			.addTo(map);
+		if ($page.url.searchParams.has('dev')) {
+			// Add a draggable marker
+			var marker = leaflet
+				.marker([52.8703709, 9.59900991], {
+					draggable: true
+				})
+				.addTo(map);
 
-		// Function to update marker popup with coordinates
-		function updatePopup(e) {
-			var lat = e.latlng.lat.toFixed(5);
-			var lng = e.latlng.lng.toFixed(5);
-			marker.bindPopup('Coordinates: [' + lat + ', ' + lng + ']').openPopup();
-			console.log('Coordinates: [' + lat + ', ' + lng + ']');
+			// Function to update marker popup with coordinates
+			const updatePopup = (e) => {
+				var lat = e.latlng.lat.toFixed(5);
+				var lng = e.latlng.lng.toFixed(5);
+				marker.bindPopup('Coordinates: [' + lat + ', ' + lng + ']').openPopup();
+				console.log('Coordinates: [' + lat + ', ' + lng + ']');
+			};
+
+			// Event listener for drag events
+			marker.on('dragend', function (e) {
+				var marker = e.target;
+				var position = marker.getLatLng();
+				updatePopup({ latlng: position });
+			});
+
+			// Initialize popup with coordinates
+			updatePopup({ latlng: marker.getLatLng() });
 		}
-
-		// Event listener for drag events
-		marker.on('dragend', function (e) {
-			var marker = e.target;
-			var position = marker.getLatLng();
-			updatePopup({ latlng: position });
-		});
-
-		// Initialize popup with coordinates
-		updatePopup({ latlng: marker.getLatLng() });
 	});
 
 	onDestroy(async () => {
@@ -275,28 +280,21 @@
 	<div class="h-screen mt-16" bind:this={mapElement} />
 	<div class="p-4 bg-darkest absolute bottom-0 z-[9999] w-screen flex gap-4 items-middle">
 		<div class="flex-2 flex-grow">
-			Datum: {getDatestamp(date)}
+			{isLoading ? 'Daten werden geladen...' : 'Fertig.'}
 			<div class="flex gap-2">
-				<UiButton
-					appearance="normal"
-					class="flex-1"
-					on:click={() => {
-						date.setDate(date.getDate() - 1);
-						date = date;
-					}}
-				>
-					&lt;
-				</UiButton>
-				<UiButton
-					appearance="normal"
-					class="flex-1"
-					on:click={() => {
-						date.setDate(date.getDate() + 1);
-						date = date;
-					}}
-				>
-					&gt;
-				</UiButton>
+				{#each allowedDates as dateOption}
+					{@const isSelected = dateOption.toDateString() === date.toDateString()}
+					<UiButton
+						appearance={isSelected ? 'primary' : 'normal'}
+						disabled={isSelected}
+						class="flex-1"
+						on:click={() => {
+							date = dateOption;
+						}}
+					>
+						{getDatestamp(dateOption)}
+					</UiButton>
+				{/each}
 			</div>
 		</div>
 		<div>
@@ -305,7 +303,7 @@
 			<div class="flex gap-2">
 				{#each [0, 1, 2] as level}
 					<UiButton
-						appearance="normal"
+						appearance={currentLevel == level ? 'primary' : 'normal'}
 						class="flex-1"
 						on:click={() => {
 							currentLevel = level;

@@ -7,7 +7,7 @@ export const POST: RequestHandler = async (event) => {
   const body = await event.request.json();
   console.log(body)
 
-  await sendNotification(body["userId"], body["payload"])
+  const subscriptions_count = await sendNotification(body["userId"], body["payload"])
 
-  return sendJson({ success: true, "error": null }, 200)
+  return sendJson({ success: true, "error": null, subscriptions_count }, 200)
 }

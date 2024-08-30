@@ -20,8 +20,11 @@ export async function sendNotification(userId: string, data: Payload) {
   );
 
   await pbAuth()
+
+  const filterString = userId == "ALL" ? "environment={:environment}" : "user.id={:userId} && environment={:environment}"
+
   const subscriptions = await pb.collection("pushSubscriptions").getFullList({
-    filter: pb.filter("user.id={:userId} && environment={:environment}", { userId, environment: env.NODE_ENV })
+    filter: pb.filter(filterString, { userId, environment: env.NODE_ENV })
   })
 
   console.log(`[push] sending push messages to subscriptions of user ${userId}`)
@@ -33,4 +36,6 @@ export async function sendNotification(userId: string, data: Payload) {
       console.error("error sending notification", e)
     }
   }
+
+  return subscriptions.length
 }
