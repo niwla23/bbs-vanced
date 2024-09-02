@@ -65,21 +65,21 @@
 	</div>
 {:else if newsArticle && newsArticle.fullscreen}
 	<div
-		class="fixed inset-0 z-50 bg-primary w-screen h-screen flex flex-col justify-center p-8"
+		class="fixed inset-0 z-50 bg-primary w-screen h-screen flex flex-col justify-center p-8 text-dark"
 		transition:animate
 	>
 		<div>
 			<h1 class="text-3xl font-bold text-center">{newsArticle.title}</h1>
 			<div class="text-center pb-4">{@html newsArticle.content}</div>
 			{#if newsArticle.linkUrl}
-				<UiButton class="bg-white text-primary p-4" appearance="none" on:click={handleClick}>
+				<UiButton class="bg-white text-black p-4" appearance="none" on:click={handleClick}>
 					Öffnen
 				</UiButton>
 			{/if}
 		</div>
 		<div class="absolute top-0 right-0 p-2">
 			<UiButton
-				class="bg-white text-primary rounded-full p-2 !w-10 h-10"
+				class="bg-primary text-dark rounded-full p-2 !w-10 h-10"
 				appearance="none"
 				on:click={markRead}
 			>
