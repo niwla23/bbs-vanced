@@ -78,66 +78,78 @@
 
 		// B
 
+		B101: {
+			level: 1,
+			building: 'B',
+			coordinates: [52.87059, 9.59878]
+		},
+
 		B102: {
 			level: 1,
 			building: 'B',
-			coordinates: [52.87031, 9.59884]
+			coordinates: [52.87046, 9.5989]
 		},
 		B103: {
 			level: 1,
 			building: 'B',
-			coordinates: [52.87034, 9.59868]
+			coordinates: [52.87047, 9.59874]
 		},
 		B104: {
 			level: 1,
 			building: 'B',
-			coordinates: [52.87036, 9.59848]
+			coordinates: [52.87048, 9.59858]
 		},
 		B105: {
 			level: 1,
 			building: 'B',
-			coordinates: [52.87068, 9.59864]
+			coordinates: [52.87072, 9.59864]
 		},
 		B106: {
 			level: 1,
 			building: 'B',
-			coordinates: [52.87068, 9.59886]
+			coordinates: [52.87071, 9.59879]
 		},
 		B107: {
 			level: 1,
 			building: 'B',
-			coordinates: [52.87067, 9.59896]
+			coordinates: [52.87069, 9.59896]
+		},
+
+		B201: {
+			level: 2,
+			building: 'B',
+			coordinates: [52.87059, 9.59878]
 		},
 
 		B202: {
 			level: 2,
 			building: 'B',
-			coordinates: [52.87031, 9.59884]
+			coordinates: [52.87046, 9.5989]
 		},
 		B203: {
 			level: 2,
 			building: 'B',
-			coordinates: [52.87034, 9.59868]
+			coordinates: [52.87047, 9.59874]
 		},
 		B204: {
 			level: 2,
 			building: 'B',
-			coordinates: [52.87036, 9.59848]
+			coordinates: [52.87048, 9.59858]
 		},
 		B205: {
 			level: 2,
 			building: 'B',
-			coordinates: [52.87068, 9.59864]
+			coordinates: [52.87072, 9.59864]
 		},
 		B206: {
 			level: 2,
 			building: 'B',
-			coordinates: [52.87068, 9.59886]
+			coordinates: [52.87071, 9.59879]
 		},
 		B207: {
 			level: 2,
 			building: 'B',
-			coordinates: [52.87067, 9.59896]
+			coordinates: [52.87069, 9.59896]
 		}
 	};
 
@@ -192,6 +204,18 @@
 		if (!leaflet) return;
 		roomMarkerGroup.clearLayers();
 
+		if (level == 0) {
+			const B0PlanBounds = new leaflet.LatLngBounds([52.8708, 9.598411], [52.8704, 9.5994]);
+			leaflet.imageOverlay('/roomsB0.png', B0PlanBounds, { zIndex: 400 }).addTo(roomMarkerGroup);
+		}
+
+		if (level != 0) {
+			const B1_2PlanBounds = new leaflet.LatLngBounds([52.87082, 9.59829], [52.87032, 9.59956]);
+			leaflet
+				.imageOverlay('/roomsB1-2.png', B1_2PlanBounds, { zIndex: 400 })
+				.addTo(roomMarkerGroup);
+		}
+
 		for (const [roomName, roomProps] of Object.entries(roomsStatic)) {
 			if (roomProps.level != level) continue;
 			leaflet
@@ -235,6 +259,7 @@
 		svgElement.innerHTML = `<g transform="rotate(-82, 0, 0)">${schoolPlan}</g>`;
 
 		leaflet.svgOverlay(svgElement, planBound, { opacity: 0.99, interactive: true }).addTo(map);
+
 		roomMarkerGroup = leaflet.layerGroup();
 		roomMarkerGroup.addTo(map);
 		drawRooms(currentLevel);
