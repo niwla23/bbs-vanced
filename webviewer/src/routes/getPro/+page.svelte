@@ -32,6 +32,13 @@
 				</div>
 			</div>
 			<div class="bg-dark p-2 rounded-md flex items-center h-24">
+				<Icon icon="mingcute:map-line" class="flex-shrink-0 w-12 text-3xl pr-2 text-primary" />
+				<div>
+					<p>Raumplan</p>
+					<small>Finde leere Räume bevor es ein anderer tut</small>
+				</div>
+			</div>
+			<div class="bg-dark p-2 rounded-md flex items-center h-24">
 				<Icon
 					icon="mingcute:notification-line"
 					class="flex-shrink-0 w-12 text-3xl pr-2 text-primary"

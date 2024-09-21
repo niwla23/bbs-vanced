@@ -7,6 +7,7 @@
 	let showMenu = false;
 	export let title: string;
 	export let showBack = false;
+	export let showMenuButton = true;
 	export let icon: string | null = null;
 </script>
 
@@ -29,9 +30,11 @@
 		</div>
 		<div class="flex gap-1">
 			<slot />
-			<UiButton on:click={() => (showMenu = true)} class="rounded-md px-2 text-xs">
-				<Icon icon="mingcute:menu-line" class="h-6 w-6" />
-			</UiButton>
+			{#if showMenuButton}
+				<UiButton on:click={() => (showMenu = true)} class="rounded-md px-2 text-xs">
+					<Icon icon="mingcute:menu-line" class="h-6 w-6" />
+				</UiButton>
+			{/if}
 		</div>
 	</div>
 	{#if showMenu}

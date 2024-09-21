@@ -44,6 +44,12 @@
 			onclick: (e) => goto('/grades')
 		},
 		{
+			icon: 'mingcute:map-line',
+			label: 'Raumplan',
+			isPro: true,
+			onclick: (e) => goto('/rooms/map')
+		},
+		{
 			icon: 'mingcute:news-line',
 			label: 'News',
 			onclick: (e) => goto('/news')

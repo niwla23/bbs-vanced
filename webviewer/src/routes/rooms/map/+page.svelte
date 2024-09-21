@@ -3,10 +3,12 @@
 	import TopBar from '@/lib/TopBar.svelte';
 	import UiButton from '@/lib/UiButton.svelte';
 	import { formatDate } from '@/lib/exams';
+	import { hasPro } from '@/routes/stores';
 	import { getDatestamp } from 'bbs-parser';
 	import type { TimetableLesson } from 'bbs-parser/src/types';
 	import type { LayerGroup } from 'leaflet';
 	import { onMount, onDestroy } from 'svelte';
+	import Swal from 'sweetalert2';
 
 	const roomsStatic = {
 		E003: {
@@ -194,6 +196,10 @@
 	}
 
 	async function loadData() {
+		if (!$hasPro) {
+			isLoading = false;
+			return;
+		}
 		isLoading = true;
 		roomsData = await getRoomsForDateClient(date);
 		isLoading = false;
@@ -261,6 +267,10 @@
 		svgElement.innerHTML = `<g transform="rotate(-82, 0, 0)">${schoolPlan}</g>`;
 
 		leaflet.svgOverlay(svgElement, planBound, { opacity: 0.99, interactive: true }).addTo(map);
+		if (!$hasPro) {
+			Swal.fire('PRO Funktion', 'Mit PRO kannst du sehen welche Klasse wann in welchem Raum ist');
+			return;
+		}
 
 		roomMarkerGroup = leaflet.layerGroup();
 		roomMarkerGroup.addTo(map);
@@ -303,7 +313,7 @@
 </script>
 
 <main class="w-full">
-	<TopBar title="Raumplan" icon="mingcute:news-line" />
+	<TopBar title="Raumplan" showBack showMenuButton={false} icon="mingcute:news-line" />
 	<div class="h-screen mt-16" bind:this={mapElement} />
 	<div class="p-4 bg-darkest absolute bottom-0 z-[9999] w-screen flex gap-4 items-middle">
 		<div class="flex-2 flex-grow">
