@@ -74,7 +74,7 @@
 </script>
 
 <div
-	class="fixed inset-0 p-8 h-screen w-screen flex justify-center items-center bg-darkest/90 z-[2500]"
+	class="fixed inset-0 p-8 h-screen w-screen flex justify-center items-center bg-darkest/90 z-[250]"
 	on:click={() => onClose()}
 	on:keypress={(e) => e.key == 'Escape' && onClose()}
 	role="button"

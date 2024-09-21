@@ -153,7 +153,7 @@
 		}
 	};
 
-	let allowedDates = [0, 1, 2].map((i) => {
+	let allowedDates = [0, 1].map((i) => {
 		let d = new Date();
 		d.setDate(d.getDate() + i);
 		return d;
@@ -236,14 +236,16 @@
 		leaflet = await import('leaflet');
 
 		// 52.870370905875234, 9.599009913085602
-		map = leaflet.map(mapElement).setView([52.8703709, 9.59900991], 18);
+		const mapBounds = new leaflet.LatLngBounds([52.8738, 9.59244], [52.86404, 9.60287]);
+		map = leaflet.map(mapElement, { maxBounds: mapBounds }).setView([52.8703709, 9.59900991], 18);
 
 		leaflet
 			.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution:
 					'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-				minZoom: 18,
+				minZoom: 17,
 				maxZoom: 22,
+				maxNativeZoom: 20,
 				opacity: 0.4
 			})
 			.addTo(map);
@@ -307,7 +309,7 @@
 		<div class="flex-2 flex-grow">
 			{isLoading ? 'Daten werden geladen...' : 'Fertig.'}
 			<div class="flex gap-2">
-				{#each allowedDates as dateOption}
+				{#each allowedDates as dateOption, i}
 					{@const isSelected = dateOption.toDateString() === date.toDateString()}
 					<UiButton
 						appearance={isSelected ? 'primary' : 'normal'}
@@ -317,7 +319,7 @@
 							date = dateOption;
 						}}
 					>
-						{getDatestamp(dateOption)}
+						{['Heute', 'Morgen', 'Übermorgen'][i]}
 					</UiButton>
 				{/each}
 			</div>
