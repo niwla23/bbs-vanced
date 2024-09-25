@@ -78,6 +78,42 @@
 			coordinates: [52.87063, 9.59935]
 		},
 
+		D105: {
+			level: 1,
+			building: 'D',
+			coordinates: [52.87074, 9.59918]
+		},
+
+		D106: {
+			level: 1,
+			building: 'D',
+			coordinates: [52.87082, 9.5992]
+		},
+
+		D107: {
+			level: 1,
+			building: 'D',
+			coordinates: [52.8709, 9.59921]
+		},
+
+		D108: {
+			level: 1,
+			building: 'D',
+			coordinates: [52.87064, 9.59931]
+		},
+
+		D109: {
+			level: 1,
+			building: 'D',
+			coordinates: [52.87072, 9.59933]
+		},
+
+		D110: {
+			level: 1,
+			building: 'D',
+			coordinates: [52.87081, 9.599345]
+		},
+
 		// B
 
 		B101: {
@@ -219,6 +255,13 @@
 			const B1_2PlanBounds = new leaflet.LatLngBounds([52.87082, 9.59829], [52.87032, 9.59956]);
 			leaflet
 				.imageOverlay('/roomsB1-2.png', B1_2PlanBounds, { zIndex: 400 })
+				.addTo(roomMarkerGroup);
+		}
+
+		if (level == 1) {
+			const D1_2PlanBounds = new leaflet.LatLngBounds([52.871, 9.59903], [52.87057, 9.59943]);
+			leaflet
+				.imageOverlay('/roomsD1-2.png', D1_2PlanBounds, { zIndex: 400 })
 				.addTo(roomMarkerGroup);
 		}
 
