@@ -21,15 +21,17 @@
 	import UiButton from '@/lib/UiButton.svelte';
 	import Swal from 'sweetalert2';
 	import { env } from '$env/dynamic/public';
+	import TempCourseSelect from './TempCourseSelect.svelte';
 
 	let data: [Date, TimetableDay][] = [];
 	let exams: Exam[] = [];
 	let lastLoadTime = new Date().getTime();
 	let settings: Settings;
+	let showSelectPopup = false;
 
 	const animate = (n) => scale(n, {});
 
-	async function loadData(date: Date, useCache = true) {
+	async function loadData(date: Date, useCache = true, showAll = false) {
 		//here
 		const timetableWithDates = await getTimetableWithDatesClient(date, useCache, settings);
 		let mergedData = [...data, ...timetableWithDates];
@@ -54,8 +56,9 @@
 		await loadData(target);
 	}
 
-	async function initialLoad(useCache: boolean) {
+	async function loadNormal(useCache: boolean, settingsOverride: Partial<Settings> = {}) {
 		settings = await getSettings();
+		settings = { ...settings, ...settingsOverride };
 		data = [];
 		const today = new Date();
 		let targetDate = today;
@@ -77,6 +80,20 @@
 		}
 	}
 
+	async function tempCourseLoad(event: CustomEvent) {
+		showSelectPopup = false;
+		console.log(event.detail.userEmail, event.detail.className);
+		if (event.detail.className) {
+			loadNormal(true, { className: event.detail.className, courses: [] });
+		} else if (event.detail.userEmail) {
+			const response = await fetch(`/api/publicUserInfo?userEmail=${event.detail.userEmail}`);
+			const data = await response.json();
+			loadNormal(true, { className: data.className, courses: data.courses });
+		} else {
+			loadNormal(true);
+		}
+	}
+
 	function akuteUnlust(slot: TimetableTimeSlot) {
 		for (const lesson of slot) {
 			lesson.subject = `<del>${lesson.subject}</del>`;
@@ -88,7 +105,7 @@
 	}
 
 	onMount(() => {
-		initialLoad(true);
+		loadNormal(true);
 		const handleScroll = () => {
 			if (
 				window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
@@ -114,8 +131,11 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<TopBar title="Stundenplan">
-			<UiButton on:click={() => initialLoad(false)} class="px-2 text-xs">
+		<TopBar title="Start">
+			<UiButton on:click={() => (showSelectPopup = true)} class="px-2 text-xs">
+				<Icon icon="mingcute:eye-line" class="h-6 w-6" />
+			</UiButton>
+			<UiButton on:click={() => loadNormal(false)} class="px-2 text-xs">
 				<Icon icon="mingcute:refresh-2-line" class="h-6 w-6" />
 			</UiButton>
 			<UiButton on:click={loadPast} class="px-2 text-xs">
@@ -177,3 +197,7 @@
 	{/if}
 	<!-- <Menu /> -->
 </div>
+
+{#if showSelectPopup}
+	<TempCourseSelect on:submit={tempCourseLoad} />
+{/if}

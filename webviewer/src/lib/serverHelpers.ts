@@ -5,7 +5,7 @@ export const pb = new PocketBase('https://bbs-backend.noteqr.de');
 pb.autoCancellation(false)
 import { autoMergeTimeslots } from "bbs-parser/src/helpers";
 import { createRedis, deserialize, serialize } from "./cache";
-import { getDatestamp, getSessionToken, getTimetable } from "bbs-parser";
+import { getClassesList, getDatestamp, getSessionToken, getTimetable } from "bbs-parser";
 import type { TimetableDay, TimetableWeek } from 'bbs-parser/src/types';
 
 
@@ -20,7 +20,8 @@ interface LogData {
 }
 
 export async function pbAuth() {
-  await pb.collection('users').authWithPassword(env.PB_USER, env.PB_PASSWORD)
+  // await pb.collection('users').authWithPassword(env.PB_USER, env.PB_PASSWORD)
+  await pb.admins.authWithPassword(env.PB_USER, env.PB_PASSWORD)
 }
 
 export async function logEvent(ressource: string, data: LogData) {
@@ -68,5 +69,20 @@ export async function getMergedTimetableServer(className: string, date: Date, us
   }
 
   return { timetableMerged, timetableRaw: timetable, cacheHit }
+}
+
+export async function getCachedClassList() {
+  const redis = await createRedis()
+  const cacheResult = await redis.get("classList")
+
+  if (cacheResult && cacheResult.length > 10) {
+    return JSON.parse(cacheResult)
+  } else {
+    const sessionToken = await getSessionToken("bbs-walsrode", "schueler")
+    const classList = await getClassesList(sessionToken);
+    await redis.set("classList", JSON.stringify(classList))
+    await redis.expire("classList", 21600)
+    return classList
+  }
 }
 

@@ -22,7 +22,7 @@ export function formatDate(n: Date) {
 
 export async function getExamsServer(pbUser: string, pbPassword: string, course: string, schoolUsername: string) {
   pb.autoCancellation(false)
-  pb.collection('users').authWithPassword(pbUser, pbPassword)
+  pb.admins.authWithPassword(pbUser, pbPassword)
 
   const filterTemplate = "course = {:course} && schoolUsername = {:schoolUsername}"
 

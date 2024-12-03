@@ -2,7 +2,6 @@ export const availableEmojis = ['🤮', '😭', '😳', '🥲', '🥱', '🥺', 
 export const availableMotd = [
   'Heute wird wieder ein Kacktag.',
   'Tipp: Bis zum dritten Tag gibt es keine Attestpflicht',
-  'Steigere deine mündliche Note durch Nicken und Sounds',
   'Manchmal hört ein Schultag auch früher auf als im Stundenplan',
   'Pass auf! Schulprojekte sind oft Zeitverschwendung',
   'Nicht alle DLCs bringen dich weiter. Wähle sie weise.',
@@ -16,7 +15,6 @@ export const availableMotd = [
   "You can't carry anything after your backpack is full.",
   'Forgot to study for a test? Call in a bomb threat!',
   'every 60 seconds in Africa, a minute passes.',
-  'A rubber band can be used to fire small projectiles to ward of attackers',
   'Enemies can’t see or shoot through walls.',
   "Remember, the rule isn't to not do it, the rule is to not get caught",
   'I don’t know, can you use the bathroom?',
@@ -31,7 +29,6 @@ export const availableMotd = [
   'Das geht vorbei, doch was ist wenn nicht?',
   'Nett hier. aber waren sie schon mal in Baden-Württenberg?',
   'Ein Gefängnisausbruch ist straffrei.',
-  'Schaun wa ma was wird... [Dein Einsatz]',
   'FCK AFD',
   'Du willst nach Hause? Geh. Morgen ist auch noch ein Tag.',
   'Schlaf > Schule.',
@@ -47,7 +44,10 @@ export const availableMotd = [
   'europäische Blauhaarkatze',
   'Niemand will an dein Schnitzel, Alice',
   'gLaUben kAnnst dU IN DEr kiRCHE',
-  'Dit is ‘ne freundliche Diktatur hier.'
+  'Dit is ‘ne freundliche Diktatur hier.',
+  'I just keep trying things and it keeps working somehow',
+  'Frühstück!',
+  'Ein Buchstabe mit mehren Ziffern, man kennts'
 ];
 export const hourTimes = {
   start: ["-", "7:55", "8:40", "9:45", "10:30", "11:35", "12:20", "13:25", "14:10", "15:05", "15:50"],

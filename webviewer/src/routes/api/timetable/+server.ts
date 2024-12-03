@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { getMergedTimetableServer, logEvent, sendJson } from "@/lib/serverHelpers";
+import { getCachedClassList, getMergedTimetableServer, logEvent, sendJson } from "@/lib/serverHelpers";
 
 export const GET: RequestHandler = async (event) => {
   // if it works it aint broken
@@ -10,13 +10,16 @@ export const GET: RequestHandler = async (event) => {
 
   // insert code here
   const { timetableMerged, cacheHit } = await getMergedTimetableServer(className, date, useCache, null, 300)
+  const classList = await getCachedClassList();
 
   logEvent("timetable", { className: className, date, cacheAllow: useCache, cacheHit: cacheHit, url: event.url.toString() })
   event.setHeaders({ "cache-control": "max-age=0" })
 
 
-  return new Response(JSON.stringify({
+  return sendJson({
     timetableMerged: Array.from(timetableMerged.entries()),
-    timestamp: new Date().toJSON()
-  }), { headers: { "content-type": "application/json" } });
+    timestamp: new Date().toJSON(),
+    classList
+  })
+
 }
