@@ -6,6 +6,8 @@ import { getAuthenticatedPocketBase } from "./clientAuth";
 export interface Settings {
   className: string;
   courses: string[];
+  recentTimetableLookupEmails?: string[];
+  recentTimetableLookupClasses?: string[];
 }
 
 export async function getSettings(cookies?: Cookies) {
