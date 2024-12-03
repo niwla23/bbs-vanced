@@ -33,6 +33,7 @@
 
 	onMount(async () => {
 		settings = await getSettings();
+		console.log('settings', settings);
 		if (!settings) return;
 
 		if (!settings.recentTimetableLookupEmails) {
@@ -72,9 +73,9 @@
 				<input bind:value={className} class="bg-dark text-brightest p-1 rounded-md" />
 			</label>
 			<div class="flex flex-col gap-2 pb-2 max-h-96 overflow-y-scroll">
-				{#each (settings?.recentTimetableLookupClasses || []).reverse() as className}
-					<UiButton appearance="normal" on:click={() => (className = className)}>
-						{className}
+				{#each (settings?.recentTimetableLookupClasses || []).reverse() as className2}
+					<UiButton appearance="normal" on:click={() => (className = className2)}>
+						{className2}
 					</UiButton>
 				{/each}
 			</div>

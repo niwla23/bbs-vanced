@@ -28,6 +28,7 @@
 	let lastLoadTime = new Date().getTime();
 	let settings: Settings;
 	let showSelectPopup = false;
+	let timetableName = 'Start';
 
 	const animate = (n) => scale(n, {});
 
@@ -84,12 +85,15 @@
 		showSelectPopup = false;
 		console.log(event.detail.userEmail, event.detail.className);
 		if (event.detail.className) {
+			timetableName = event.detail.className;
 			loadNormal(true, { className: event.detail.className, courses: [] });
 		} else if (event.detail.userEmail) {
+			timetableName = event.detail.userEmail.split('@')[0];
 			const response = await fetch(`/api/publicUserInfo?userEmail=${event.detail.userEmail}`);
 			const data = await response.json();
 			loadNormal(true, { className: data.className, courses: data.courses });
 		} else {
+			timetableName = 'Deins';
 			loadNormal(true);
 		}
 	}
@@ -131,7 +135,7 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<TopBar title="Start">
+		<TopBar title={timetableName.slice(0, 10)}>
 			<UiButton on:click={() => (showSelectPopup = true)} class="px-2 text-xs">
 				<Icon icon="mingcute:eye-line" class="h-6 w-6" />
 			</UiButton>
