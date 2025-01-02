@@ -89,14 +89,27 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
 
   const klabudatum: string = $('input[name="KlaBuDatum"]').val()
 
+
+  let increaseYear = false
+  let hasYearBeenIncreased = false
   headings.each((index, heading) => {
     const dateString = $($(heading).find("center").contents().get(2)).text().split(".")
     const currentMonth = Number(dateString[1]) - 1 // why, just why javascript. Why are months 0 indexed
     const currentDayOfMonth = Number(dateString[0])
     let currentDate = new Date()
     currentDate.setFullYear(Number(klabudatum.split(".")[2]))
+    if (increaseYear) {
+      currentDate.setFullYear(currentDate.getFullYear() + 1)
+      increaseYear = false
+      hasYearBeenIncreased = true
+    }
     currentDate.setMonth(currentMonth, currentDayOfMonth)
     currentDate.setHours(12, 0, 0, 0)
+
+    // if we are at the end of year, increase year number by one
+    if (currentMonth == 11 && currentDayOfMonth == 31) {
+      increaseYear = true
+    }
 
     if (isNaN(currentDate.getTime())) {
       return
@@ -140,32 +153,19 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
       })
     })
 
-
-    // cleanup
-    // delete all slots from the end of a day up to the last contenful slot
-    /* let hour = timetableDay.length;
-    while (hour--) {
-      const slot = timetableDay[hour]
-
-      if (slot.length === 0) {
-        timetableDay.pop()
-        continue
-      }
-
-      if (slot.length > 1) {
-        continue
-      }
-
-      let lesson = slot[0]
-      if (!lesson.room && !lesson.subject && !lesson.teacher) {
-        timetableDay.pop()
-      } else {
-        break
-      }
-    } */
-
     timetable_week.set(currentDate, timetableDay)
   })
+
+  let timetable_week_fixed: TimetableWeek = new Map()
+  if (hasYearBeenIncreased) {
+    timetable_week.forEach((value, key) => {
+      const newDate = new Date(key);
+      newDate.setFullYear(newDate.getFullYear() - 1);
+      timetable_week_fixed.set(newDate, value);
+    });
+  } else {
+    timetable_week_fixed = timetable_week
+  }
 
   if (date) {
     // check if this is the correct date
@@ -180,7 +180,7 @@ export function parseTimetable(html: string, date?: Date): TimetableWeek | Timet
       }
   }
 
-  return timetable_week
+  return timetable_week_fixed
 }
 
 /**

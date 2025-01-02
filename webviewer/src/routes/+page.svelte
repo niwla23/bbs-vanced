@@ -52,7 +52,9 @@
 	}
 
 	async function loadFuture() {
+		console.log(data);
 		const firstDate = data[data.length - 1][0];
+		console.log('firstdate', firstDate);
 		const target = getNextMonday(firstDate);
 		await loadData(target);
 	}
