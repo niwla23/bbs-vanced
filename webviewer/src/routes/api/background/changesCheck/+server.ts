@@ -54,6 +54,10 @@ function generateChangesSummary(changes: ProcessedChange[]) {
 }
 
 async function handleChanges(user: RecordModel, changes: ProcessedChange[]) {
+  if (changes.length >= 3) {
+    console.log("discarding push message, more than 3 days changed")
+  }
+
   const changesSummary = generateChangesSummary(changes);
   const resend = new Resend(env.RESEND_API_KEY)
   const html = render({ template: TimetableChangeEmail, props: { changes, changesSummary } });
