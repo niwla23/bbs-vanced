@@ -16,6 +16,7 @@
 
 	let hasPro = false;
 
+	let settings = null;
 	let courses = new Set<string>([]);
 	let className = '';
 	let notificationEmail = '';
@@ -39,10 +40,10 @@
 	}
 
 	async function loadSettings() {
-		let data = await getSettings();
-		if (!data) return;
-		className = data.className;
-		courses = new Set(data.courses);
+		settings = await getSettings();
+		if (!settings) return;
+		className = settings.className;
+		courses = new Set(settings.courses);
 
 		const fetchedTheme = localStorage.getItem('theme');
 		if (fetchedTheme) theme = fetchedTheme;
@@ -56,9 +57,9 @@
 		await saveSettings(
 			{
 				courses: trimmedCourses,
-				className: className.trim()
-			},
-			hasPro
+				className: className.trim(),
+				...settings
+			}
 			// true
 		);
 
