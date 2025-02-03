@@ -35,6 +35,8 @@ export async function getSettings(cookies?: Cookies) {
     if (browser) encoded = localStorage.getItem("settings")
     if (!encoded) return;
   }
+  // if (encoded == "undefined") return
+
   const data: Settings = JSON.parse(encoded);
   await saveSettings(data)
 

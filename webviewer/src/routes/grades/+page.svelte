@@ -18,6 +18,7 @@
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 	import { hasPro } from '../stores';
+	import UiButton from '@/lib/UiButton.svelte';
 
 	let loadingComplete = false;
 	let subjectNames = [
@@ -40,6 +41,14 @@
 	let editDialogOpen = false;
 	let infoDialogOpen = true;
 	let editSubjectNamesOpen = false;
+
+	function swapP2andP3() {
+		const oldP2Data = gradeUserData[1];
+		const oldP3Data = gradeUserData[2];
+
+		gradeUserData[1] = oldP3Data;
+		gradeUserData[2] = oldP2Data;
+	}
 
 	function addSignToNumber(n: number) {
 		return (n < 0 ? '' : '+') + n;
@@ -88,7 +97,9 @@
 
 <div class="w-full flex justify-center p-4">
 	<main class="max-w-4xl w-full">
-		<TopBar title="Abinotenrechner" icon="solar:calculator-minimalistic-linear" />
+		<TopBar title="Abirechner" icon="solar:calculator-minimalistic-linear">
+			<UiButton class="whitespace-nowrap mr-4" on:click={swapP2andP3}>P2 ↔ P3</UiButton>
+		</TopBar>
 		<div class="flex flex-col gap-2 pt-12">
 			<div>
 				<h2 class="text-lg font-bold">Semesternoten</h2>
@@ -204,7 +215,7 @@
 {#if editDialogOpen}
 	<EditGrade
 		on:submit={handleEditSubmit}
-		subject={subjectNames[currentlyEditing[0]]}
+		subject={subjectNameOptions[currentlyEditing[0]][gradeUserData[currentlyEditing[0]].nameOption]}
 		index={currentlyEditing[1]}
 		points={getCurrentlyEditingData(currentlyEditing).grade}
 		isGuess={getCurrentlyEditingData(currentlyEditing).isGuess}
