@@ -108,7 +108,7 @@ export function blockIIHas0Points(userData: SubjectUserData[]) {
   let zeros = 0
   for (let i = 0; i <= 4; i++) {
     const blockIIGrade = userData[i].grades[4].grade
-    if (blockIIGrade == 5) zeros += 1
+    if (blockIIGrade == 0) zeros += 1
   }
   return zeros > 0
 }
