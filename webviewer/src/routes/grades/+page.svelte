@@ -13,7 +13,9 @@
 		saveDataOnline,
 		subscribeOnlineData,
 		type SubjectUserData,
-		subjectNameOptions
+		subjectNameOptions,
+		countUnterkurseBlockII,
+		blockIIHas0Points
 	} from '@/lib/grades';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
@@ -76,6 +78,8 @@
 	$: pointsBlockII = totalPointsBlockII(gradeUserData);
 	$: numRelevantGrades = countRelevantGrades(gradeUserData);
 	$: areRelevantGradesOk = checkSubjectsForNeededRelevantGrades(gradeUserData);
+	$: numUnterkurseBlockII = countUnterkurseBlockII(gradeUserData);
+	$: blockIIZeroPoints = blockIIHas0Points(gradeUserData);
 
 	function saveIfPro() {
 		if (hasPro && loadingComplete) saveDataOnline(gradeUserData);
@@ -192,8 +196,25 @@
 						</tr>
 						<tr>
 							<td>Punkte Block II</td>
-							<td class="text-right">{pointsBlockII.toFixed(0)}</td>
+							<td class="text-right">
+								{pointsBlockII.toFixed(0)}
+							</td>
 						</tr>
+						{#if blockIIZeroPoints}
+							<tr class="text-red-500">
+								<td>⤷ Kein Fach darf 0 Punkte haben</td>
+							</tr>
+						{/if}
+						{#if numUnterkurseBlockII > 2}
+							<tr class="text-red-500">
+								<td>⤷ zu viele Unterkurse (max 2)</td>
+							</tr>
+						{/if}
+						{#if pointsBlockII < 100}
+							<tr class="text-red-500">
+								<td>⤷ zu wenig Punkte (min 100)</td>
+							</tr>
+						{/if}
 						<tr>
 							<td>Punkte Gesamt</td>
 							<td class="text-right">{(pointsBlockI + pointsBlockII).toFixed(0)}</td>

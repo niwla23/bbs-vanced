@@ -93,6 +93,26 @@ export function countRelevantGrades(userData: SubjectUserData[]) {
   return totalRelevantGrades
 }
 
+
+export function countUnterkurseBlockII(userData: SubjectUserData[]) {
+  let unterkurse = 0
+  for (let i = 0; i <= 4; i++) {
+    const blockIIGrade = userData[i].grades[4].grade
+    if (blockIIGrade < 5) unterkurse += 1
+  }
+  return unterkurse
+}
+
+
+export function blockIIHas0Points(userData: SubjectUserData[]) {
+  let zeros = 0
+  for (let i = 0; i <= 4; i++) {
+    const blockIIGrade = userData[i].grades[4].grade
+    if (blockIIGrade == 5) zeros += 1
+  }
+  return zeros > 0
+}
+
 export function pointsToGrade(points: number) {
   return (17 - points) / 3
 }
@@ -104,6 +124,7 @@ export function pointsToGradePlusMinus(points: number) {
 export function gradeToPoints(grade: number) {
   return 17 - (3 * grade)
 }
+
 
 
 export const gradeUserDataTemplate: SubjectUserData[] = [
