@@ -80,8 +80,106 @@ export function totalPointsBlockII(userData: SubjectUserData[]) {
 }
 
 export function totalPointsToGrade(points: number) {
-  if (points == 300) return 4.0
-  return -0.0056 * points + 5.592
+  if (points < 300) {
+    return 6
+  }
+  else if (points == 300) {
+    return 4
+  }
+  else if (points >= 301 && points <= 318) {
+    return 3.9
+  }
+  else if (points >= 319 && points <= 336) {
+    return 3.8
+  }
+  else if (points >= 337 && points <= 354) {
+    return 3.7
+  }
+  else if (points >= 355 && points <= 372) {
+    return 3.6
+  }
+  else if (points >= 373 && points <= 390) {
+    return 3.5
+  }
+  else if (points >= 391 && points <= 408) {
+    return 3.4
+  }
+  else if (points >= 409 && points <= 426) {
+    return 3.3
+  }
+  else if (points >= 427 && points <= 444) {
+    return 3.2
+  }
+  else if (points >= 445 && points <= 462) {
+    return 3.1
+  }
+  else if (points >= 463 && points <= 480) {
+    return 3.0
+  }
+  else if (points >= 481 && points <= 498) {
+    return 2.9
+  }
+  else if (points >= 499 && points <= 516) {
+    return 2.8
+  }
+  else if (points >= 517 && points <= 534) {
+    return 2.7
+  }
+  else if (points >= 535 && points <= 552) {
+    return 2.6
+  }
+  else if (points >= 553 && points <= 570) {
+    return 2.5
+  }
+  else if (points >= 571 && points <= 588) {
+    return 2.4
+  }
+  else if (points >= 589 && points <= 606) {
+    return 2.3
+  }
+  else if (points >= 607 && points <= 624) {
+    return 2.2
+  }
+  else if (points >= 625 && points <= 642) {
+    return 2.1
+  }
+  else if (points >= 643 && points <= 660) {
+    return 2.0
+  }
+  else if (points >= 661 && points <= 678) {
+    return 1.9
+  }
+  else if (points >= 679 && points <= 696) {
+    return 1.8
+  }
+  else if (points >= 697 && points <= 714) {
+    return 1.7
+  }
+  else if (points >= 715 && points <= 732) {
+    return 1.6
+  }
+  else if (points >= 733 && points <= 750) {
+    return 1.5
+  }
+  else if (points >= 751 && points <= 768) {
+    return 1.4
+  }
+  else if (points >= 769 && points <= 786) {
+    return 1.3
+  }
+  else if (points >= 787 && points <= 804) {
+    return 1.2
+  }
+  else if (points >= 805 && points <= 822) {
+    return 1.1
+  }
+  else if (points >= 823) {
+    return 1.0
+  }
+
+  //
+  // if (points == 300) return 4.0
+  // return -0.0056 * points + 5.592
 }
 
 export function countRelevantGrades(userData: SubjectUserData[]) {
