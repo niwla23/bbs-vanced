@@ -47,7 +47,8 @@ export const availableMotd = [
   'Dit is ‘ne freundliche Diktatur hier.',
   'I just keep trying things and it keeps working somehow',
   'Frühstück!',
-  'Ein Buchstabe mit mehren Ziffern, man kennts'
+  '🏳️‍⚧️🏳️‍⚧️🏳️‍⚧️',
+  '🏳️‍🌈🏳️‍🌈🏳️‍🌈',
 ];
 export const hourTimes = {
   start: ["-", "7:55", "8:40", "9:45", "10:30", "11:35", "12:20", "13:25", "14:10", "15:05", "15:50"],
