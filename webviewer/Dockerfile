@@ -1,11 +1,12 @@
 FROM node:24.0-alpine
 
 WORKDIR /app
-RUN npm i -g pnpm@8.6
+RUN npm i -g pnpm@10.20
 
 COPY . .
 WORKDIR /app/webviewer
 
+ENV CI=true
 RUN pnpm install
 RUN pnpm build
 
