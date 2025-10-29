@@ -70,7 +70,7 @@
 				{/each}
 			{/each}
 			<Hr style={hr} />
-			<Text style={footer}>BBS Vanced by Alwin Lohrie</Text>
+			<Text style={footer}>BBS Vanced by Lea Lohrie</Text>
 			<Text style={footer}>
 				Du kannst diese Emails in den Einstellungen der BBS Vanced App deaktivieren.
 			</Text>

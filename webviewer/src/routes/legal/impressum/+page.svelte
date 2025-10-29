@@ -2,7 +2,7 @@
 	<h1>Impressum</h1>
 	<p>Angaben gemäß § 5 TMG</p>
 	<p>
-		Alwin Lohrie
+		Lea Lohrie
 		<br />
 		Benzen 49
 		<br />
