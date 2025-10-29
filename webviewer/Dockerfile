@@ -1,4 +1,4 @@
-FROM node:20.2-alpine
+FROM node:24.0-alpine
 
 WORKDIR /app
 RUN npm i -g pnpm@8.6
